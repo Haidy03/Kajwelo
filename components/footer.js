@@ -1,5 +1,5 @@
 export const footer = `
-  <div class="container">
+  <div class="container-fluid">
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-section brand-section">
