@@ -1,13 +1,63 @@
+:root {
+  /* BRAND COLORS */
+  --color-primary: #0e2d4c;           /* Main brand navy blue */
+  --color-primary-light: #1a3d6a;     /* For hover/active buttons */
+  --color-accent: #ffd400;           /* Bright yellow - CTAs, highlights */
+
+  /* BACKGROUNDS */
+  --color-bg: #ffffff;               /* Page background */
+  --color-bg-secondary: #f5f5f5;     /* Cards, sections */
+
+  /* TEXT */
+  --color-text-main: #0e2d4c;        /* Primary heading text */
+  --color-text-secondary: #4a4a4a;   /* Paragraphs, muted text */
+
+  /* BORDERS */
+  --color-border: #dcdcdc;           /* Input borders, card lines */
+
+  /* FEEDBACK */
+  --color-success: #4caf50;          /* Green: success states */
+  --color-error: #f44336;            /* Red: error messages */
+}
+
+
+/* Dark mode */
+:root.dark {
+  /* BRAND COLORS */
+  --color-primary: #0e2d4c;
+  --color-primary-light: #264e7c;
+  --color-accent: #ffd400;
+
+  /* BACKGROUNDS */
+  --color-bg: #121212;
+  --color-bg-secondary: #1e1e1e;
+
+  /* TEXT */
+  --color-text-main: #ffffff;
+  --color-text-secondary: #cccccc;
+
+  /* BORDERS */
+  --color-border: #333333;
+
+  /* FEEDBACK */
+  --color-success: #81c784;
+  --color-error: #ef5350;
+}
+
 body{
     margin: 30px;
+    background-color: var(--color-bg);
 }
 #sidebar{
-    /*border: 1px solid black;*/
+    /*border: 1px solid */
     width: 200px;
     height: 400px;
-    /*margin: 55px;*/
     padding: 20px;
-    box-shadow: black 3px 3px 20px ;
+    box-shadow: black 3px 3px 20px;
+    border-radius: 15px;
+}
+#sidebar > p{
+    color: var(--color-primary);
 }
 .categoris-sidebar{
     margin: 15px;
@@ -17,10 +67,29 @@ body{
     width: 1000px;
     height: 400px;
 }
+.card{
+    background-color: var(--color-bg-secondary);
+    transition: all 0.2s;
+}
+.card > p,h5{
+    color: var(--color-text-main);
+}
+.items a{
+    color: var(--color-primary);
+    background-color: var(--color-accent);
+    border: none;
+}
+.items a:hover{
+    background-color: var(--color-primary);
+    color: var(--color-accent);
+}
 .card-img{
     margin: auto;
     width: 200px;
     height: 200px;
+}
+.card:hover{
+    transform: scale(1.1);
 }
 .items{
     margin: 30px 0px;
