@@ -1,57 +1,75 @@
 export const footer = `
-<footer class="footer">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5>
-          <i class="fas fa-apple-alt text-success me-2"></i>Fruitables
-        </h5>
-        <p>
-          Fresh and organic fruits and vegetables delivered to your
-          doorstep.
-        </p>
-        <div class="footer-social">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5>Quick Links</h5>
-        <div class="footer-links">
-          <a href="#">Home</a>
-          <a href="#">Shop</a>
-          <a href="#">About Us</a>
-          <a href="#">Contact</a>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5>Categories</h5>
-        <div class="footer-links">
-          <a href="#">Fruits</a>
-          <a href="#">Vegetables</a>
-          <a href="#">Organic Foods</a>
-          <a href="#">Fresh Juice</a>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5>Contact Us</h5>
-        <p>
-          <i class="fas fa-map-marker-alt me-2"></i> 123 Street, New York,
-          USA
-        </p>
-        <p><i class="fas fa-phone me-2"></i> +012 345 67890</p>
-        <p><i class="fas fa-envelope me-2"></i> info@fruitables.com</p>
-      </div>
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section brand-section">
+                    <div class="brand-logo">URBAN THREADS</div>
+                    <p class="brand-tagline">Authentic streetwear for the culture. Locally crafted, globally inspired.</p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Instagram">IG</a>
+                        <a href="#" class="social-link" aria-label="TikTok">TK</a>
+                        <a href="#" class="social-link" aria-label="Twitter">TW</a>
+                        <a href="#" class="social-link" aria-label="YouTube">YT</a>
+                    </div>
+
+                    <div class="newsletter">
+                        <p>Stay updated on drops and exclusive releases</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Enter your email" required>
+                            <button type="submit">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Streetwear</a></li>
+                        <li><a href="#">Essentials</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">Sale</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>About</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Store Locator</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Track Order</a></li>
+                        <li><a href="#">Student Discount</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">© 2025 Urban Threads. All rights reserved.</div>
+                
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+
+                <div class="local-badge">Locally Made</div>
+            </div>
+        </footer>
     </div>
-  </div>
-  <div class="footer-bottom text-center">
-    <div class="container">
-      <p class="mb-0">
-        &copy; ${new Date().getFullYear()} Fruitables. All Rights Reserved.
-      </p>
-    </div>
-  </div>
-</footer>
 `;

@@ -6,6 +6,8 @@
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/navbar.css" />
+     <link rel="stylesheet" href="./css/footer.css">
     <style>
         .cart-container {
             min-height: 80vh;
@@ -53,6 +55,8 @@
     </style>
 </head>
 <body>
+    
+ <div id="navbar"></div>
 <div class="container-fluid py-4">
     <div class="row g-4">
         <!-- Products Section -->
@@ -104,6 +108,25 @@
     </div>
 </div>
 
+ <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+
+
+
+
+
+
+
+
+  <script type="module">
+    import { footer } from './components/footer.js';
+    document.getElementById('footer-placeholder').innerHTML = footer;
+  </script>    
+<script type="module">
+    import { navbar } from './components/navbar.js';
+    document.getElementById('navbar').innerHTML = navbar;
+  </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
 <script>
     const cartState = {
