@@ -1,2 +1,2 @@
-# Kajwelo
+Kajwelo
 Documentation
