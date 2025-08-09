@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<link rel="stylesheet" href="./css/navbar.css">
+<link rel="stylesheet" href="./css/searchbar.css">
+<link rel="stylesheet" href="./css/footer.css">
+<link rel="stylesheet" href="./css/homepage.css">
+
+
+<style>
+
+
+</style>
+
+</head>
+<body>
+    
+
+    <div id="navbar"></div>   
+    <div id="searchbar"></div>   
+
+
+   
+
+
+
+
+
+
+    <div id="body">
+        <div class="container">
+         
+            <h1>Shop By Category</h1>
+            
+            <!-- One big container with all 6 images -->
+            
+            <div class="row g-4" >
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 category-col">
+                    <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" alt="Category 1" class="category-image">
+                </div>
+            </div>
+
+            <h1>Shop By Brand</h1>
+            <div id="carouselExampleFade" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="./images/gold-ring.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="./images/female-holding-engagement-marriage-rings.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="./images/divorce-concept-with-golden-wedding-rings.jpg" class="d-block w-100" alt="...">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>        <!--End of carouselExampleFade div-->
+
+
+        </div>
+    </div>
+
+
+
+   
+
+
+    <div id="footer"></div>   
+    
+
+
+
+    
+
+    <script type="module">
+    import { navbar } from './components/navbar.js';
+    document.getElementById('navbar').innerHTML = navbar;
+  </script>
+
+  <script type="module">
+    import { searchbar } from './components/searchbar.js';
+    document.getElementById('searchbar').innerHTML = searchbar;
+  </script>
+
+  <script type="module">
+    import { footer } from './components/footer.js';
+    document.getElementById('footer').innerHTML = footer;
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+</body>
+</html>

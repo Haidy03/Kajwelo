@@ -1,207 +1,133 @@
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Base styles */
+        body {
             min-height: 100vh;
-        } */
-
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar styles */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-section {
-            flex: 1;
-            display: flex;
             align-items: center;
+            background-color: #f8f9fa;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 20px;
         }
-
-        .logo {
-            width: 200px;
-            height: 100px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        
+        #logo {
+            font-size: 24px;
             font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-
-        .logo:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .search-section {
-            flex: 2;
-            display: flex;
-            justify-content: center;
-            max-width: 600px;
-            margin: 0 2rem;
-        }
-
-        .search-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 50px 12px 20px;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-input:focus {
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .search-btn {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .actions-section {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 1rem;
-        }
-
-        .action-btn {
-            position: relative;
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 12px;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        
+        #logo a {
+            text-decoration: none;
             color: #333;
-            backdrop-filter: blur(5px);
         }
-
-        .action-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        
+        .navbar > a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin: 0 10px;
         }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
+        
+        .navbar > a:hover {
+            color: #007bff;
+        }
+        
+        .navbar-icons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            animation: pulse 2s infinite;
+            gap: 15px;
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        
+        .navbar-icons a {
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
         }
-
-        .search-icon, .user-icon, .cart-icon, .heart-icon {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+        
+        .navbar-icons a:hover {
+            color: #007bff;
         }
-
-        /* Demo content */
-        .demo-content {
-            padding: 2rem;
-            text-align: center;
-            color: white;
-            margin-top: 2rem;
+ /* Medium screens (tablets) */
+  @media (max-width: 991px) {
+            .navbar {
+                padding: 10px 20px;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .navbar > a {
+                margin: 0 8px;
+                font-size: 14px;
+            }
+            
+            #logo {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
         }
-
-        .demo-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .demo-content p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-
-        /* Responsive */
+ /* Small screens (large phones) */
         @media (max-width: 768px) {
             .navbar {
-                padding: 1rem;
-                flex-wrap: wrap;
-                gap: 1rem;
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
             }
             
-            .logo-section, .actions-section {
-                flex: none;
+            #logo {
+                order: -1;
+                margin-bottom: 15px;
             }
             
-            .search-section {
-                flex: 1;
-                margin: 0;
-                min-width: 250px;
+            .navbar > a {
+                margin: 0 5px;
+                font-size: 13px;
+            }
+            
+            .navbar-icons {
+                order: 1;
+                margin-top: 10px;
             }
         }
+
+        /* Extra small screens (small phones) */
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            
+            .navbar > a {
+                font-size: 12px;
+                margin: 0 3px;
+            }
+            
+            #logo {
+                font-size: 18px;
+            }}        
+
+
+
+         /* Very small screens */
+        @media (max-width: 480px) {
+            .navbar {
+                gap: 10px;
+            }
+            
+            .navbar > a {
+                font-size: 11px;
+                margin: 2px;
+            }
+            
+            #logo {
+                font-size: 16px;
+            }
+            
+            .navbar-icons a {
+                font-size: 16px;
+            }         
+        }  

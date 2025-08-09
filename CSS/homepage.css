@@ -1,0 +1,216 @@
+
+        /* Body content */
+        #body {
+            flex: 1;
+            padding: 40px 0;
+        }
+        
+        /* Category images */
+        .category-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .category-col {
+            margin-bottom: 30px;
+        }
+        
+        /* Headings */
+        h1 {
+            text-align: center;
+            margin: 50px 0;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Carousel */
+        .carousel {
+            margin-bottom: 50px;
+        }
+        
+        .carousel-item img {
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+
+        
+        /* Responsive breakpoints */
+        
+        /* Large screens (desktops) */
+        @media (min-width: 992px) {
+            .container {
+                max-width: 1200px;
+            }
+            
+            .carousel-item img {
+                height: 500px;
+            }
+        }
+        
+        /* Medium screens (tablets) */
+        @media (max-width: 991px) {
+            /* .navbar {
+                padding: 10px 20px;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .navbar > a {
+                margin: 0 8px;
+                font-size: 14px;
+            }
+            
+            #logo {
+                font-size: 20px;
+                margin-bottom: 10px;
+            } */
+            
+            /* .search-box {
+                max-width: 400px;
+                padding: 10px 15px;
+            } */
+            
+            .category-image {
+                height: 200px;
+            }
+            
+            .carousel-item img {
+                height: 300px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+                margin: 30px 0;
+            }
+        }
+        
+        /* Small screens (large phones) */
+        @media (max-width: 768px) {
+            /* .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            #logo {
+                order: -1;
+                margin-bottom: 15px;
+            }
+            
+            .navbar > a {
+                margin: 0 5px;
+                font-size: 13px;
+            }
+            
+            .navbar-icons {
+                order: 1;
+                margin-top: 10px;
+            } */
+            
+            /* .search-box {
+                max-width: 350px;
+                margin: 15px auto;
+            } */
+            
+            #body {
+                padding: 20px 0;
+            }
+            
+            .category-image {
+                height: 180px;
+            }
+            
+            .carousel-item img {
+                height: 250px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin: 25px 0;
+            }
+        }
+        
+        /* Extra small screens (small phones) */
+        @media (max-width: 576px) {
+            /* .navbar {
+                padding: 10px 15px;
+            }
+            
+            .navbar > a {
+                font-size: 12px;
+                margin: 0 3px;
+            }
+            
+            #logo {
+                font-size: 18px;
+            } */
+            
+            /* .search-box {
+                max-width: 300px;
+                padding: 8px 15px;
+            }
+            
+            .search-box input {
+                font-size: 14px;
+            } */
+            
+            .category-image {
+                height: 150px;
+            }
+            
+            .carousel-item img {
+                height: 200px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin: 20px 0;
+            }
+            
+            .container {
+                padding: 0 10px;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 480px) {
+            /* .navbar {
+                gap: 10px;
+            }
+            
+            .navbar > a {
+                font-size: 11px;
+                margin: 2px;
+            }
+            
+            #logo {
+                font-size: 16px;
+            }
+            
+            .navbar-icons a {
+                font-size: 16px;
+            } */
+            
+            /* .search-box {
+                max-width: 280px;
+            }
+             */
+            .category-image {
+                height: 120px;
+            }
+            
+            .carousel-item img {
+                height: 150px;
+            }
+        }
