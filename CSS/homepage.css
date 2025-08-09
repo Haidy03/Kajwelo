@@ -35,10 +35,14 @@
         /* Carousel */
         .carousel {
             margin-bottom: 50px;
+             max-width: 600px; /* Limit maximum width */
+            margin-left: auto;
+            margin-right: auto;
+            
         }
         
         .carousel-item img {
-            height: 400px;
+            height: 250px;
             object-fit: cover;
             border-radius: 8px;
         }
@@ -55,6 +59,9 @@
             
             .carousel-item img {
                 height: 500px;
+            }
+             .carousel {
+                max-width: 900px; /* Larger max-width on desktop */
             }
         }
         
@@ -212,5 +219,8 @@
             
             .carousel-item img {
                 height: 150px;
+            }
+              .carousel {
+                max-width: 470px; /* Larger max-width on desktop */
             }
         }
