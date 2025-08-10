@@ -1,4 +1,51 @@
 
+        .background {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: url("../images/divorce-concept-with-golden-wedding-rings.jpg") center/cover no-repeat;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.background:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.background h4 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0.8em 1.5em;
+    border-radius: 8px;
+    font-size: clamp(1rem, 3vw, 2rem);
+    text-align: center;
+    margin: 0;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.category-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.category-image:hover {
+    text-decoration: none;
+    color: inherit;
+}
+        
         /* Body content */
         #body {
             flex: 1;
@@ -15,7 +62,7 @@
             cursor: pointer;
         }
         
-        .category-image:hover {
+        .category-col:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
@@ -63,30 +110,27 @@
              .carousel {
                 max-width: 900px; /* Larger max-width on desktop */
             }
+            .background {
+                    aspect-ratio: 16 / 10;
+                }
+
+                .background h4 {
+                    font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+                    padding: 1em 2em;
+                }
         }
         
         /* Medium screens (tablets) */
         @media (max-width: 991px) {
-            /* .navbar {
-                padding: 10px 20px;
-                justify-content: center;
-                text-align: center;
+            .background {
+                aspect-ratio: 4 / 3;
             }
-            
-            .navbar > a {
-                margin: 0 8px;
-                font-size: 14px;
+
+            .background h4 {
+                font-size: clamp(1rem, 4vw, 1.8rem);
+                padding: 0.7em 1.2em;
             }
-            
-            #logo {
-                font-size: 20px;
-                margin-bottom: 10px;
-            } */
-            
-            /* .search-box {
-                max-width: 400px;
-                padding: 10px 15px;
-            } */
+
             
             .category-image {
                 height: 200px;
@@ -104,31 +148,17 @@
         
         /* Small screens (large phones) */
         @media (max-width: 768px) {
-            /* .navbar {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 20px;
-            }
-            
-            #logo {
-                order: -1;
+            .background {
+                aspect-ratio: 16 / 9;
                 margin-bottom: 15px;
             }
-            
-            .navbar > a {
-                margin: 0 5px;
-                font-size: 13px;
+
+            .background h4 {
+                font-size: clamp(0.9rem, 5vw, 1.6rem);
+                padding: 0.6em 1em;
+                border-radius: 6px;
             }
-            
-            .navbar-icons {
-                order: 1;
-                margin-top: 10px;
-            } */
-            
-            /* .search-box {
-                max-width: 350px;
-                margin: 15px auto;
-            } */
+           
             
             #body {
                 padding: 20px 0;
@@ -150,27 +180,17 @@
         
         /* Extra small screens (small phones) */
         @media (max-width: 576px) {
-            /* .navbar {
-                padding: 10px 15px;
+            .background {
+                aspect-ratio: 3 / 2;
+            }
+
+            .background h4 {
+                font-size: clamp(0.8rem, 6vw, 1.4rem);
+                padding: 0.5em 0.8em;
+                white-space: normal;
+                line-height: 1.2;
             }
             
-            .navbar > a {
-                font-size: 12px;
-                margin: 0 3px;
-            }
-            
-            #logo {
-                font-size: 18px;
-            } */
-            
-            /* .search-box {
-                max-width: 300px;
-                padding: 8px 15px;
-            }
-            
-            .search-box input {
-                font-size: 14px;
-            } */
             
             .category-image {
                 height: 150px;
@@ -192,27 +212,15 @@
         
         /* Very small screens */
         @media (max-width: 480px) {
-            /* .navbar {
-                gap: 10px;
+            .background {
+                width: 400px;;
             }
+            .background h4 {
+             
+                font-size: clamp(0.7rem, 7vw, 1.2rem);
+                padding: 0.4em 0.6em;
+                 }
             
-            .navbar > a {
-                font-size: 11px;
-                margin: 2px;
-            }
-            
-            #logo {
-                font-size: 16px;
-            }
-            
-            .navbar-icons a {
-                font-size: 16px;
-            } */
-            
-            /* .search-box {
-                max-width: 280px;
-            }
-             */
             .category-image {
                 height: 120px;
             }
@@ -224,3 +232,13 @@
                 max-width: 470px; /* Larger max-width on desktop */
             }
         }
+
+
+        /* Very small phones */
+@media (max-width: 360px) {
+    .background h4 {
+        font-size: clamp(0.6rem, 8vw, 1rem);
+        padding: 0.3em 0.5em;
+
+    }
+}
