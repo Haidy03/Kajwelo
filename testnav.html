@@ -1,20 +1,10 @@
-.products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-
-            .product-image {
-                height: 200px;
-            }
-
-            .product-info {
-                padding: 20px;
-            }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kajwelo - Fashion & Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -101,10 +91,11 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
             transition: color 0.3s ease, transform 0.2s ease;
             position: relative;
+            padding: 8px;
         }
 
         .icon-btn:hover {
@@ -183,6 +174,54 @@
             background: #c0392b;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Hero Search */
+        .hero-search {
+            max-width: 500px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .hero-search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50px;
+            padding: 15px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 5px 15px;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .hero-search-input::placeholder {
+            color: #999;
+        }
+
+        .hero-search-btn {
+            background: #e74c3c;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            padding: 12px 15px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .hero-search-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
         }
 
         /* Main Content */
@@ -488,6 +527,68 @@
             box-shadow: 0 10px 25px rgba(44, 62, 80, 0.3);
         }
 
+        /* Featured Brands Section */
+        .featured-brands {
+            background: #f8f9fa;
+            padding: 60px 20px;
+        }
+
+        .brands-carousel {
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .brands-track {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            animation: scroll 20s linear infinite;
+            width: max-content;
+        }
+
+        .brand-logo {
+            background: white;
+            width: 120px;
+            height: 80px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .brand-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .brand-logo.nike { background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; }
+        .brand-logo.adidas { background: linear-gradient(45deg, #000000, #333333); color: white; }
+        .brand-logo.zara { background: linear-gradient(45deg, #ffffff, #f8f9fa); border: 2px solid #ddd; }
+        .brand-logo.hnm { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
+        .brand-logo.gucci { background: linear-gradient(45deg, #006633, #009900); color: white; }
+        .brand-logo.prada { background: linear-gradient(45deg, #000000, #2c3e50); color: white; }
+        .brand-logo.versace { background: linear-gradient(45deg, #ffd700, #ffed4e); color: #000; }
+        .brand-logo.calvin { background: linear-gradient(45deg, #ffffff, #f1f2f6); border: 2px solid #ddd; }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .brands-track:hover {
+            animation-play-state: paused;
+        }
+
         /* Features Section */
         .features {
             background: #f8f9fa;
@@ -641,6 +742,11 @@
                 gap: 20px;
             }
 
+            .search-container {
+                max-width: 200px;
+                margin: 0 10px;
+            }
+
             .nav-menu.active {
                 display: flex;
             }
@@ -723,6 +829,28 @@
                 grid-template-columns: 1fr;
                 gap: 25px;
             }
+
+            .search-container {
+                display: none;
+            }
+
+            .hero-search {
+                max-width: 400px;
+            }
+
+            .hero-search-container {
+                padding: 12px 20px;
+            }
+
+            .hero-search-input {
+                font-size: 15px;
+            }
+
+            .brand-logo {
+                width: 100px;
+                height: 70px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -737,16 +865,21 @@
                 <li><a href="#" class="nav-link">Contact</a></li>
                 <li><a href="#" class="nav-link">Brands</a></li>
             </ul>
+
+            <!-- <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search products...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div> -->
             
             <div class="nav-icons">
-                <button class="icon-btn" title="Login">👤</button>
-                <button class="icon-btn" title="Logout">🚪</button>
-                <button class="icon-btn" title="Wishlist">❤️</button>
+                <button class="icon-btn" title="Login"><i class="fas fa-user"></i></button>
+                <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                <button class="icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>
                 <button class="icon-btn" title="Cart">
-                    🛒
+                    <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">3</span>
                 </button>
-                <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+                <button class="mobile-menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </nav>
@@ -756,6 +889,14 @@
         <div class="hero-content">
             <h1>Your Window to Style</h1>
             <p>Discover and compare fashion from the world's top online stores—effortlessly. Find your perfect style with Kajwelo.</p>
+            
+            <div class="hero-search">
+                <div class="hero-search-container">
+                    <input type="text" class="hero-search-input" placeholder="Search for products, brands, styles...">
+                    <button class="hero-search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
             <button class="cta-btn">Explore Collection</button>
         </div>
     </section>
@@ -885,6 +1026,36 @@
                 <button class="view-all-btn">View All Products</button>
             </div>
         </section>
+
+        <!-- Featured Brands Section -->
+        <section class="featured-brands">
+            <div class="section-header">
+                <h2 class="section-title">Featured Brands</h2>
+                <p class="section-subtitle">Shop from the world's most trusted fashion brands.</p>
+            </div>
+
+            <div class="brands-carousel">
+                <div class="brands-track">
+                    <div class="brand-logo nike">NIKE</div>
+                    <div class="brand-logo adidas">ADIDAS</div>
+                    <div class="brand-logo zara">ZARA</div>
+                    <div class="brand-logo hnm">H&M</div>
+                    <div class="brand-logo gucci">GUCCI</div>
+                    <div class="brand-logo prada">PRADA</div>
+                    <div class="brand-logo versace">VERSACE</div>
+                    <div class="brand-logo calvin">CALVIN<br>KLEIN</div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="brand-logo nike">NIKE</div>
+                    <div class="brand-logo adidas">ADIDAS</div>
+                    <div class="brand-logo zara">ZARA</div>
+                    <div class="brand-logo hnm">H&M</div>
+                    <div class="brand-logo gucci">GUCCI</div>
+                    <div class="brand-logo prada">PRADA</div>
+                    <div class="brand-logo versace">VERSACE</div>
+                    <div class="brand-logo calvin">CALVIN<br>KLEIN</div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Features Section -->
@@ -973,6 +1144,44 @@
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
             }, 200);
+        });
+
+        // Hero search functionality
+        document.querySelector('.hero-search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.hero-search-input').value;
+            if (searchTerm.trim()) {
+                alert(`Searching for: ${searchTerm}`);
+                // In real implementation, this would trigger actual search
+            }
+        });
+
+        document.querySelector('.hero-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                if (searchTerm.trim()) {
+                    alert(`Searching for: ${searchTerm}`);
+                    // In real implementation, this would trigger actual search
+                }
+            }
+        });
+
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value;
+            if (searchTerm.trim()) {
+                alert(`Searching for: ${searchTerm}`);
+                // In real implementation, this would trigger actual search
+            }
+        });
+
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                if (searchTerm.trim()) {
+                    alert(`Searching for: ${searchTerm}`);
+                    // In real implementation, this would trigger actual search
+                }
+            }
         });
 
         // Newsletter form submission
