@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +23,7 @@
         /* Navigation */
         .navbar {
             background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             width: 100%;
@@ -186,10 +187,10 @@
         .hero-search-container {
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 50px;
             padding: 15px 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
         }
 
@@ -271,7 +272,7 @@
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .category-card.women {
@@ -289,7 +290,7 @@
             right: 0;
             padding: 40px;
             color: white;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
         }
 
         .category-title {
@@ -305,7 +306,7 @@
         }
 
         .category-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid white;
             padding: 12px 30px;
@@ -338,14 +339,14 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
@@ -415,7 +416,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -428,8 +429,9 @@
             opacity: 1;
         }
 
-        .quick-view-btn, .wishlist-btn {
-            background: rgba(255,255,255,0.9);
+        .quick-view-btn,
+        .wishlist-btn {
+            background: rgba(255, 255, 255, 0.9);
             border: none;
             padding: 10px 20px;
             border-radius: 25px;
@@ -444,7 +446,8 @@
             font-size: 18px;
         }
 
-        .quick-view-btn:hover, .wishlist-btn:hover {
+        .quick-view-btn:hover,
+        .wishlist-btn:hover {
             background: white;
             transform: scale(1.05);
         }
@@ -556,7 +559,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             font-weight: 600;
@@ -568,21 +571,57 @@
 
         .brand-logo:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .brand-logo.nike { background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; }
-        .brand-logo.adidas { background: linear-gradient(45deg, #000000, #333333); color: white; }
-        .brand-logo.zara { background: linear-gradient(45deg, #ffffff, #f8f9fa); border: 2px solid #ddd; }
-        .brand-logo.hnm { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
-        .brand-logo.gucci { background: linear-gradient(45deg, #006633, #009900); color: white; }
-        .brand-logo.prada { background: linear-gradient(45deg, #000000, #2c3e50); color: white; }
-        .brand-logo.versace { background: linear-gradient(45deg, #ffd700, #ffed4e); color: #000; }
-        .brand-logo.calvin { background: linear-gradient(45deg, #ffffff, #f1f2f6); border: 2px solid #ddd; }
+        .brand-logo.nike {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .brand-logo.adidas {
+            background: linear-gradient(45deg, #000000, #333333);
+            color: white;
+        }
+
+        .brand-logo.zara {
+            background: linear-gradient(45deg, #ffffff, #f8f9fa);
+            border: 2px solid #ddd;
+        }
+
+        .brand-logo.hnm {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .brand-logo.gucci {
+            background: linear-gradient(45deg, #006633, #009900);
+            color: white;
+        }
+
+        .brand-logo.prada {
+            background: linear-gradient(45deg, #000000, #2c3e50);
+            color: white;
+        }
+
+        .brand-logo.versace {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+
+        .brand-logo.calvin {
+            background: linear-gradient(45deg, #ffffff, #f1f2f6);
+            border: 2px solid #ddd;
+        }
 
         @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         .brands-track:hover {
@@ -609,7 +648,7 @@
             padding: 40px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
@@ -738,7 +777,7 @@
                 background: white;
                 flex-direction: column;
                 padding: 20px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
                 gap: 20px;
             }
 
@@ -854,12 +893,13 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">Kajwelo</a>
-            
+
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#" class="nav-link">Home</a></li>
                 <li><a href="#" class="nav-link">Contact</a></li>
@@ -870,14 +910,14 @@
                 <input type="text" class="search-input" placeholder="Search products...">
                 <button class="search-btn"><i class="fas fa-search"></i></button>
             </div> -->
-            
+
             <div class="nav-icons">
-                <button class="icon-btn" title="Login"><i class="fas fa-user"></i></button>
-                <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-                <button class="icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>
-                <button class="icon-btn" title="Cart">
+                <button class="icon-btn" title="Login" id="loginBtn"><i class="fas fa-user"></i></button>
+                <button class="icon-btn" title="Logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+                <button class="icon-btn" title="Wishlist" id="wishlistBtn"><i class="fas fa-heart"></i></button>
+                <button class="icon-btn" title="Cart" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">3</span>
+                    <span class="cart-count" id="cartCount">3</span>
                 </button>
                 <button class="mobile-menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             </div>
@@ -888,15 +928,16 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Your Window to Style</h1>
-            <p>Discover and compare fashion from the world's top online stores—effortlessly. Find your perfect style with Kajwelo.</p>
-            
+            <p>Discover and compare fashion from the world's top online stores—effortlessly. Find your perfect style
+                with Kajwelo.</p>
+
             <div class="hero-search">
                 <div class="hero-search-container">
                     <input type="text" class="hero-search-input" placeholder="Search for products, brands, styles...">
                     <button class="hero-search-btn"><i class="fas fa-search"></i></button>
                 </div>
             </div>
-            
+
             <button class="cta-btn">Explore Collection</button>
         </div>
     </section>
@@ -905,7 +946,8 @@
     <main class="main-content">
         <div class="section-header">
             <h2 class="section-title">Shop by Category</h2>
-            <p class="section-subtitle">All the latest fashion trends and must-have products for every style preference.</p>
+            <p class="section-subtitle">All the latest fashion trends and must-have products for every style preference.
+            </p>
         </div>
 
         <!-- Category Grid -->
@@ -917,11 +959,12 @@
                     <button class="category-btn">Shop Women</button>
                 </div>
             </div>
-            
+
             <div class="category-card men">
                 <div class="category-content">
                     <h3 class="category-title">Men's Fashion</h3>
-                    <p class="category-subtitle">Find the perfect t-shirt, your new go-to sneakers and more right here.</p>
+                    <p class="category-subtitle">Find the perfect t-shirt, your new go-to sneakers and more right here.
+                    </p>
                     <button class="category-btn">Shop Men</button>
                 </div>
             </div>
@@ -1066,13 +1109,13 @@
                 <h4 class="feature-title">Free Shipping</h4>
                 <p class="feature-desc">Free shipping on orders over $50. Fast and reliable delivery worldwide.</p>
             </div>
-            
+
             <div class="feature-card">
                 <div class="feature-icon">🔄</div>
                 <h4 class="feature-title">Easy Returns</h4>
                 <p class="feature-desc">30-day return policy. Shop with confidence and return if not satisfied.</p>
             </div>
-            
+
             <div class="feature-card">
                 <div class="feature-icon">💎</div>
                 <h4 class="feature-title">Premium Quality</h4>
@@ -1107,7 +1150,17 @@
             </div>
         </div>
     </footer>
-
+    <!-- 🔔 Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title">Logged Out</h5>
+                </div>
+                <div class="modal-body">You have been logged out.</div>
+            </div>
+        </div>
+    </div>
     <script>
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
@@ -1125,7 +1178,7 @@
         document.addEventListener('click', (e) => {
             const navMenu = document.getElementById('navMenu');
             const mobileBtn = document.querySelector('.mobile-menu-btn');
-            
+
             if (!navMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
                 navMenu.classList.remove('active');
             }
@@ -1139,7 +1192,7 @@
         });
 
         // Add cart animation
-        document.querySelector('.icon-btn[title="Cart"]').addEventListener('click', function() {
+        document.querySelector('.icon-btn[title="Cart"]').addEventListener('click', function () {
             this.style.transform = 'scale(1.2)';
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
@@ -1147,7 +1200,7 @@
         });
 
         // Hero search functionality
-        document.querySelector('.hero-search-btn').addEventListener('click', function() {
+        document.querySelector('.hero-search-btn').addEventListener('click', function () {
             const searchTerm = document.querySelector('.hero-search-input').value;
             if (searchTerm.trim()) {
                 alert(`Searching for: ${searchTerm}`);
@@ -1155,7 +1208,7 @@
             }
         });
 
-        document.querySelector('.hero-search-input').addEventListener('keypress', function(e) {
+        document.querySelector('.hero-search-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 const searchTerm = this.value;
                 if (searchTerm.trim()) {
@@ -1166,7 +1219,7 @@
         });
 
         // Search functionality
-        document.querySelector('.search-btn').addEventListener('click', function() {
+        document.querySelector('.search-btn').addEventListener('click', function () {
             const searchTerm = document.querySelector('.search-input').value;
             if (searchTerm.trim()) {
                 alert(`Searching for: ${searchTerm}`);
@@ -1174,7 +1227,7 @@
             }
         });
 
-        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+        document.querySelector('.search-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 const searchTerm = this.value;
                 if (searchTerm.trim()) {
@@ -1185,7 +1238,7 @@
         });
 
         // Newsletter form submission
-        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+        document.querySelector('.newsletter-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const email = this.querySelector('.newsletter-input').value;
             if (email) {
@@ -1194,5 +1247,7 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="./utils/logout.js"></script>
 </body>
 </html>
