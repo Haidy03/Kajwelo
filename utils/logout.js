@@ -1,5 +1,6 @@
 // 🔐 utils/logout.js
 import { Storage } from "./localStorageHelper.js";
+import {showModal} from "./modalHelper.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentUser = Storage.get("loggedInUser");
