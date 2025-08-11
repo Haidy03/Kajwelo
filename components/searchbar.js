@@ -1,0 +1,8 @@
+export const searchbar =`
+
+<div class="search-box">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="Search">
+</div>
+
+`;
