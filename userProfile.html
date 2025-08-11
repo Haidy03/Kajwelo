@@ -12,12 +12,15 @@
     />
     <link rel="stylesheet" href="css/userprofileStyle.css" />
     <script src="js/profilemain.js" defer></script>
-    <!---->
-    <!-- <div id="navbar-placeholder"></div> -->
-
-    <!---->
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
   </head>
   <body class="bg-light">
+    <!---->
+    <div id="navbar"></div>
+
+    <!---->
+
     <div class="main-content">
       <!-- Sidebar -->
       <div class="sidebar-col min-vh-100">
@@ -170,5 +173,17 @@
     </div>
 
     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+      import { navbar } from "./components/navbar.js";
+      document.getElementById("navbar").innerHTML = navbar;
+
+      import { footer } from "./components/footer.js";
+      document.getElementById("footer-placeholder").innerHTML = footer;
+    </script>
   </body>
 </html>
