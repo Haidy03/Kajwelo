@@ -12,7 +12,18 @@ const products=[
 
 window.addEventListener("load",function()
 {
-    const grid=document.getElementById("grid");             //container for all cards
+    const section=this.document.getElementById("productssection");
+    section.classList.add("best-sellers");
+
+    const sectionheader=this.document.createElement("div");         //div for header
+    sectionheader.classList.add("section-header");
+    const header=this.document.createElement("h2");         // header content
+    header.classList.add("section-title");
+    header.textContent="women section";
+
+    sectionheader.appendChild(header);
+
+    const grid=document.createElement("grid");             //container for all cards
     console.log(grid);
     grid.classList.add("products-grid");
 
@@ -95,7 +106,9 @@ window.addEventListener("load",function()
 
         grid.appendChild(card);
     
-
+        section.appendChild(sectionheader);
+        section.appendChild(grid);
+        
 
     });     //end of loop
 

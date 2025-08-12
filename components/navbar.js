@@ -1,6 +1,6 @@
 export const navbar =`
 
-    <nav class="navbar">
+    <nav class="custom-navbar">
         <div class="nav-container">
             <a href="#" class="logo">Kajwelo</a>
             
@@ -10,14 +10,18 @@ export const navbar =`
                 <li><a href="#" class="nav-link">Brands</a></li>
             </ul>
 
+            <!-- <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search products...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div> -->
             
             <div class="nav-icons">
-                <button class="icon-btn" title="Login"><i class="fas fa-user"></i></button>
-                <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                <button class="icon-btn" title="Login" id="loginBtn"><i class="fas fa-user"></i></button>
+                <button class="icon-btn" title="Logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
                 <button class="icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>
-                <button class="icon-btn" title="Cart">
+                <button class="icon-btn" title="Cart" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">3</span>
+                    <span class="cart-count" id="cartCount">3</span>
                 </button>
                 <button class="mobile-menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             </div>
