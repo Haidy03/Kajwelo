@@ -9,7 +9,7 @@
             line-height: 1.6;
             color: #333;
             background: #fff;
-            margin-top: 4%;
+            /* margin-top: 4%; */
         }
 
         /* Navigation */
@@ -21,6 +21,7 @@
             width: 100%;
             z-index: 1000;
             padding: 0 20px;
+            margin-bottom: 2%;
         }
 
         .nav-container {
