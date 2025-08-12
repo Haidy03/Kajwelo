@@ -37,8 +37,8 @@
                         minlength="6">
                     <div class="invalid-feedback">Password must be at least 6 characters.</div>
                 </div>
-                <div class="form-group form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="showPasswordCheck">
+                <div class="form-group form-check mb-3" id="showLoginPass">
+                    <span id="showPasswordCheck"><i class="fa-regular fa-eye-slash"></i></span>
                     <label class="form-check-label" for="showPasswordCheck">Show Password</label>
                 </div>
                 <div class="buttonContainer">
@@ -53,56 +53,55 @@
         <div class="form-panel" id="signupPanel">
             <form class="form-control signup-form" id="signupForm" novalidate>
                 <h2>Create Account</h2>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupFirstName">First Name</label>
                     <input type="text" id="signupFirstName" name="firstName" required pattern="^[A-Za-z]{2,}$">
                     <div class="invalid-feedback">Enter a valid first name.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupLastName">Last Name</label>
                     <input type="text" id="signupLastName" name="lastName" required pattern="^[A-Za-z]{2,}$">
                     <div class="invalid-feedback">Enter a valid last name.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupUsername">Username</label>
                     <input type="text" id="signupUsername" name="username" required pattern="^[A-Za-z0-9_]{4,}$">
                     <div class="invalid-feedback">At least 4 characters: letters, numbers, or _ only.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupEmail">Email</label>
                     <input type="email" id="signupEmail" name="email" required>
                     <div class="invalid-feedback">Enter a valid email address.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupPassword">Password</label>
                     <input type="password" id="signupPassword" name="password" required
                         pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$">
                     <div class="invalid-feedback">Must contain uppercase, lowercase, digit & 6+ chars.</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="text">
                     <label for="signupConfirmPassword">Confirm Password</label>
                     <input type="password" id="signupConfirmPassword" name="confirmPassword" required>
                     <div class="invalid-feedback">Passwords do not match.</div>
                 </div>
-                <div class="form-group"
-                    style="margin-bottom: 10px; display: flex; flex-direction: row; align-items: center;">
-                    <input type="checkbox" id="showSignupPassword">
+                <div class="form-group" id="showRegisterPass">
+                    <span id="showSignupPassword"><i class="fa-regular fa-eye-slash"></i></span>
                     <label for="showSignupPassword">Show Password</label>
                 </div>
-                <div class="form-group row">
-                    <label class="col-4" for="gender">Gender :</label>
+                <div class="form-group">
+                    <label>Gender :</label>
                     <input type="radio" class="col-1" id="genderMale" name="gender" value="male" required>
                     <label for="genderMale" class="col-3">Male</label>
                     <input type="radio" class="col-1" id="genderFemale" name="gender" value="female" required>
                     <label for="genderFemale" class="col-3">Female</label>
                     <div class="invalid-feedback col-12">Please select your gender.</div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-4" for="signupJoinAs">Join As :</label>
-                    <input type="radio" class="col-1" id="joinAsCustomer" name="joinAs" value="customer" required>
+                <div class="form-group">
+                    <label>Join As :</label>
+                    <input type="radio" id="joinAsCustomer" name="joinAs" value="customer" required>
                     <label for="joinAsCustomer" class="col-3">Customer</label>
-                    <input type="radio" class="col-1" id="joinAsBrand" name="joinAs" value="seller" required>
-                    <label for="joinAsBrand" class="col-3">Brand Owner</label>
+                    <input type="radio" id="joinAsBrand" name="joinAs" value="seller" required>
+                    <label for="joinAsBrand">Brand Owner</label>
                     <div class="invalid-feedback col-12">Please select an option.</div>
                 </div>
                 <div class="buttonContainer">

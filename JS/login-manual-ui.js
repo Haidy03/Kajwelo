@@ -34,9 +34,15 @@ export function toggleMode(toSignup) {
     signupMode = toSignup;
     if (signupMode) {
         container.classList.add('signup-mode');
+        mobileSignupBtn.classList.add('signup-active');
+        mobileSignupBtn.classList.remove('inactive', 'login-active');
+        mobileLoginBtn.classList.add('inactive');
         setIntroContent(true);
     } else {
         container.classList.remove('signup-mode');
+        mobileLoginBtn.classList.add('login-active');
+        mobileLoginBtn.classList.remove('inactive', 'signup-active');
+        mobileSignupBtn.classList.add('inactive');
         setIntroContent(false);
     }
 }
@@ -83,6 +89,7 @@ if (mobileLoginBtn && mobileSignupBtn) {
         mobileLoginBtn.classList.add('login-active');
         mobileLoginBtn.classList.remove('inactive', 'signup-active');
         mobileSignupBtn.classList.add('inactive');
+        container.classList.remove('signup-mode');
     };
     mobileSignupBtn.onclick = () => {
         document.getElementById('signupPanel').style.display = '';
@@ -90,6 +97,7 @@ if (mobileLoginBtn && mobileSignupBtn) {
         mobileSignupBtn.classList.add('signup-active');
         mobileSignupBtn.classList.remove('inactive', 'login-active');
         mobileLoginBtn.classList.add('inactive');
+        container.classList.add('signup-mode');
     };
 }
 
