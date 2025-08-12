@@ -7,11 +7,15 @@ import { toggleMode } from "./login-manual-ui.js";
 const loginForm = document.getElementById("loginForm");
 const showPasswordCheck = document.getElementById("showPasswordCheck");
 const codeField = document.getElementById("confirmationCodeField");
+const show_hide_loginPasswordText=document.querySelector("#showLoginPass>label")
+const pwd = document.getElementById('loginPassword');
 
 // Show/hide password
-showPasswordCheck.addEventListener("change", () => {
-    const pwd = document.getElementById('loginPassword');
-    pwd.type = showPasswordCheck.checked ? "text" : "password";
+showPasswordCheck.addEventListener("click", () => {
+    
+    pwd.type = showPasswordCheck.innerHTML == `<i class="fa-regular fa-eye-slash"></i>` ? "text" : "password";
+    showPasswordCheck.innerHTML = showPasswordCheck.innerHTML == `<i class="fa-regular fa-eye-slash"></i>` ? `<i class="fa-regular fa-eye"></i>` : `<i class="fa-regular fa-eye-slash"></i>`;
+    show_hide_loginPasswordText.textContent = show_hide_loginPasswordText.textContent == "Show Password" ? "Hide Password" : "Show Password";
 });
 
 loginForm.addEventListener("submit", (e) => {
