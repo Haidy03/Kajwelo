@@ -50,7 +50,7 @@ window.addEventListener("load",function()
 
         const ProCurrentPrice=this.document.createElement("span");     //span for the current price
         ProCurrentPrice.classList.add("current-price");
-        ProCurrentPrice.textContent=product.currentprice;
+        ProCurrentPrice.textContent=product.currentprice+" $";
 
         const ProOldPrice=this.document.createElement("span");     //span for the old price
         ProOldPrice.classList.add("old-price");
