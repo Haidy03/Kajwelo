@@ -23,14 +23,33 @@ window.addEventListener("load",function()
         const imagecontainer=this.document.createElement("div");             // image div for this card
         imagecontainer.classList.add("product-image");
        
-     
-     
+        const badge= document.createElement("div");
+        badge.className="product-badge";
+        
+        const overlay=document.createElement("div");
+        overlay.className="product-overlay";
+
+        const whishListBtn=this.document.createElement("button");
+        whishListBtn.className="wishlist-btn";
+        whishListBtn.textContent="♡";
+
+        
+
+        const quickViewBtn=this.document.createElement("button");
+        quickViewBtn.className="quick-view-btn";
+        quickViewBtn.textContent="";
+        quickViewBtn.innerHTML=`<i class="fa-solid fa-cart-shopping"></i> Add to Cart`
+
+        overlay.appendChild(quickViewBtn);
+        overlay.appendChild(whishListBtn);
+
         const image=this.document.createElement("img");                     //the image
         image.src=product.image;
         image.style.width="100%";
         image.style.height="100%";
         
         imagecontainer.appendChild(image);
+        imagecontainer.appendChild(overlay);
 
         const info=this.document.createElement("div");                      //div for the info about the product
         info.classList.add("product-info");
