@@ -1,6 +1,6 @@
 const products=[
     {title:"Dress",currentprice:300,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"Nike"},
-    {title:"blouse",currentprice:300,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"LC"},
+    {title:"blouse",currentprice:200,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"LC"},
     {title:"Dress",currentprice:300,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"Defacto"},
     {title:"blouse",currentprice:300,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"Adidas"},
     {title:"Dress",currentprice:300,oldprice:400,image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",brand:"Nike"},
