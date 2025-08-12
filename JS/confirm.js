@@ -35,7 +35,7 @@ form.addEventListener("submit", function (e) {
     Auth.login({ email, password });
 
     setTimeout(() => {
-      window.location.href = "testnav.html";
+      window.location.href = "FinalHomePage.html";
     }, 1500); // وقت كافي لقراءة الرسالة
   } else {
     codeInput.classList.remove("is-valid");
