@@ -49,7 +49,7 @@ loginForm.addEventListener("submit", (e) => {
     const result = Auth.login({ email, password });
 
     if (result && result.success) {
-        window.location.href = "testnav.html";
+        window.location.href = "FinalHomePage.html";
     } else {
         let message = "We couldn't log you in. Please check your email and password.";
         if (result.reason === "email_not_found") {
