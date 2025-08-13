@@ -1,6 +1,10 @@
 // 🔐 utils/logout.js
 import { Storage } from "./localStorageHelper.js";
-import { showModal } from "./modalHelper.js";
+import { navbar } from '../components/navbar.js';
+import { footer } from '../components/footer.js';
+
+document.body.insertAdjacentHTML("afterbegin",navbar)
+document.body.insertAdjacentHTML("beforeend",footer)
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentUser = Storage.get("loggedInUser");
@@ -45,6 +49,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1500);
     });
   }
-
-
 });
