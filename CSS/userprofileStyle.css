@@ -1,0 +1,127 @@
+:root {
+  --color-primary: #0e2d4c; /* Main brand navy blue */
+  --color-primary-light: #1a3d6a; /* For hover/active buttons */
+  --color-accent: #ffd400;
+  --secondary-color: #f3f3f3;
+  --text-color: #333;
+  --highlight-color: #007bff;
+
+  --color-bg: #ffffff; /* Page background */
+  --color-bg-secondary: #f5f5f5; /* Cards, sections */
+
+  /* TEXT */
+  --color-text-main: #0e2d4c; /* Primary heading text */
+  --color-text-secondary: #4a4a4a; /* Paragraphs, muted text */
+
+  /* BORDERS */
+  --color-border: #dcdcdc; /* Input borders, card lines */
+
+  /* FEEDBACK */
+  --color-success: #4caf50; /* Green: success states */
+  --color-error: #f44336; /* Red: error messages */
+}
+
+/* Dark mode */
+:root.dark {
+  /* BRAND COLORS */
+  --color-primary: #0e2d4c;
+  --color-primary-light: #264e7c;
+  --color-accent: #ffd400;
+
+  /* BACKGROUNDS */
+  --color-bg: #121212;
+  --color-bg-secondary: #1e1e1e;
+
+  /* TEXT */
+  --color-text-main: #ffffff;
+  --color-text-secondary: #cccccc;
+
+  /* BORDERS */
+  --color-border: #333333;
+
+  /* FEEDBACK */
+  --color-success: #81c784;
+  --color-error: #ef5350;
+}
+
+body {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    display: flex;
+    gap: 20px;
+    padding: 20px 15px;
+  }
+
+  .sidebar-col {
+    flex: 0 0 280px;
+  }
+
+  .content-col {
+    flex: 1;
+  }
+}
+
+.sidebar-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.sidebar h5 {
+  margin-bottom: 2rem;
+}
+
+.sidebar a {
+  display: block;
+  margin: 0.5rem 0;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  color: var(--primary-color);
+}
+
+.account-section {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.25rem;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.text-primary-custom {
+  color: var(--primary-color) !important;
+}
+
+.btn-link {
+  color: var(--primary-color);
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
