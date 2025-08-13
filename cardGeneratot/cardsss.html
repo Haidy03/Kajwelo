@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Products</title>
-    <link rel="stylesheet" href="../css/Finalhomepage.css">
+    <link rel="stylesheet" href="../CSS/Finalhomepage.css" />
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" /> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
 
+  <style>
+    .Addwishlist-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #ccc;
+      transition: color 0.3s;
+    }
 
+    .Addwishlist-btn:hover {
+      color: red;
+    }
 
-</head>
+    .Addwishlist-btn.active {
+      color: red;
+    }
+  </style>
 
-<body>
-
+  <body>
     <section id="productssection"></section>
-    
-
 
     <script src="../cardGeneratot/card.js"></script>
-    <script type="module" src="../utils/logout.js"></script>
-</body>
+    <script src="wishlist.js"></script>
 
+    <script type="module" src="../utils/logout.js"></script>
+  </body>
 </html>
