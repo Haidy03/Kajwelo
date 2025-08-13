@@ -37,17 +37,27 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            padding: 0;
         }
 
         .form-control {
-            width: 90%;
+            padding: 20px;
+            width: 95%;
             border: none;
             background: none;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
             font-size: medium;
         }
+
+        #showpass {
+            padding: 0;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+
 
         .form-control h2 {
             color: var(--color-primary);
@@ -55,6 +65,13 @@
             text-align: center;
             font-size: 1.8rem;
         }
+
+        #text {
+            display: flex;
+            flex-direction: column;
+        }
+
+
 
         .form-group label {
             color: var(--color-text-main);
@@ -65,7 +82,7 @@
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group input[type="password"] {
-            width: 100%;
+            width: 90%;
             height: 25px;
             padding: 10px 12px;
             border: 1px solid #dcdcdc;
@@ -231,9 +248,13 @@
             color: #fff;
         }
 
-        #signupPanel .signup-form input[type=checkbox] {
-            margin-right: 4px;
-            width: 20%;
+        #showSignupPassword,
+        #showPasswordCheck {
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--color-primary-light);
+            margin-right: 5px;
         }
 
         .buttonContainer {

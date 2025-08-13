@@ -1,5 +1,10 @@
 // 🔐 utils/logout.js
 import { Storage } from "./localStorageHelper.js";
+import { navbar } from '../components/navbar.js';
+import { footer } from '../components/footer.js';
+
+document.body.insertAdjacentHTML("afterbegin",navbar)
+document.body.insertAdjacentHTML("beforeend",footer)
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentUser = Storage.get("loggedInUser");
@@ -24,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cartCount.style.display = "none";
 
     cartBtn.addEventListener("click", () => {
-      
+
       alert("you must login/register to access cart..!")
       /* const modal = new bootstrap.Modal(document.getElementById("quickLoginModal"));
       modal.show(); */
@@ -36,14 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => {
       Storage.remove("loggedInUser");
 
-      const modal = new bootstrap.Modal(document.getElementById("logoutModal"));
-      modal.show();
-
+      // const modal = new bootstrap.Modal(document.getElementById("logoutModal"));
+      // modal.show();
+      window.location.href = "login-register.html";
       setTimeout(() => {
-        window.location.href = "login-register.html";
+
       }, 1500);
     });
   }
-
-
 });
