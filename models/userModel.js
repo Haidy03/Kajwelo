@@ -6,6 +6,9 @@ export function createUser(userData, confirmCode) {
     confirmCode,
     isConfirmed: false,
     isMaster: false,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    cart: [],
+    wishlist:[],
+    orders:[],
   };
 }
