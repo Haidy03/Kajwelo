@@ -1,4 +1,4 @@
-export const navbar =`
+export const navbar = `
 
     <nav class="custom-navbar">
         <div class="nav-container">
@@ -18,7 +18,9 @@ export const navbar =`
             <div class="nav-icons">
                 <button class="icon-btn" title="Login" id="loginBtn"><i class="fas fa-user"></i></button>
                 <button class="icon-btn" title="Logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
-                <button class="icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>
+<button class="icon-btn" title="Wishlist" onclick="location.href='/cardGeneratot/wishlist.html'">
+  <i class="fas fa-heart"></i>
+</button>
                 <button class="icon-btn" title="Cart" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">3</span>

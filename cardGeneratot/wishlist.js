@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
   try {
-    // Load wishlist from localStorage
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    // Load loggedInUser
+    let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!loggedInUser || !Array.isArray(loggedInUser.wishlist)) {
+      loggedInUser = { wishlist: [] };
+    }
+
+    let wishlist = loggedInUser.wishlist;
 
     // Get the container where cards will be inserted
     const wishlistContainer = document.getElementById("wishlist-container");
@@ -66,30 +72,44 @@ document.addEventListener("DOMContentLoaded", function () {
       )
       .join("");
 
+    // Hook up remove buttons
     document.querySelectorAll(".remove-wishlist-btn").forEach((button) => {
       button.addEventListener("click", function () {
         const card = this.closest("[data-id]");
         const productId = parseInt(card.getAttribute("data-id"));
 
-        const updatedWishlist = wishlist.filter(
+        // Remove from loggedInUser.wishlist
+        loggedInUser.wishlist = loggedInUser.wishlist.filter(
           (item) => item.id !== productId
         );
 
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+        // Save changes back
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
 
-        card.remove();
-
-        if (wishlistCount) {
-          wishlistCount.textContent = `Wishlist (${updatedWishlist.length})`;
+        // Also update users array
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
+        if (userIndex !== -1) {
+          users[userIndex] = loggedInUser;
+          localStorage.setItem("users", JSON.stringify(users));
         }
 
-        if (updatedWishlist.length === 0) {
+        // Remove card from DOM
+        card.remove();
+
+        // Update counter
+        if (wishlistCount) {
+          wishlistCount.textContent = `Wishlist (${loggedInUser.wishlist.length})`;
+        }
+
+        // Show empty message if none left
+        if (loggedInUser.wishlist.length === 0) {
           wishlistContainer.innerHTML = `
             <div class="col-12 text-center py-5">
               <i class="fas fa-heart-broken fa-3x text-muted mb-3"></i>
               <h5 class="text-muted">Your wishlist is empty</h5>
               <p class="text-muted">Start adding items to see them here</p>
-              <a href="cardsss.html" class="btn btn-primary" >Browse Products</a>
+              <a href="cardsss.html" class="btn btn-primary">Browse Products</a>
             </div>
           `;
         }

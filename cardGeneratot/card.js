@@ -117,35 +117,50 @@ window.addEventListener("load", function () {
     whishListBtn.dataset.productId = product.id; // NEW
 
     whishListBtn.addEventListener("click", function () {
-      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      // 1. Get logged-in user
+      let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-      const existingIndex = wishlist.findIndex(
+      if (!loggedInUser) {
+        alert("You need to log in to use wishlist!");
+        window.location.href = "/login-register.html"; // redirect after alert
+        return;
+      }
+
+      // 2. Ensure wishlist exists
+      if (!Array.isArray(loggedInUser.wishlist)) {
+        loggedInUser.wishlist = [];
+      }
+
+      // 3. Check if product is already in wishlist
+      const existingIndex = loggedInUser.wishlist.findIndex(
         (item) => item.id === product.id
       );
 
       if (existingIndex === -1) {
-        // Add to wishlist
-        wishlist.push(product);
+        // Add product
+        loggedInUser.wishlist.push(product);
         whishListBtn.innerHTML = "❤";
         whishListBtn.classList.add("active");
       } else {
-        // Remove from wishlist
-        wishlist.splice(existingIndex, 1);
-        whishListBtn.innerHTML = "♡"; //
+        // Remove product
+        loggedInUser.wishlist.splice(existingIndex, 1);
+        whishListBtn.innerHTML = "♡";
         whishListBtn.classList.remove("active");
       }
 
-      // Save back to localStorage
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      // 4. Save back to loggedInUser
+      localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
 
-      console.log("Wishlist updated:", wishlist);
+      // 5. Also sync with users array
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
+      if (userIndex !== -1) {
+        users[userIndex] = loggedInUser;
+        localStorage.setItem("users", JSON.stringify(users));
+      }
+
+      console.log("Wishlist updated:", loggedInUser.wishlist);
     });
-
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    if (wishlist.some((item) => item.id === product.id)) {
-      whishListBtn.innerHTML = "❤";
-      whishListBtn.classList.add("active");
-    }
 
     //////////////////
 
