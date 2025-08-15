@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+
+    <script type="module">
+        import { Storage } from "../utils/localStorageHelper.js";
+        import { User } from "../models/User.js";
+        import { Customer } from "../models/Customer.js";
+        import { Seller } from "../models/Seller.js";
+        import { Admin } from "../models/Admin.js";
+
+        window.addEventListener("load", () => {
+
+            const options = {
+                address: "Tanta",
+                phone: "01555853925",
+                gender: "female"
+            }
+
+            const sellerOptions = {
+                brandName: "TownTeam",
+                businessAddress: "Tanta",
+                targetAudience: "Men"
+            }
+
+            const newCustomer1 = new Customer("haidy", "haidy@exmaple.com", "1234", "Customer", options);
+            const newCustomer2 = new Customer("mekkawi", "mekkawi@exmaple.com", "1234", "Customer", options);
+            const newCustomer3 = new Customer("rahma", "rahma@exmaple.com", "1234", "Customer", options);
+
+            const townteam = new Seller("Rahma", "Rahma@test.com", "123456", "seller", sellerOptions);
+            
+            const testProduct = {
+                id: crypto.randomUUID(),
+                name: "Skirt",               // e.g. "Oversized Graphic Tee"
+                description: "A Cute Skirt",        // Full product description
+                price: 350,              // Base price (may vary with size or color)
+
+                image: "/images/anyImage.jpg",             // URLs to product images
+
+                category: "Women",           // "Men", "Women", "Unisex", etc.
+                subcategory: "Skirt",        // "T-Shirts", "Jeans", "Hoodies", etc.
+
+                sellerId: townteam.id,          // Reference to seller (brand)
+
+                availableColors: ["Red", "Black", "Blue"],  // Hex or color names e.g. ["#000000", "Red"]
+                availableSizes: ["XL", "M"],   // ["S", "M", "L", "XL"]
+                //fit:[String],               // ["Regular", "Slim", "Oversized",...etc]
+
+                stock: [                    // Stock per size and color
+                    {
+                        size: "XL",
+                        color: "Red",
+                        quantity: 5
+                    },
+                    {
+                        size: "XL",
+                        color: "Black",
+                        quantity: 3
+                    },
+                    {
+                        size: "XL",
+                        color: "Blue",
+                        quantity: 1
+                    },
+                    {
+                        size: "M",
+                        color: "Blue",
+                        quantity: 3
+                    }
+                ],
+                tags: ["Best Seller"],             // ["summer", "casual", "sale"]
+
+                visibility: true,
+                //isFeatured: Boolean,        // For homepage highlights
+                //isOnSale: Boolean,
+                salePrice: 175,          // If applicable
+
+                // rating: {
+                //   average: Number,          // 4.5
+                //   count: Number             // 130 reviews
+                // },
+
+                createdAt: Date,
+                updatedAt: Date
+            }
+            townteam.products = [testProduct]
+
+
+            const users = [newCustomer1, newCustomer2, newCustomer3, townteam];
+            Storage.set("users", users);
+            const allusers = Storage.get("users");
+
+            const brand = allusers[3];
+            const customer = allusers[0];
+            let product1 = { id: testProduct.id, name: testProduct.name,  price: testProduct.price, sellerId: testProduct.sellerId }
+            let product2 = { id: 50, name: "Pants", color: "black", price: 100, sellerId: newCustomer1.id }
+            //Storage.set("loggedInSeller", brand);
+
+            Storage.set("loggedInUser", customer)
+
+            const currentUser = Storage.get("loggedInUser");
+
+
+
+
+
+
+
+
+
+
+            const order = [product1, product1];
+
+            const orders = [order, order, order]
+            //console.log(currentUser)
+            //console.log(currentUser instanceof Seller)
+
+
+            // Seller Behaviour
+            if (currentUser instanceof Seller) {
+
+                currentUser.verify()
+                const result = currentUser.addProduct(product1);
+                currentUser.orders = orders;
+                //currentUser.earnings=currentUser.calculateTotalEarnings()
+                if (result.success) User.updateInDB(currentUser)
+                //console.log(result.message)
+
+
+
+
+
+                alert("ana el seller")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+            // Customer Behaviour
+            else if (currentUser instanceof Customer) {
+
+
+                currentUser.cart = [product1, product2]
+
+                let order = [{ product: product1, quantity: 2, size: "XL", color: "Red", buyer: currentUser.id }
+                    , { product: product2, quantity: 3, size: "XL", color: "black", buyer: currentUser.id }
+                ]
+                User.updateInDB(currentUser);
+
+                let result = currentUser.checkout(order)
+                if (result.success) {
+                    console.log(result.message)
+                } else {
+                    alert(result.message)
+                }
+
+
+
+
+
+
+
+alert("ana el customer")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+            // Admin Behaviour
+            else if (currentUser instanceof Admin) {
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+        })
+
+    </script>
+</body>
+
+</html>
