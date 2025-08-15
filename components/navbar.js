@@ -5,9 +5,9 @@ export const navbar = `
             <a href="#" class="logo">Kajwelo</a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="/FinalHomePage.html" class="nav-link">Home</a></li>
                 <li><a href="#" class="nav-link">Contact</a></li>
-                <li><a href="#" class="nav-link">Brands</a></li>
+                <li><a href="/Pages/Brands.html" class="nav-link">Brands</a></li>
             </ul>
 
             <!-- <div class="search-container">
@@ -21,7 +21,7 @@ export const navbar = `
 <button class="icon-btn" title="Wishlist" onclick="location.href='/cardGeneratot/wishlist.html'">
   <i class="fas fa-heart"></i>
 </button>
-                <button class="icon-btn" title="Cart" id="cartBtn">
+                <button class="icon-btn" title="Cart" id="cartBtn" onclick="location.href='/Pages/Cart.html'">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">3</span>
                 </button>
