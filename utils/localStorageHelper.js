@@ -1,32 +1,102 @@
 // 💾 utils/localStorageHelper.js
 
-// Storage is a helper object that simplifies localStorage operations
-export const Storage = {
-  // Stores a value under a given key after converting it to JSON
-  set: (key, val) => localStorage.setItem(key, JSON.stringify(val)),
+// localStorageHelper.js
+import { User } from "../models/User.js";
+import { Customer } from "../models/Customer.js";
+import { Seller } from "../models/Seller.js";
+import { Admin } from "../models/Admin.js";
 
-  // Retrieves a value by key and parses it from JSON
-  // Returns default value if key doesn't exist or parsing fails
-  get: (key, def = null) => {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : def;
-    } catch {
-      return def;
-    }
-  },
+//import {Product} from "../models/Product.js";
 
-  // Removes a specific key from localStorage
-  remove: (key) => localStorage.removeItem(key),
-
-  // Clears all keys from localStorage
-  clear: function () {
-    localStorage.clear();
-  },
-
-  // Checks if a key exists in localStorage
-  has: (key) => localStorage.getItem(key) !== null,
+// القاموس (Class Registry)
+const classMap = {
+    user: User,
+    customer: Customer,
+    seller: Seller,
+    admin: Admin,
+    //product:Product
 };
+
+export const Storage = {
+    set(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    },
+
+    get(key, defaultValue = null) {
+        const stored = localStorage.getItem(key);
+        if (!stored) return defaultValue;
+
+        const parsed = JSON.parse(stored);
+
+        if (Array.isArray(parsed)) {
+            
+            return parsed.map(item => reviveInstance(item));
+        }
+
+        if (typeof parsed === "object" && parsed !== null) {
+            return reviveInstance(parsed);
+        }
+
+        return parsed;
+    },
+
+    remove(key) {
+        localStorage.removeItem(key);
+    },
+
+    // Clears all keys from localStorage
+    clear: function () {
+        localStorage.clear();
+    },
+
+    // Checks if a key exists in localStorage
+    has: (key) => localStorage.getItem(key) !== null,
+};
+
+// دالة عامة لإعادة بناء الـ instance
+export function reviveInstance(obj) {
+    
+    if (!obj || typeof obj !== "object") return obj;
+   
+    const key = (obj.role || obj.class || "").toLowerCase();
+    console.log()
+    const TargetClass = classMap[key];
+
+    if (TargetClass) {
+        return Object.assign(new TargetClass(), obj);
+    }
+    
+    return obj; // لو مفيش كلاس مطابق، رجّع الـ object زي ما هو
+}
+
+
+// // Storage is a helper object that simplifies localStorage operations
+// export const Storage = {
+//   // Stores a value under a given key after converting it to JSON
+//   set: (key, val) => localStorage.setItem(key, JSON.stringify(val)),
+
+//   // Retrieves a value by key and parses it from JSON
+//   // Returns default value if key doesn't exist or parsing fails
+//   get: (key, def = null) => {
+//     try {
+//       const item = localStorage.getItem(key);
+//       return item ? JSON.parse(item) : def;
+//     } catch {
+//       return def;
+//     }
+//   },
+
+//   // Removes a specific key from localStorage
+//   remove: (key) => localStorage.removeItem(key),
+
+//   // Clears all keys from localStorage
+//   clear: function () {
+//     localStorage.clear();
+//   },
+
+//   // Checks if a key exists in localStorage
+//   has: (key) => localStorage.getItem(key) !== null,
+// };
 
 /*
 🧪 Example Usage:
