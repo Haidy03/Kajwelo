@@ -13,11 +13,11 @@ window.addEventListener("load",function()
 
     addProductBtn.addEventListener("click",function()
     {
-        window.location.href="addProductSeller.html";
+        window.location.href="SelleraAddProduct.html";
     });
     AddProdBtn.addEventListener("click",function()
     {
-        window.location.href="addProductSeller.html";
+        window.location.href="SelleraAddProduct.html";
     });
     DashboardBtn.addEventListener("click",function()
     {
