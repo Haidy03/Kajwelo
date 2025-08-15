@@ -1097,6 +1097,18 @@
                     <label class="form-label">Low Stock Threshold</label>
                     <input type="number" class="form-input" id="lowStockThreshold" min="0" value="10">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-input" id="productColor" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Size</label>
+                    <input type="text" class="form-input" id="productSize" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-input" id="productQuantity" min="0" value="10">
+                </div>
 
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
@@ -1109,7 +1121,7 @@
     </div>
 
     <!-- Restock Modal -->
-    <div class="modal" id="restockModal">
+    <!--<div class="modal" id="restockModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Restock Product</h3>
@@ -1148,7 +1160,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
 
     <script>
         // Sample inventory data
@@ -1319,8 +1331,8 @@
                         <button class="action-btn edit" onclick="editProduct(${product.id})" title="Edit Product">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn restock" onclick="openRestockModal(${product.id})" title="Restock">
-                            <i class="fas fa-plus"></i>
+                        <button class="action-btn restock" onclick="openRestockModal(${product.id})">
+                            <i class="fa-solid fa-toggle-on"></i>
                         </button>
                         <button class="action-btn delete" onclick="deleteProduct(${product.id})" title="Delete Product">
                             <i class="fas fa-trash"></i>
