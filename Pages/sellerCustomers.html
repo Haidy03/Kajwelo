@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Kajwelo - Customers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.875rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--topbar-height);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Customers Page Specific Styles */
+        .customers-container {
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .customers-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-cards {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .stat-icon.success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+
+        .stat-icon.warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+        }
+
+        .stat-icon.danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+
+        .stat-change.negative {
+            color: var(--danger-color);
+        }
+
+        .customers-table-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            min-width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .customers-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .customers-table th {
+            background: #f8f9fa;
+            color: var(--dark-color);
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .customers-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .customers-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .customer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .customer-details h6 {
+            margin: 0;
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .customer-details small {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .customer-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn.view {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary-color);
+        }
+
+        .action-btn.edit {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pagination-info {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .pagination {
+            margin: 0;
+        }
+
+        .page-link {
+            color: var(--primary-color);
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .page-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .page-item.active .page-link {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 993px) {
+            .sidebar {
+                left: 0;
+                position: fixed;
+            }
+            
+            .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .customers-table-section {
+                overflow-x: auto;
+            }
+
+            .search-input {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .customers-container {
+                padding: 1rem;
+            }
+
+            .customers-header {
+                padding: 1rem;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-actions {
+                justify-content: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .customers-table {
+                font-size: 0.8125rem;
+            }
+
+            .customers-table th,
+            .customers-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .customer-details h6 {
+                font-size: 0.8125rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .user-profile span,
+            .user-profile i {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .customers-table th:nth-child(n+4),
+            .customers-table td:nth-child(n+4) {
+                display: none;
+            }
+
+            .customer-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .customer-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+
+            .pagination-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Touch device improvements */
+        @media (hover: none) {
+            .sidebar-link, .btn, .menu-toggle, .notification-btn, 
+            .action-btn {
+                min-height: 44px;
+            }
+
+            .search-input {
+                min-height: 44px;
+            }
+        }
+
+        /* Modal styles */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Kajwelo</div>
+            <div class="sidebar-subtitle">Seller Portal</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <button class="sidebar-link" id="DashBtn">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" id="AddProdBtn">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link active">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" id="InventoryBtn">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <span>Pending</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Customers</h1>
+            </div>
+            
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                    <span>John Seller</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Customers Container -->
+        <div class="customers-container">
+            <!-- Header -->
+            <div class="customers-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h2 class="mb-1">Customer Management</h2>
+                        <p class="mb-0 text-muted">Manage and view your customer base</p>
+                    </div>
+                    <div class="d-flex gap-2 mt-2 mt-md-0">
+                        <button class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#exportModal">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                            <i class="fas fa-plus"></i>
+                            Add Customer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row stats-cards">
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Total Customers</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 12% from last month
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-value">987</div>
+                        <div class="stat-label">Active Customers</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 8% from last month
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">New This Month</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 23% from last month
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-user-times"></i>
+                        </div>
+                        <div class="stat-value">104</div>
+                        <div class="stat-label">Inactive Customers</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> 5% from last month
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Table Section -->
+            <div class="customers-table-section">
+                <div class="table-header">
+                    <h3 class="table-title">All Customers</h3>
+                    <div class="table-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Search customers...">
+                        </div>
+                        <select class="form-select" style="width: auto;">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Pending</option>
+                        </select>
+                        <select class="form-select" style="width: auto;">
+                            <option>All Time</option>
+                            <option>This Month</option>
+                            <option>Last Month</option>
+                            <option>Last 3 Months</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover customers-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Email</th>
+                                <th>Orders</th>
+                                <th>Total Spent</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <!-- Customer rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing 1 to 10 of 1,247 customers
+                    </div>
+                    <nav aria-label="Customers pagination">
+                        <ul class="pagination mb-0">
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                            <li class="page-item active">
+                                <span class="page-link">1</span>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <span class="page-link">...</span>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">125</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCustomerForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Customers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="exportForm">
+                        <div class="mb-3">
+                            <label class="form-label">Export Format</label>
+                            <select class="form-select">
+                                <option value="csv">CSV</option>
+                                <option value="xlsx">Excel (XLSX)</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date Range</label>
+                            <select class="form-select">
+                                <option>All Time</option>
+                                <option>This Month</option>
+                                <option>Last Month</option>
+                                <option>Last 3 Months</option>
+                                <option>Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Customer Status</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">Active Customers</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">Inactive Customers</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                                <label class="form-check-label">Pending Customers</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="exportCustomers()">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Details Modal -->
+    <div class="modal fade" id="customerDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="customerDetailsContent">
+                    <!-- Customer details will be populated by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Edit Customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sample customer data
+        const customers = [
+            {
+                id: 1,
+                firstName: "Sarah",
+                lastName: "Johnson",
+                email: "sarah.johnson@email.com",
+                phone: "+1 (555) 123-4567",
+                orders: 12,
+                totalSpent: 2450.00,
+                status: "active",
+                joined: "2023-08-15",
+                address: "123 Main St, New York, NY 10001",
+                lastOrder: "2024-01-10"
+            },
+            {
+                id: 2,
+                firstName: "Michael",
+                lastName: "Chen",
+                email: "michael.chen@email.com",
+                phone: "+1 (555) 987-6543",
+                orders: 8,
+                totalSpent: 1890.50,
+                status: "active",
+                joined: "2023-09-22",
+                address: "456 Oak Ave, Los Angeles, CA 90210",
+                lastOrder: "2024-01-08"
+            },
+            {
+                id: 3,
+                firstName: "Emma",
+                lastName: "Williams",
+                email: "emma.williams@email.com",
+                phone: "+1 (555) 456-7890",
+                orders: 15,
+                totalSpent: 3200.75,
+                status: "active",
+                joined: "2023-07-03",
+                address: "789 Pine St, Chicago, IL 60601",
+                lastOrder: "2024-01-12"
+            },
+            {
+                id: 4,
+                firstName: "David",
+                lastName: "Brown",
+                email: "david.brown@email.com",
+                phone: "+1 (555) 321-0987",
+                orders: 3,
+                totalSpent: 567.25,
+                status: "inactive",
+                joined: "2023-11-18",
+                address: "321 Elm St, Houston, TX 77001",
+                lastOrder: "2023-12-15"
+            },
+            {
+                id: 5,
+                firstName: "Lisa",
+                lastName: "Garcia",
+                email: "lisa.garcia@email.com",
+                phone: "+1 (555) 654-3210",
+                orders: 7,
+                totalSpent: 1456.80,
+                status: "active",
+                joined: "2023-10-05",
+                address: "654 Maple Dr, Phoenix, AZ 85001",
+                lastOrder: "2024-01-09"
+            },
+            {
+                id: 6,
+                firstName: "James",
+                lastName: "Wilson",
+                email: "james.wilson@email.com",
+                phone: "+1 (555) 789-0123",
+                orders: 1,
+                totalSpent: 89.99,
+                status: "pending",
+                joined: "2024-01-05",
+                address: "987 Cedar St, Philadelphia, PA 19101",
+                lastOrder: "2024-01-05"
+            },
+            {
+                id: 7,
+                firstName: "Jennifer",
+                lastName: "Davis",
+                email: "jennifer.davis@email.com",
+                phone: "+1 (555) 012-3456",
+                orders: 9,
+                totalSpent: 2100.40,
+                status: "active",
+                joined: "2023-06-12",
+                address: "147 Birch Ln, San Antonio, TX 78201",
+                lastOrder: "2024-01-11"
+            },
+            {
+                id: 8,
+                firstName: "Robert",
+                lastName: "Martinez",
+                email: "robert.martinez@email.com",
+                phone: "+1 (555) 345-6789",
+                orders: 4,
+                totalSpent: 789.30,
+                status: "inactive",
+                joined: "2023-12-01",
+                address: "258 Spruce Ave, San Diego, CA 92101",
+                lastOrder: "2023-12-20"
+            },
+            {
+                id: 9,
+                firstName: "Ashley",
+                lastName: "Anderson",
+                email: "ashley.anderson@email.com",
+                phone: "+1 (555) 678-9012",
+                orders: 11,
+                totalSpent: 2670.15,
+                status: "active",
+                joined: "2023-05-20",
+                address: "369 Willow St, Dallas, TX 75201",
+                lastOrder: "2024-01-13"
+            },
+            {
+                id: 10,
+                firstName: "Christopher",
+                lastName: "Taylor",
+                email: "christopher.taylor@email.com",
+                phone: "+1 (555) 901-2345",
+                orders: 6,
+                totalSpent: 1234.60,
+                status: "active",
+                joined: "2023-08-30",
+                address: "741 Poplar Rd, Austin, TX 78701",
+                lastOrder: "2024-01-07"
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateCustomersTable();
+            setupEventListeners();
+        });
+
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const body = document.body;
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scrolling when sidebar is open on mobile
+            if (window.innerWidth < 993) {
+                if (sidebar.classList.contains('open')) {
+                    body.style.overflow = 'hidden';
+                } else {
+                    body.style.overflow = '';
+                }
+            }
+        }
+
+        // Close sidebar when clicking on a link (for mobile)
+        function setupEventListeners() {
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 993) {
+                        toggleSidebar();
+                    }
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                filterCustomers();
+            });
+
+            // Form submissions
+            document.getElementById('addCustomerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCustomer();
+            });
+        }
+
+        // Populate customers table
+        function populateCustomersTable() {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = customers.map(customer => `
+                <tr>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-avatar">
+                                ${customer.firstName.charAt(0)}${customer.lastName.charAt(0)}
+                            </div>
+                            <div class="customer-details">
+                                <h6>${customer.firstName} ${customer.lastName}</h6>
+                                <small>${customer.phone}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${customer.email}</td>
+                    <td>${customer.orders}</td>
+                    <td>${customer.totalSpent.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>
+                        <span class="status-badge status-${customer.status}">
+                            ${customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>${new Date(customer.joined).toLocaleDateString()}</td>
+                    <td>
+                        <div class="customer-actions">
+                            <button class="action-btn view" onclick="viewCustomer(${customer.id})" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" onclick="editCustomer(${customer.id})" title="Edit Customer">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteCustomer(${customer.id})" title="Delete Customer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter customers based on search
+        function filterCustomers() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const filteredCustomers = customers.filter(customer =>
+                customer.firstName.toLowerCase().includes(searchTerm) ||
+                customer.lastName.toLowerCase().includes(searchTerm) ||
+                customer.email.toLowerCase().includes(searchTerm) ||
+                customer.phone.includes(searchTerm)
+            );
+            
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = filteredCustomers.map(customer => `
+                <tr>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-avatar">
+                                ${customer.firstName.charAt(0)}${customer.lastName.charAt(0)}
+                            </div>
+                            <div class="customer-details">
+                                <h6>${customer.firstName} ${customer.lastName}</h6>
+                                <small>${customer.phone}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${customer.email}</td>
+                    <td>${customer.orders}</td>
+                    <td>${customer.totalSpent.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>
+                        <span class="status-badge status-${customer.status}">
+                            ${customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>${new Date(customer.joined).toLocaleDateString()}</td>
+                    <td>
+                        <div class="customer-actions">
+                            <button class="action-btn view" onclick="viewCustomer(${customer.id})" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" onclick="editCustomer(${customer.id})" title="Edit Customer">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteCustomer(${customer.id})" title="Delete Customer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // View customer details
+        function viewCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            const modalContent = document.getElementById('customerDetailsContent');
+            modalContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Personal Information</h6>
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td>${customer.firstName} ${customer.lastName}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>${customer.email}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone:</strong></td>
+                                <td>${customer.phone}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status:</strong></td>
+                                <td>
+                                    <span class="status-badge status-${customer.status}">
+                                        ${customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Order Information</h6>
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <td><strong>Total Orders:</strong></td>
+                                <td>${customer.orders}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Spent:</strong></td>
+                                <td>${customer.totalSpent.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Joined Date:</strong></td>
+                                <td>${new Date(customer.joined).toLocaleDateString()}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Order:</strong></td>
+                                <td>${new Date(customer.lastOrder).toLocaleDateString()}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6 class="text-primary">Address</h6>
+                        <p class="mb-0">${customer.address}</p>
+                    </div>
+                </div>
+            `;
+
+            const modal = new bootstrap.Modal(document.getElementById('customerDetailsModal'));
+            modal.show();
+        }
+
+        // Edit customer
+        function editCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            // In a real application, you would populate an edit form
+            // For now, we'll just show an alert
+            alert(`Edit customer: ${customer.firstName} ${customer.lastName}\n\nThis would open an edit form in a real application.`);
+        }
+
+        // Delete customer
+        function deleteCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            if (confirm(`Are you sure you want to delete ${customer.firstName} ${customer.lastName}? This action cannot be undone.`)) {
+                // In a real application, you would make an API call to delete the customer
+                const index = customers.findIndex(c => c.id === customerId);
+                if (index > -1) {
+                    customers.splice(index, 1);
+                    populateCustomersTable();
+                    alert('Customer deleted successfully!');
+                }
+            }
+        }
+
+        // Add new customer
+        function addCustomer() {
+            // In a real application, you would collect form data and make an API call
+            // For now, we'll just show a success message
+            alert('Customer added successfully!');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCustomerModal'));
+            modal.hide();
+            
+            // Reset form
+            document.getElementById('addCustomerForm').reset();
+        }
+
+        // Export customers
+        function exportCustomers() {
+            // In a real application, you would generate and download the export file
+            // For now, we'll just show a success message
+            alert('Export started! Your file will be downloaded shortly.');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            modal.hide();
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const body = document.body;
+            
+            if (window.innerWidth >= 993) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                body.style.overflow = '';
+            }
+        });
+
+        // Touch device improvements
+        if ('ontouchstart' in window) {
+            // Add touch-friendly classes
+            document.body.classList.add('touch-device');
+            
+            // Prevent zoom on input focus
+            document.addEventListener('touchstart', function() {}, {passive: true});
+        }
+
+        // iPad detection and improvements
+        function isiPad() {
+            return navigator.userAgent.match(/(iPad)/) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        if (isiPad()) {
+            document.body.classList.add('ipad-device');
+        }
+    </script>
+</body>
+</html>
