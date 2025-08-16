@@ -1,7 +1,7 @@
 import { Storage } from "../utils/localStorageHelper.js";
 
 export class User {
-  constructor(name, email, password,phone) {
+  constructor(name, email, password, phone) {
     if (new.target === User) {
       throw new Error("Cannot instantiate abstract class 'User' directly.");
     }
@@ -15,7 +15,7 @@ export class User {
     this.updatedAt = new Date();
     this.isConfirmed = false;
     this.role = "user";
-    this.confirmCode=null;
+    this.confirmCode = null;
   }
 
   // Common methods for all users
@@ -49,14 +49,6 @@ export class User {
     }
   }
 
-  // Space to Add Forget Password;
-  /*
-  
-  
-  
-  
-  
-  */
   static updateCurrentUser(updated_version) {
     const users = Storage.get("users");
 
@@ -67,10 +59,10 @@ export class User {
     });
 
     Storage.set("users", users);
-    Storage.set("loggedInUser",updated_version)
+    Storage.set("loggedInUser", updated_version)
   }
 
-static updateInDB(updated_version) {
+  static updateInDB(updated_version) {
     const users = Storage.get("users");
 
     users.forEach((u, i) => {

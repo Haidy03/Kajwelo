@@ -2,14 +2,26 @@
 import { Storage } from "./localStorageHelper.js";
 import { navbar } from '../components/navbar.js';
 import { footer } from '../components/footer.js';
+import { Auth } from "./auth.js"
+import { Customer } from "../models/Customer.js";
+import { Seller } from "../models/Seller.js";
+import { Admin } from "../models/Admin.js";
 
-document.body.insertAdjacentHTML("afterbegin",navbar)
-document.body.insertAdjacentHTML("beforeend",footer)
+const currentUser = Auth.getCurrentUser();
+if (currentUser instanceof Seller || currentUser instanceof Admin)
+  window.location.href = "accessDeniedPage.html";
+
+// window.addEventListener("load", () => {
+
+// })
+
+document.body.insertAdjacentHTML("afterbegin", navbar)
+document.body.insertAdjacentHTML("beforeend", footer)
 
 document.addEventListener("DOMContentLoaded", () => {
-  const currentUser = Storage.get("loggedInUser");
-  // if (!currentUser) {
-  //   window.location.href = "login-register.html";
+  // const currentUser = Auth.getCurrentUser();
+  // if (!(currentUser instanceof Customer)) {
+  //   window.location.href = "accessDeniedPage.html";
   //   return;
   // }
 
@@ -23,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.style.display = "none";
 
     loginBtn.addEventListener("click", () => {
-      window.location.href = "login-register.html";
+      window.location.href = "login.html";
     })
 
     cartCount.style.display = "none";
@@ -39,14 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.style.display = "none";
 
     logoutBtn.addEventListener("click", () => {
-      Storage.remove("loggedInUser");
+      Auth.logout()
 
       // const modal = new bootstrap.Modal(document.getElementById("logoutModal"));
       // modal.show();
-      window.location.href = "login-register.html";
-      setTimeout(() => {
+      // window.location.href = "login-register.html";
 
-      }, 1500);
     });
   }
 });

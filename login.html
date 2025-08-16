@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kajwelo - Login & Signup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./CSS/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Kajwelo</h1>
+            <p>Fashion & Style Portal</p>
+        </div>
+
+        <div class="form-switcher">
+            <button class="switch-btn active" id="loginBtn">Login</button>
+            <button class="switch-btn" id="signupBtn">Sign Up</button>
+            <div class="switch-indicator" id="switchIndicator"></div>
+        </div>
+
+        <div class="form-container">
+            <form class="form active" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email" required>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password"
+                            required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                            <i class="fas fa-eye" id="loginPasswordIcon"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+
+                <button type="submit" class="form-btn">Login</button>
+
+                <div class="forgot-password">
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+            </form>
+
+            <!-- Signup Form - Phase 1: Role Selection -->
+            <form class="form" id="signupPhase1">
+                <div class="phase-indicator">
+                    <div class="phase-dot active"></div>
+                    <div class="phase-dot"></div>
+                </div>
+
+                <div class="role-selection">
+                    <label class="form-label">Join As</label>
+                    <div class="role-options">
+                        <div class="role-option">
+                            <input type="radio" id="brandOwner" name="userRole" value="Seller">
+                            <div class="role-card">
+                                <div class="role-icon">🏪</div>
+                                <div class="role-title">Brand Owner</div>
+                            </div>
+                        </div>
+                        <div class="role-option">
+                            <input type="radio" id="customer" name="userRole" value="Customer">
+                            <div class="role-card">
+                                <div class="role-icon">👤</div>
+                                <div class="role-title">Customer</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message" id="roleError"></div>
+                </div>
+
+                <button type="button" class="form-btn" id="nextToPhase2" disabled>Next</button>
+            </form>
+
+            <!-- Signup Form - Phase 2: Brand Owner Details -->
+            <form class="form" id="signupBrandOwner">
+                <div class="phase-indicator">
+                    <div class="phase-dot completed"></div>
+                    <div class="phase-dot active"></div>
+                </div>
+
+                <button type="button" class="back-btn" id="backToPhase1Brand">← Back</button>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandName">Name</label>
+                    <input type="text" id="brandName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandEmail">Email</label>
+                    <input type="email" id="brandEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="brandPassword" class="form-input" placeholder="Create password"
+                            required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('brandPassword')">
+                            <i class="fas fa-eye" id="brandPasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandConfirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="brandConfirmPassword" class="form-input"
+                            placeholder="Confirm password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('brandConfirmPassword')">
+                            <i class="fas fa-eye" id="brandConfirmPasswordIcon"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="brandPasswordMatchError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandNameField">Brand Name</label>
+                    <input type="text" id="brandNameField" class="form-input" placeholder="Enter your brand name"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandAddress">Address (Optional)</label>
+                    <input type="text" id="brandAddress" class="form-input" placeholder="Enter your address">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="brandPhone">Phone (Optional)</label>
+                    <input type="tel" id="brandPhone" class="form-input" placeholder="Enter your phone number">
+                </div>
+
+                <div class="target-audience-selection">
+                    <label class="form-label">Target Audience</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="targetMen" name="targetAudience" value="Men">
+                            <label class="checkbox-label" for="targetMen">Men</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="targetWomen" name="targetAudience" value="Women">
+                            <label class="checkbox-label" for="targetWomen">Women</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="targetAudienceError"></div>
+                </div>
+
+                <button type="submit" class="form-btn">Create Brand Account</button>
+            </form>
+
+            <!-- Signup Form - Phase 2: Customer Details -->
+            <form class="form" id="signupCustomer">
+                <div class="phase-indicator">
+                    <div class="phase-dot completed"></div>
+                    <div class="phase-dot active"></div>
+                </div>
+
+                <button type="button" class="back-btn" id="backToPhase1Customer">← Back</button>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerName">Name</label>
+                    <input type="text" id="customerName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerEmail">Email</label>
+                    <input type="email" id="customerEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="customerPassword" class="form-input" placeholder="Create password"
+                            required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('customerPassword')">
+                            <i class="fas fa-eye" id="customerPasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerConfirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="customerConfirmPassword" class="form-input"
+                            placeholder="Confirm password" required>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('customerConfirmPassword')">
+                            <i class="fas fa-eye" id="customerConfirmPasswordIcon"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="customerPasswordMatchError"></div>
+                </div>
+
+                <div class="gender-selection">
+                    <label class="form-label">Gender</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="genderMale" name="gender" value="Male">
+                            <label class="checkbox-label" for="genderMale">Male</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="genderFemale" name="gender" value="Female">
+                            <label class="checkbox-label" for="genderFemale">Female</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="genderError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerAddress">Address (Optional)</label>
+                    <input type="text" id="customerAddress" class="form-input" placeholder="Enter your address">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerPhone">Phone (Optional)</label>
+                    <input type="tel" id="customerPhone" class="form-input" placeholder="Enter your phone number">
+                </div>
+
+                <button type="submit" class="form-btn">Create Customer Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./JS/login.js" type="module"> </script>
+    <script>
+        // Password toggle function
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + 'Icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
