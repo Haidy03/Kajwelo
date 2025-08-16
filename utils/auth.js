@@ -104,6 +104,7 @@ export class Auth {
   // Optional: logout function
   static logout() {
     Storage.remove("loggedInUser");
+    window.location.href="../login.html"
   }
 
   // Optional: get current user
