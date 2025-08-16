@@ -1,77 +1,13 @@
-
- //                         My own scriptt
-window.addEventListener("load",function()
-{
-    const dashboardbtns=document.querySelectorAll(".dashboard-btn");
-    const addStockBtn=this.document.getElementById("addStockBtn");
-    const mainprice=this.document.getElementById("mainPriceId"); 
-    const salePrice=this.document.getElementById("salePriceId"); 
-    var error=this.document.getElementById("errordiv") ;
-    var error2=this.document.getElementById("errordiv2") ;
-
-
-//   Validation for the price
-    mainprice.addEventListener("change",function()
-{
-    if(mainprice.value<0)
-    {
-        mainprice.classList.add("error");
-        error.style.display="block";
-        mainprice.value=0;    
-        
-    }
-    else if(mainprice.value>=0)
-    {
-        mainprice.classList.remove("error");
-        error.style.display="none";
-    }
-});     //main price end
-
-    salePrice.addEventListener("change",function()
-{
-    if(salePrice.value<0)
-    {
-        salePrice.classList.add("error");
-        error2.style.display="block";
-        salePrice.value=0;    
-        
-    }
-    else if(salePrice.value>=0)
-    {
-        salePrice.classList.remove("error");
-        error2.style.display="none";
-    }
-});     //sale price end
-
-
-    
-    dashboardbtns.forEach(btn => {
-        btn.addEventListener("click",function(){
-            window.location.href="sellerdashboard.html";
-        })
-         
-    });
-    
-
-    const AddProdBtn=document.getElementById("AddProdBtn");
-    AddProdBtn.addEventListener("click",function()
-        {
-            window.location.href="addProductSeller.html";
-        });
-
-
-    
-        var allowedSizes = ["XS", "S", "M", "L", "XL", "2XL","3XL"];
-        var validColors = [
+var allowedSizes = ["XS", "S", "M", "L", "XL", "2XL","3XL"];
+var validColors = [
     "black", "white", "gray", "silver", "red", "maroon", "crimson", "salmon",
     "orange", "coral", "yellow", "gold", "green", "lime",
     "blue", "navy", "skyblue", "azure", "royalblue", "teal", "turquoise", "aqua",
     "purple", "violet", "lavender", "indigo", "plum", "magenta", "fuchsia",
     "pink", "hotpink", "brown", "chocolate", "tan", "beige"];
 
-
-
-        document.getElementById('addStockBtn').addEventListener('click', function() {
+window.addEventListener("load", function() {
+    document.getElementById('addStockBtn').addEventListener('click', function() {
         // Generate a unique ID for each entry
         const entryId = Date.now();
         
@@ -127,10 +63,4 @@ window.addEventListener("load",function()
             entry.remove();
         }
     }
-
-
-   
-
-    
-        
-});     //END OF WINDOW LOAD
+});

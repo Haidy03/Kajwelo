@@ -181,20 +181,22 @@
                     <div class="form-row two-cols">
                         <div class="form-group">
                             <label class="form-label required">Base Price ($)</label>
-                            <input type="number" class="form-input" name="price" step="0.01" min="0" placeholder="0.00" required>
+                            <input type="number" id="mainPriceId" class="form-input" name="price" step="0.01" min="0" placeholder="0.00" required>
+                            <div class="error-message" id="errordiv">Price must be 0 or greater</div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Sale Price ($)</label>
-                            <input type="number" class="form-input" name="salePrice" step="0.01" min="0" placeholder="0.00">
+                            <input type="number" id="salePriceId" class="form-input" name="salePrice" step="0.01" min="0" placeholder="0.00">
+                            <div class="error-message" id="errordiv2">Price must be 0 or greater</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Images -->
                 <div class="form-section full-width">
-                    <h3 class="section-title">
+                    <h3 class="section-title form-label">
                         <i class="fas fa-images"></i>
-                        Product Images
+                        Product Images <span class="required-asterisk">*</span>
                     </h3>
                     
                     <div class="image-upload-container" id="imageUploadContainer">
@@ -203,40 +205,13 @@
                         </div>
                         <div class="upload-text">Click to upload or drag and drop</div>
                         <div class="upload-hint">PNG, JPG, GIF up to 10MB</div>
-                        <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
+                        <input type="file" id="imageInput" class="form-input" accept="image/*" multiple style="display: none;">
                     </div>
-                    
+                    <div class="error-message" id="imageError">Please upload at least one product image</div>
                     <div class="image-preview" id="imagePreview"></div>
                 </div>
 
-                <!-- Product Variants -->
-                <div class="form-section full-width">
-                    <h3 class="section-title">
-                        <i class="fas fa-palette"></i>
-                        Product Variants
-                    </h3>
-                          /////////////////////////////////////////////////////////////////////////////////////////////
-                    <div class="form-row two-cols">
-                        <div class="form-group">
-                            <label class="form-label">Available Colors</label>
-                            <div class="tag-input-container" id="colorsContainer">
-                                <input type="text" class="tag-input" placeholder="Add color (press Enter)" id="colorInput">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Available Sizes</label>
-                            <div class="tag-input-container" id="sizesContainer">
-                                <input type="text" class="tag-input" placeholder="Add size (press Enter)" id="sizeInput">
-                            </div>
-                        </div>
-                        <!-- <div class="form-group">
-                            <label class="form-label">Fit Options</label>
-                            <div class="tag-input-container" id="fitContainer">
-                                <input type="text" class="tag-input" placeholder="Add fit (press Enter)" id="fitInput">
-                            </div>
-                        </div> -->
-                    </div>
-                </div>
+                
 
                 <!-- Stock Management -->
                 <div class="form-section full-width">
@@ -245,9 +220,7 @@
                         Stock Management
                     </h3>
                     
-                    <div class="stock-grid" id="stockGrid">
-                        <!-- Stock items will be dynamically generated -->
-                    </div>
+                    <div id="stockItemsContainer"></div>
                     
                     <button type="button" class="add-stock-btn" id="addStockBtn">
                         <i class="fas fa-plus"></i>
@@ -323,6 +296,14 @@
                 imageInput.click();
             });
 
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    uploadContainer.classList.remove('error');
+                    imageError.style.display = 'none';
+                    handleFiles(this.files);
+                }
+            });
+
             // Drag and drop
             uploadContainer.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -346,6 +327,8 @@
         }
 
         function handleFiles(files) {
+            document.getElementById('imageUploadContainer').classList.remove('error');
+            document.getElementById('imageError').style.display = 'none';
             Array.from(files).forEach(file => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
@@ -561,13 +544,33 @@
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
+
+                if (productImages.length === 0) {
+                document.getElementById('imageUploadContainer').classList.add('error');
+                document.getElementById('imageError').style.display = 'block';
+                document.getElementById('imageUploadContainer').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
                 submitProduct();
             });
         }
 
         function submitProduct() {
-            const formData = new FormData(document.getElementById('productForm'));
+            const fileInput = document.getElementById('imageInput');
+            const uploadContainer = document.getElementById('imageUploadContainer');
+            const imageError = document.getElementById('imageError');
             
+
+            // In your submitProduct function, replace the file input check with:
+        if (productImages.length === 0) {
+            document.getElementById('imageUploadContainer').classList.add('error');
+            document.getElementById('imageError').style.display = 'block';
+            document.getElementById('imageUploadContainer').scrollIntoView({ behavior: 'smooth' });
+            return false;
+        }
+    
+
+
             // Collect all the data
             const productData = {
                 name: formData.get('name'),
@@ -590,7 +593,7 @@
 
             // Validate required fields
             if (!productData.name || !productData.description || !productData.price || 
-                !productData.category || !productData.subcategory) {
+                !productData.category || !productData.subcategory || !productData.images) {
                 alert('Please fill in all required fields.');
                 return;
             }
@@ -617,6 +620,17 @@
                 submitBtn.disabled = false;
                 clearAutoSaveData();
             }, 2000);
+
+
+            if (productImages.length === 0) {
+                document.getElementById('imageUploadContainer').classList.add('error');
+                document.getElementById('imageError').style.display = 'block';
+                alert('Please upload at least one product image');
+                return;
+            } else {
+                document.getElementById('imageUploadContainer').classList.remove('error');
+                document.getElementById('imageError').style.display = 'none';
+            }
         }
 
         function resetForm() {
@@ -674,7 +688,7 @@
         document.getElementById('productForm').addEventListener('input', startAutoSave);
         document.getElementById('productForm').addEventListener('change', startAutoSave);
 
-        // Load auto-saved data on page load
+        //Load auto-saved data on page load
         function loadAutoSavedData() {
             const autoSaveData = localStorage.getItem('kajwelo_product_autosave');
             if (autoSaveData) {
