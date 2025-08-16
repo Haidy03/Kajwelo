@@ -5,16 +5,14 @@ import { User } from "../models/User.js";
 import { Customer } from "../models/Customer.js";
 import { Seller } from "../models/Seller.js";
 import { Admin } from "../models/Admin.js";
-
-//import {Product} from "../models/Product.js";
+import { Product } from "../models/Product.js";
 
 // القاموس (Class Registry)
 const classMap = {
-    user: User,
     customer: Customer,
     seller: Seller,
     admin: Admin,
-    //product:Product
+    product: Product
 };
 
 export const Storage = {
@@ -29,12 +27,11 @@ export const Storage = {
         const parsed = JSON.parse(stored);
 
         if (Array.isArray(parsed)) {
-            
-            return parsed.map(item => reviveInstance(item));
+            return parsed.map(item => reformProducts(reviveInstance(item)));
         }
 
         if (typeof parsed === "object" && parsed !== null) {
-            return reviveInstance(parsed);
+            return reformProducts(reviveInstance(parsed));
         }
 
         return parsed;
@@ -55,9 +52,9 @@ export const Storage = {
 
 // دالة عامة لإعادة بناء الـ instance
 export function reviveInstance(obj) {
-    
+
     if (!obj || typeof obj !== "object") return obj;
-   
+
     const key = (obj.role || obj.class || "").toLowerCase();
     console.log()
     const TargetClass = classMap[key];
@@ -65,8 +62,17 @@ export function reviveInstance(obj) {
     if (TargetClass) {
         return Object.assign(new TargetClass(), obj);
     }
-    
+
     return obj; // لو مفيش كلاس مطابق، رجّع الـ object زي ما هو
+}
+
+export function reformProducts(obj) {
+    Object.keys(obj).forEach(key => {
+        if (Array.isArray(obj[key])) {
+            obj[key] = obj[key].map(item => reviveInstance(item));
+        }
+    });
+    return obj
 }
 
 

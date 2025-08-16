@@ -1,91 +1,68 @@
 import { User } from "./User.js";
 import { Storage } from "../utils/localStorageHelper.js";
+import { Product } from "./Product.js";
 
 export class Seller extends User {
-  constructor(name, email, password, role, options = {}) {
-    super(name, email, password, role);
+  constructor(name, email, password, options = {}) {
+    super(name, email, password, options.phone);
 
     // Seller-specific fields
     this.brandName = options.brandName || '';
     this.businessAddress = options.businessAddress || null;
-    this.penddingProducts = options.penddingProducts || [];
     this.products = options.products || [];
     this.orders = options.orders || [];
     this.earnings = options.earnings || 0;
     this.isVerified = options.isVerified || false;
     this.targetAudience = options.targetAudience || "both";
+    this.role = "seller"
   }
 
   // Seller-specific methods
-  addProduct(product) {
-    if (product && this.isVerified) {
-      this.penddingProducts.forEach(penddingProduct => {
-        if (product.id === penddingProduct.id) return { success: false, message: "already waitig for admin approval" }
-      });
-      this.products.forEach(inventoryProduct => {
-        if (product.id === inventoryProduct.id) return { success: false, message: "already in inventory update quantity" }
-      });
+  addProduct(productData) {
+    if (productData && this.isVerified) {
 
-      this.penddingProducts.push({
-        ...product,
-        sellerId: this.id,
-        addedAt: new Date()
-      });
+      const exists = this.products.some(p => p.name === productData.name);
+      if (exists) {
+        return { success: false, message: "already waiting for admin approval" };
+      }
+
+      const product = new Product(this.id, productData);
+      this.products.push(product);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Product Waiting For Admin Review Successfully" }
+
+
+
     } else {
       return { success: false, message: "Product isn't Added, You're Not Verifed Yet" }
     }
   }
 
 
-  removeProductFromInventory(productId) {
+  removeProduct(productId) {
     const product = this.products.find(p => p.id === productId ? p : null)
     if (product) {
       this.products = this.products.filter(p => p.id !== productId);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "removed successfuly" };
     } else {
       return { success: false, message: "Product isn't Found" }
     }
   }
 
-  removeProductFromPenddingList(productId) {
-    const product = this.penddingProducts.find(p => p.id === productId ? p : null)
-    if (product) {
-      this.penddingProducts = this.penddingProducts.filter(p => p.id !== productId);
-      this.updatedAt = new Date();
-      return { success: true, message: "removed successfuly" };
-    } else {
-      return { success: false, message: "Product isn't Found" }
-    }
-  }
 
   updateProduct(productId, productUpdated) {
-    let productIndex = this.penddingProducts.findIndex(p => p.id === productId);
+    const productIndex = this.products.findIndex(p => p.id === productId);
     if (productIndex !== -1) {
-      this.penddingProducts[productIndex] = {
-        ...productUpdated,
-        updatedAt: new Date()
-      };
+      this.products[productIndex] = productUpdated;
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Updated successfuly" };
-
-    } else if (productIndex === -1) {
-      productIndex = this.products.findIndex(p => p.id === productId);
-      if (productIndex !== -1) {
-        this.products[productIndex] = {
-          ...productUpdated,
-          updatedAt: new Date()
-        };
-        this.updatedAt = new Date();
-        return { success: true, message: "Updated successfuly" };
-      }
+    } else {
+      return { success: false, message: "Product Not found" }
     }
-    else {
-      return { success: false, message: "Couldn't Found product withen This Seller products" }
-    }
-
   }
 
 
@@ -106,6 +83,27 @@ export class Seller extends User {
     this.updatedAt = new Date();
   }
 
+  showProduct(productId) {
+    let result = { success: false, message: "product isn't found" }
+    this.products.forEach(product => {
+      if (product.id === productId) {
+        result = product.show();
+        User.updateInDB(this)
+      }
+    })
+    return result;
+  }
+
+  hideProduct(productId) {
+    let result = { success: false, message: "product isn't found" }
+    this.products.forEach(product => {
+      if (product.id === productId) {
+        result = product.hide();
+        User.updateInDB(this)
+      }
+    })
+    return result;
+  }
 
 }
 
