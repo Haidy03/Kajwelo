@@ -18,6 +18,17 @@
             --topbar-height: 70px;
         }
 
+
+        .error-message {
+            color: #ce1010;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display:none;
+        }
+        .error {
+            border-color: red;
+            box-shadow: 0 0 0 2px rgba(180, 3, 3, 0.715);
+        }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #f8f9fa;
@@ -371,6 +382,35 @@
         .image-upload-container.dragover {
             border-color: var(--primary-color);
             background-color: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Error state for image upload */
+        .image-upload-container.error {
+            border: 2px dashed var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Show error when container has error class */
+        .image-upload-container.error + .error-message {
+            display: block;
+        }
+        .required-asterisk {
+            color: var(--danger-color);
+        }
+
+        /* Make sure error message is initially hidden */
+        #imageError {
+            display: none;
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
         }
 
         .upload-icon {

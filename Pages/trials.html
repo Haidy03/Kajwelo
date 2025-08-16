@@ -3,975 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>Kajwelo - Inventory Management</title>
+    <title>Kajwelo - Add Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --dark-color: #1f2937;
-            --light-color: #f8fafc;
-            --sidebar-width: 280px;
-            --topbar-height: 70px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f8f9fa;
-            line-height: 1.6;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            height: 100vh;
-            width: var(--sidebar-width);
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            z-index: 1000;
-            transition: left 0.3s ease-in-out;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 0.25rem;
-        }
-
-        .sidebar-subtitle {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.875rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.875rem 1.5rem;
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            background: none;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .sidebar-link:hover,
-        .sidebar-link.active {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .sidebar-link i {
-            width: 20px;
-            margin-right: 0.75rem;
-            text-align: center;
-        }
-
-        /* Main Content */
-        .main-content {
-            transition: margin-left 0.3s ease-in-out;
-            min-height: 100vh;
-        }
-
-        /* Top Bar */
-        .topbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: var(--topbar-height);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .menu-toggle {
-            background: none;
-            border: none;
-            font-size: 1.25rem;
-            color: var(--dark-color);
-            margin-right: 1rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .page-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dark-color);
-            margin: 0;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .notification-btn {
-            position: relative;
-            background: none;
-            border: none;
-            font-size: 1.25rem;
-            color: var(--dark-color);
-            margin-right: 1rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: var(--danger-color);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        /* Inventory Page Styles */
-        .inventory-container {
-            padding: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .inventory-header {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .inventory-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f8f9fa;
-            color: var(--dark-color);
-            border: 2px solid #e5e7eb;
-        }
-
-        .btn-secondary:hover {
-            background: #e9ecef;
-            transform: translateY(-1px);
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-1px);
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .stat-icon.total {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .stat-icon.low-stock {
-            background: linear-gradient(135deg, var(--warning-color), #f97316);
-        }
-
-        .stat-icon.out-stock {
-            background: linear-gradient(135deg, var(--danger-color), #dc2626);
-        }
-
-        .stat-icon.value {
-            background: linear-gradient(135deg, var(--success-color), #059669);
-        }
-
-        .stat-content h3 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-content p {
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin: 0;
-        }
-
-        /* Filters and Search */
-        .filters-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .filters-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .filters-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--dark-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .filter-label {
-            font-weight: 500;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .filter-input {
-            padding: 0.75rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-            background: white;
-        }
-
-        .filter-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .filter-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        /* Bulk Actions */
-        .bulk-actions {
-            background: #f8f9fa;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-
-        .bulk-actions.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .bulk-info {
-            color: var(--dark-color);
-            font-weight: 500;
-        }
-
-        .bulk-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.8125rem;
-        }
-
-        /* Inventory Table */
-        .inventory-table-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        .table-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .table-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .table-controls {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .view-toggle {
-            display: flex;
-            background: #f1f5f9;
-            border-radius: 8px;
-            padding: 0.25rem;
-        }
-
-        .view-btn {
-            padding: 0.5rem 0.75rem;
-            border: none;
-            background: none;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #6b7280;
-            transition: all 0.2s ease;
-        }
-
-        .view-btn.active {
-            background: white;
-            color: var(--primary-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .inventory-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .inventory-table th {
-            background: #f8fafc;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--dark-color);
-            font-size: 0.875rem;
-            border-bottom: 2px solid #e5e7eb;
-            position: relative;
-        }
-
-        .inventory-table th.sortable {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .inventory-table th.sortable:hover {
-            background: #f1f5f9;
-        }
-
-        .inventory-table th.sortable::after {
-            content: '↕';
-            position: absolute;
-            right: 0.5rem;
-            opacity: 0.3;
-        }
-
-        .inventory-table th.sorted-asc::after {
-            content: '↑';
-            opacity: 1;
-        }
-
-        .inventory-table th.sorted-desc::after {
-            content: '↓';
-            opacity: 1;
-        }
-
-        .inventory-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.875rem;
-        }
-
-        .inventory-table tbody tr:hover {
-            background: #f8fafc;
-        }
-
-        .product-cell {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .product-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid #f1f5f9;
-        }
-
-        .product-info h4 {
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-        }
-
-        .product-info p {
-            color: #6b7280;
-            font-size: 0.75rem;
-            margin: 0;
-        }
-
-        .stock-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .stock-status.in-stock {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .stock-status.low-stock {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .stock-status.out-of-stock {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .quantity-cell {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-input {
-            width: 80px;
-            padding: 0.375rem 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            text-align: center;
-        }
-
-        .quantity-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .quantity-btn {
-            width: 20px;
-            height: 20px;
-            border: none;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .actions-cell {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn.edit {
-            background: #f3f4f6;
-            color: var(--primary-color);
-        }
-
-        .action-btn.edit:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .action-btn.delete {
-            background: #fef2f2;
-            color: var(--danger-color);
-        }
-
-        .action-btn.delete:hover {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        /* Card View */
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            padding: 1.5rem;
-        }
-
-        .inventory-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .inventory-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 1.25rem;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 0.75rem;
-        }
-
-        .card-title {
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 0.25rem;
-        }
-
-        .card-category {
-            color: #6b7280;
-            font-size: 0.8125rem;
-        }
-
-        .card-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .card-stat {
-            text-align: center;
-        }
-
-        .card-stat .value {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--dark-color);
-        }
-
-        .card-stat .label {
-            color: #6b7280;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 2rem 1.5rem;
-            background: white;
-            border-top: 2px solid #f1f5f9;
-        }
-
-        .pagination-btn {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #d1d5db;
-            background: white;
-            color: var(--dark-color);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .pagination-btn:hover:not(:disabled) {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .pagination-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .pagination-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .pagination-info {
-            margin: 0 1rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        /* Responsive Design */
-        @media (min-width: 993px) {
-            .sidebar {
-                left: 0;
-                position: fixed;
-            }
-            
-            .main-content {
-                margin-left: var(--sidebar-width);
-            }
-            
-            .menu-toggle {
-                display: none;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .inventory-table-container {
-                overflow-x: auto;
-            }
-
-            .inventory-table {
-                min-width: 800px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .inventory-container {
-                padding: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-top {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .header-actions {
-                justify-content: stretch;
-            }
-
-            .header-actions .btn {
-                flex: 1;
-                justify-content: center;
-            }
-
-            .table-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-
-            .inventory-grid {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-            }
-
-            .bulk-actions {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
-            }
-
-            .bulk-buttons {
-                justify-content: stretch;
-            }
-
-            .bulk-buttons .btn {
-                flex: 1;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .topbar {
-                padding: 0.75rem 1rem;
-            }
-
-            .page-title {
-                font-size: 1.25rem;
-            }
-
-            .inventory-header {
-                padding: 1rem;
-            }
-
-            .filters-section {
-                padding: 1rem;
-            }
-
-            .stat-card {
-                padding: 1rem;
-            }
-
-            .user-profile span,
-            .user-profile i {
-                display: none;
-            }
-        }
-
-        /* Loading States */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem;
-            color: #6b7280;
-        }
-
-        .loading i {
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #6b7280;
-        }
-
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
-        }
-
-        .empty-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--dark-color);
-        }
-
-        .empty-description {
-            margin-bottom: 2rem;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/SelerAddproduct.css">
+    <script src="./trials.js"></script>
+    <script src="../js/SellerAddPro.js"></script>
+   
 </head>
 <body>
     <!-- Sidebar Overlay -->
@@ -986,13 +23,13 @@
         
         <ul class="sidebar-menu">
             <li>
-                <button class="sidebar-link" id="DashBoardBtn">
+                <button class="sidebar-link dashboard-btn" id="DashBoardBtn">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" id="AddProdBtn">
+                <button class="sidebar-link active" id="AddProdBtn">
                     <i class="fas fa-box"></i>
                     <span>Products</span>
                 </button>
@@ -1016,9 +53,15 @@
                 </button>
             </li>
             <li>
-                <button class="sidebar-link active">
+                <button class="sidebar-link">
                     <i class="fas fa-warehouse"></i>
                     <span>Inventory</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <span>Pending</span>
                 </button>
             </li>
             <li>
@@ -1038,7 +81,7 @@
                 <button class="menu-toggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="page-title">Inventory Management</h1>
+                <h1 class="page-title">Add New Product</h1>
             </div>
             
             <div class="topbar-right">
@@ -1055,786 +98,737 @@
             </div>
         </header>
 
-        <!-- Inventory Container -->
-        <div class="inventory-container">
-            <!-- Header -->
-            <div class="inventory-header">
-                <div class="header-top">
-                    <h2 class="inventory-title">Inventory Overview</h2>
-                    <div class="header-actions">
-                        <button class="btn btn-secondary" onclick="exportInventory()">
-                            <i class="fas fa-download"></i>
-                            Export
-                        </button>
-                        <button class="btn btn-secondary" onclick="importInventory()">
-                            <i class="fas fa-upload"></i>
-                            Import
-                        </button>
-                        <button class="btn btn-primary" onclick="addNewProduct()">
-                            <i class="fas fa-plus"></i>
-                            Add Product
-                        </button>
-                    </div>
+        <!-- Form Container -->
+        <div class="form-container">
+            <!-- Form Header -->
+            <div class="form-header">
+                <h2 class="form-title">Create New Product</h2>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary dashboard-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </button>
+                    <button type="submit" form="productForm" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Product
+                    </button>
                 </div>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon total">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="totalProducts">0</h3>
-                        <p>Total Products</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon low-stock">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="lowStockItems">0</h3>
-                        <p>Low Stock Items</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon out-stock">
-                        <i class="fas fa-times-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="outOfStockItems">0</h3>
-                        <p>Out of Stock</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon value">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="inventoryValue">$0</h3>
-                        <p>Total Value</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filters Section -->
-            <div class="filters-section">
-                <div class="filters-header">
-                    <h3 class="filters-title">
-                        <i class="fas fa-filter"></i>
-                        Filters & Search
+            <!-- Product Form -->
+            <form id="productForm" class="product-form">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Basic Information
                     </h3>
-                    <button class="btn btn-secondary btn-sm" onclick="clearFilters()">
-                        <i class="fas fa-times"></i>
-                        Clear All
-                    </button>
-                </div>
-                
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label class="filter-label">Search Products</label>
-                        <input type="text" class="filter-input" id="searchInput" placeholder="Search by name or SKU...">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Product Name</label>
+                            <input type="text" class="form-input" name="name" placeholder="e.g. Oversized Graphic Tee" required>
+                        </div>
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Category</label>
-                        <select class="filter-input filter-select" id="categoryFilter">
-                            <option value="">All Categories</option>
-                            <option value="Men">Men</option>
-                            <option value="Women">Women</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Stock Status</label>
-                        <select class="filter-input filter-select" id="stockFilter">
-                            <option value="">All Status</option>
-                            <option value="in-stock">In Stock</option>
-                            <option value="low-stock">Low Stock</option>
-                            <option value="out-of-stock">Out of Stock</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Price Range</label>
-                        <select class="filter-input filter-select" id="priceFilter">
-                            <option value="">All Prices</option>
-                            <option value="0-25">$0 - $25</option>
-                            <option value="25-50">$25 - $50</option>
-                            <option value="50-100">$50 - $100</option>
-                            <option value="100+">$100+</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Bulk Actions -->
-            <div class="bulk-actions" id="bulkActions">
-                <div class="bulk-info">
-                    <span id="selectedCount">0</span> items selected
-                </div>
-                <div class="bulk-buttons">
-                    <button class="btn btn-secondary btn-sm" onclick="bulkEdit()">
-                        <i class="fas fa-edit"></i>
-                        Edit Selected
-                    </button>
-                    <button class="btn btn-success btn-sm" onclick="bulkUpdateStock()">
-                        <i class="fas fa-boxes"></i>
-                        Update Stock
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="bulkDelete()">
-                        <i class="fas fa-trash"></i>
-                        Delete Selected
-                    </button>
-                </div>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Description</label>
+                            <textarea class="form-input form-textarea" name="description" placeholder="Detailed product description..." required></textarea>
+                        </div>
+                    </div>
 
-            <!-- Inventory Table -->
-            <div class="inventory-table-container">
-                <div class="table-header">
-                    <h3 class="table-title">Product Inventory</h3>
-                    <div class="table-controls">
-                        <div class="view-toggle">
-                            <button class="view-btn active" id="tableViewBtn" onclick="switchView('table')">
-                                <i class="fas fa-table"></i>
-                            </button>
-                            <button class="view-btn" id="cardViewBtn" onclick="switchView('card')">
-                                <i class="fas fa-th-large"></i>
-                            </button>
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label class="form-label required">Category</label>
+                            <select class="form-input form-select" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                                
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Subcategory</label>
+                            <select class="form-input form-select" name="subcategory" required>
+                                <option value="">Select Subcategory</option>
+                                <option value="T-Shirts">T-Shirts</option>
+                                <option value="Skirts">Skirts</option>
+                                <option value="Pants">Pants</option>
+                                <option value="Dresses">Dresses</option>
+                                <option value="Shorts">Shorts</option>
+                                <option value="Suits">Suits</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tags</label>
+                            <div class="tag-input-container" id="tagsContainer">
+                                <input type="text" class="tag-input" placeholder="Add tags (press Enter)" id="tagInput">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Table View -->
-                <div id="tableView">
-                    <table class="inventory-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
-                                </th>
-                                <th class="sortable" onclick="sortTable('product')">Product</th>
-                                <th class="sortable" onclick="sortTable('sku')">SKU</th>
-                                <th class="sortable" onclick="sortTable('category')">Category</th>
-                                <th class="sortable" onclick="sortTable('stock')">Stock</th>
-                                <th class="sortable" onclick="sortTable('price')">Price</th>
-                                <th class="sortable" onclick="sortTable('status')">Status</th>
-                                <th class="sortable" onclick="sortTable('updated')">Last Updated</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventoryTableBody">
-                            <!-- Table rows will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-
-                    <!-- Pagination -->
-                    <div class="pagination" id="tablePagination">
-                        <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div id="pageNumbers"></div>
-                        <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <div class="pagination-info">
-                            Showing <span id="pageInfo">1-10 of 50</span> products
+                <!-- Pricing -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-dollar-sign"></i>
+                        Pricing
+                    </h3>
+                    
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label class="form-label required">Base Price ($)</label>
+                            <input type="number" class="form-input" name="price" step="0.01" min="0" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sale Price ($)</label>
+                            <input type="number" class="form-input" name="salePrice" step="0.01" min="0" placeholder="0.00">
                         </div>
                     </div>
                 </div>
 
-                <!-- Card View -->
-                <div id="cardView" style="display: none;">
-                    <div class="inventory-grid" id="inventoryGrid">
-                        <!-- Cards will be populated by JavaScript -->
+                <!-- Product Images -->
+                <div class="form-section full-width">
+                    <h3 class="section-title">
+                        <i class="fas fa-images"></i>
+                        Product Images
+                    </h3>
+                    
+                    <div class="image-upload-container" id="imageUploadContainer">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">Click to upload or drag and drop</div>
+                        <div class="upload-hint">PNG, JPG, GIF up to 10MB</div>
+                        <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
                     </div>
                     
-                    <div class="pagination" id="cardPagination">
-                        <button class="pagination-btn" onclick="changePage(-1)">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div id="cardPageNumbers"></div>
-                        <button class="pagination-btn" onclick="changePage(1)">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <div class="pagination-info">
-                            Showing <span id="cardPageInfo">1-12 of 50</span> products
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <!-- Product Variants -->
+            
+                <!-- <div class="form-section full-width">
+                    <h3 class="section-title">
+                        <i class="fas fa-palette"></i>
+                        Product Variants
+                    </h3>
+                          /////////////////////////////////////////////////////////////////////////////////////////////
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label class="form-label">Available Colors</label>
+                            <div class="tag-input-container" id="colorsContainer">
+                                <input type="text" class="tag-input" placeholder="Add color (press Enter)" id="colorInput">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Available Sizes</label>
+                            <div class="tag-input-container" id="sizesContainer">
+                                <input type="text" class="tag-input" placeholder="Add size (press Enter)" id="sizeInput">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fit Options</label>
+                            <div class="tag-input-container" id="fitContainer">
+                                <input type="text" class="tag-input" placeholder="Add fit (press Enter)" id="fitInput">
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+               
+<!--                              ///////////////////////////////////////////////////////////////////////// -->
+                <!-- Stock Management -->
+                <div class="form-section full-width">
+                    <h3 class="section-title">
+                        <i class="fas fa-boxes"></i>
+                        Stock Management
+                    </h3>
+                    
+                    <!-- This is where dynamic stock items will be added -->
+                    <div id="stockItemsContainer"></div>
+                   
+
+
+
+
+                    <button type="button" class="add-stock-btn" id="addStockBtn">
+                        <i class="fas fa-plus"></i>
+                             Add Stock Entry
+                    </button>
+                </div>
+
+                
+                <!-- Settings -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-cogs"></i>
+                        Settings
+                    </h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Product Visibility</label>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" name="visibility" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span>Make this product visible to customers</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </main>
 
     <script>
         // Global variables
-        let inventoryData = [];
-        let filteredData = [];
-        let selectedItems = new Set();
-        let currentPage = 1;
-        let itemsPerPage = 10;
-        let currentView = 'table';
-        let sortColumn = '';
-        let sortDirection = 'asc';
+        let productImages = [];
+        let productTags = [];
+        let availableColors = [];
+        let availableSizes = [];
+        let fitOptions = [];
+        let stockEntries = [];
 
-        // Sample data - In real app, this would come from API
-        const sampleData = [
-            {
-                id: 1,
-                name: "Classic White T-Shirt",
-                sku: "TSH-WH-001",
-                category: "Men",
-                subcategory: "T-Shirts",
-                price: 29.99,
-                salePrice: null,
-                stock: 150,
-                lowStockThreshold: 20,
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
-                status: "in-stock",
-                lastUpdated: "2024-01-15T10:30:00Z",
-                variants: [
-                    { size: "S", color: "White", quantity: 30 },
-                    { size: "M", color: "White", quantity: 50 },
-                    { size: "L", color: "White", quantity: 40 },
-                    { size: "XL", color: "White", quantity: 30 }
-                ]
-            },
-            {
-                id: 2,
-                name: "Denim Jacket",
-                sku: "JKT-DN-002",
-                category: "Women",
-                subcategory: "Jackets",
-                price: 89.99,
-                salePrice: 69.99,
-                stock: 25,
-                lowStockThreshold: 10,
-                image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=300&h=300&fit=crop",
-                status: "in-stock",
-                lastUpdated: "2024-01-14T15:45:00Z",
-                variants: [
-                    { size: "S", color: "Blue", quantity: 8 },
-                    { size: "M", color: "Blue", quantity: 10 },
-                    { size: "L", color: "Blue", quantity: 7 }
-                ]
-            },
-            {
-                id: 3,
-                name: "Summer Dress",
-                sku: "DRS-SM-003",
-                category: "Women",
-                subcategory: "Dresses",
-                price: 59.99,
-                salePrice: null,
-                stock: 8,
-                lowStockThreshold: 15,
-                image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&h=300&fit=crop",
-                status: "low-stock",
-                lastUpdated: "2024-01-13T09:20:00Z",
-                variants: [
-                    { size: "S", color: "Floral", quantity: 3 },
-                    { size: "M", color: "Floral", quantity: 5 }
-                ]
-            },
-            {
-                id: 4,
-                name: "Leather Boots",
-                sku: "BTS-LTH-004",
-                category: "Men",
-                subcategory: "Shoes",
-                price: 149.99,
-                salePrice: 129.99,
-                stock: 0,
-                lowStockThreshold: 5,
-                image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop",
-                status: "out-of-stock",
-                lastUpdated: "2024-01-12T14:10:00Z",
-                variants: []
-            },
-            {
-                id: 5,
-                name: "Casual Blazer",
-                sku: "BLZ-CS-005",
-                category: "Women",
-                subcategory: "Blazers",
-                price: 119.99,
-                salePrice: null,
-                stock: 35,
-                lowStockThreshold: 10,
-                image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=300&h=300&fit=crop",
-                status: "in-stock",
-                lastUpdated: "2024-01-16T11:00:00Z",
-                variants: [
-                    { size: "XS", color: "Navy", quantity: 8 },
-                    { size: "S", color: "Navy", quantity: 12 },
-                    { size: "M", color: "Navy", quantity: 15 }
-                ]
-            }
-        ];
-
-        // Initialize the page
+        // Initialize the form
         document.addEventListener('DOMContentLoaded', function() {
-            // Load sample data
-            inventoryData = [...sampleData];
-            filteredData = [...inventoryData];
-            
-            updateStats();
-            renderInventory();
-            setupEventListeners();
+            initializeImageUpload();
+            initializeTagInputs();
+            initializeStockManagement();
+            setupFormSubmission();
         });
 
-        // Setup event listeners
-        function setupEventListeners() {
-            document.getElementById('searchInput').addEventListener('input', debounce(filterInventory, 300));
-            document.getElementById('categoryFilter').addEventListener('change', filterInventory);
-            document.getElementById('stockFilter').addEventListener('change', filterInventory);
-            document.getElementById('priceFilter').addEventListener('change', filterInventory);
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
 
-        // Debounce function for search
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+        function goToDashboard() {
+            // In a real application, this would navigate to the dashboard
+            if (confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
+                window.location.href = 'sellerdashboard.html';
+            }
         }
 
-        // Update statistics
-        function updateStats() {
-            const totalProducts = inventoryData.length;
-            const lowStockItems = inventoryData.filter(item => 
-                item.stock > 0 && item.stock <= item.lowStockThreshold).length;
-            const outOfStockItems = inventoryData.filter(item => item.stock === 0).length;
-            const inventoryValue = inventoryData.reduce((total, item) => 
-                total + (item.salePrice || item.price) * item.stock, 0);
+        // Image upload functionality
+        function initializeImageUpload() {
+            const uploadContainer = document.getElementById('imageUploadContainer');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
 
-            document.getElementById('totalProducts').textContent = totalProducts;
-            document.getElementById('lowStockItems').textContent = lowStockItems;
-            document.getElementById('outOfStockItems').textContent = outOfStockItems;
-            document.getElementById('inventoryValue').textContent = `${inventoryValue.toLocaleString()}`;
+            // Click to upload
+            uploadContainer.addEventListener('click', () => {
+                imageInput.click();
+            });
+
+            // Drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('dragover');
+            });
+
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('dragover');
+            });
+
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            // File input change
+            imageInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
         }
 
-        // Filter inventory
-        function filterInventory() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const stockFilter = document.getElementById('stockFilter').value;
-            const priceFilter = document.getElementById('priceFilter').value;
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imageData = {
+                            file: file,
+                            url: e.target.result,
+                            id: Date.now() + Math.random()
+                        };
+                        productImages.push(imageData);
+                        renderImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-            filteredData = inventoryData.filter(item => {
-                const matchesSearch = !searchTerm || 
-                    item.name.toLowerCase().includes(searchTerm) ||
-                    item.sku.toLowerCase().includes(searchTerm);
-                
-                const matchesCategory = !categoryFilter || item.category === categoryFilter;
-                
-                const matchesStock = !stockFilter || item.status === stockFilter;
-                
-                const matchesPrice = !priceFilter || (() => {
-                    const price = item.salePrice || item.price;
-                    switch(priceFilter) {
-                        case '0-25': return price <= 25;
-                        case '25-50': return price > 25 && price <= 50;
-                        case '50-100': return price > 50 && price <= 100;
-                        case '100+': return price > 100;
-                        default: return true;
+        function renderImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = productImages.map(image => `
+                <div class="image-preview-item">
+                    <img src="${image.url}" alt="Product image">
+                    <button type="button" class="remove-image" onclick="removeImage('${image.id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeImage(imageId) {
+            productImages = productImages.filter(img => img.id != imageId);
+            renderImagePreview();
+        }
+
+        // Tag input functionality
+        function initializeTagInputs() {
+            setupTagInput('tagInput', 'tagsContainer', productTags);
+            setupTagInput('colorInput', 'colorsContainer', availableColors);
+            setupTagInput('sizeInput', 'sizesContainer', availableSizes);
+            setupTagInput('fitInput', 'fitContainer', fitOptions);
+        }
+
+        function setupTagInput(inputId, containerId, dataArray) {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById(containerId);
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && input.value.trim()) {
+                    e.preventDefault();
+                    const value = input.value.trim();
+                    if (!dataArray.includes(value)) {
+                        dataArray.push(value);
+                        renderTags(containerId, dataArray);
+                        input.value = '';
+                        
+                        // Update stock grid when colors or sizes change
+                        if (inputId === 'colorInput' || inputId === 'sizeInput') {
+                            updateStockGrid();
+                        }
                     }
-                })();
-
-                return matchesSearch && matchesCategory && matchesStock && matchesPrice;
+                }
             });
-
-            currentPage = 1;
-            renderInventory();
         }
 
-        // Clear filters
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('categoryFilter').value = '';
-            document.getElementById('stockFilter').value = '';
-            document.getElementById('priceFilter').value = '';
-            filteredData = [...inventoryData];
-            currentPage = 1;
-            renderInventory();
+        function renderTags(containerId, dataArray) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('.tag-input');
+            const existingTags = container.querySelectorAll('.tag-item');
+            
+            // Remove existing tags
+            existingTags.forEach(tag => tag.remove());
+            
+            // Add new tags
+            dataArray.forEach(item => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag-item';
+                tagElement.innerHTML = `
+                    ${item}
+                    <button type="button" class="tag-remove" onclick="removeTag('${containerId}', '${item}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.insertBefore(tagElement, input);
+            });
         }
 
-        // Sort table
-        function sortTable(column) {
-            if (sortColumn === column) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortColumn = column;
-                sortDirection = 'asc';
+        function removeTag(containerId, value) {
+            let dataArray;
+            switch(containerId) {
+                case 'tagsContainer':
+                    dataArray = productTags;
+                    break;
+                case 'colorsContainer':
+                    dataArray = availableColors;
+                    break;
+                case 'sizesContainer':
+                    dataArray = availableSizes;
+                    break;
+                case 'fitContainer':
+                    dataArray = fitOptions;
+                    break;
             }
-
-            // Update table headers
-            document.querySelectorAll('.inventory-table th').forEach(th => {
-                th.classList.remove('sorted-asc', 'sorted-desc');
-            });
-
-            const header = document.querySelector(`th[onclick="sortTable('${column}')"]`);
-            if (header) {
-                header.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
-            }
-
-            // Sort data
-            filteredData.sort((a, b) => {
-                let valueA, valueB;
+            
+            const index = dataArray.indexOf(value);
+            if (index > -1) {
+                dataArray.splice(index, 1);
+                renderTags(containerId, dataArray);
                 
-                switch(column) {
-                    case 'product':
-                        valueA = a.name;
-                        valueB = b.name;
-                        break;
-                    case 'sku':
-                        valueA = a.sku;
-                        valueB = b.sku;
-                        break;
-                    case 'category':
-                        valueA = a.category;
-                        valueB = b.category;
-                        break;
-                    case 'stock':
-                        valueA = a.stock;
-                        valueB = b.stock;
-                        break;
-                    case 'price':
-                        valueA = a.salePrice || a.price;
-                        valueB = b.salePrice || b.price;
-                        break;
-                    case 'status':
-                        valueA = a.status;
-                        valueB = b.status;
-                        break;
-                    case 'updated':
-                        valueA = new Date(a.lastUpdated);
-                        valueB = new Date(b.lastUpdated);
-                        break;
-                    default:
-                        return 0;
+                // Update stock grid when colors or sizes change
+                if (containerId === 'colorsContainer' || containerId === 'sizesContainer') {
+                    updateStockGrid();
                 }
-
-                if (typeof valueA === 'string') {
-                    valueA = valueA.toLowerCase();
-                    valueB = valueB.toLowerCase();
-                }
-
-                if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
-                if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-
-            renderInventory();
-        }
-
-        // Switch view
-        function switchView(view) {
-            currentView = view;
-            
-            document.getElementById('tableViewBtn').classList.toggle('active', view === 'table');
-            document.getElementById('cardViewBtn').classList.toggle('active', view === 'card');
-            
-            document.getElementById('tableView').style.display = view === 'table' ? 'block' : 'none';
-            document.getElementById('cardView').style.display = view === 'card' ? 'block' : 'none';
-            
-            itemsPerPage = view === 'table' ? 10 : 12;
-            currentPage = 1;
-            renderInventory();
-        }
-
-        // Render inventory
-        function renderInventory() {
-            if (currentView === 'table') {
-                renderTableView();
-            } else {
-                renderCardView();
             }
-            updatePagination();
         }
 
-        // Render table view
-        function renderTableView() {
-            const tbody = document.getElementById('inventoryTableBody');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const pageData = filteredData.slice(startIndex, endIndex);
+        // Stock management functionality
+        function initializeStockManagement() {
+            document.getElementById('addStockBtn').addEventListener('click', addStockEntry);
+        }
 
-            if (pageData.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="9" class="empty-state">
-                            <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                            <div class="empty-title">No products found</div>
-                            <div class="empty-description">Try adjusting your filters or search terms</div>
-                        </td>
-                    </tr>
-                `;
+        function addStockEntry() {
+            const stockId = Date.now() + Math.random();
+            stockEntries.push({
+                id: stockId,
+                size: '',
+                color: '',
+                quantity: 0
+            });
+            renderStockGrid();
+        }
+
+        function updateStockGrid() {
+            // Generate stock entries for all size/color combinations
+            stockEntries = [];
+            
+            if (availableSizes.length > 0 && availableColors.length > 0) {
+                availableSizes.forEach(size => {
+                    availableColors.forEach(color => {
+                        const existingEntry = stockEntries.find(entry => 
+                            entry.size === size && entry.color === color
+                        );
+                        
+                        if (!existingEntry) {
+                            stockEntries.push({
+                                id: Date.now() + Math.random(),
+                                size: size,
+                                color: color,
+                                quantity: 0
+                            });
+                        }
+                    });
+                });
+            }
+            
+            renderStockGrid();
+        }
+
+        function renderStockGrid() {
+            const stockGrid = document.getElementById('stockGrid');
+            
+            if (stockEntries.length === 0) {
+                stockGrid.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">Add colors and sizes to manage stock inventory.</p>';
+                return;
+            }
+            
+            stockGrid.innerHTML = stockEntries.map(entry => `
+                <div class="stock-item">
+                    <div class="form-group">
+                        <label class="form-label">Size</label>
+                        <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'size', this.value)">
+                            <option value="">Select Size</option>
+                            ${availableSizes.map(size => 
+                                `<option value="${size}" ${entry.size === size ? 'selected' : ''}>${size}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'color', this.value)">
+                            <option value="">Select Color</option>
+                            ${availableColors.map(color => 
+                                `<option value="${color}" ${entry.color === color ? 'selected' : ''}>${color}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" min="0" value="${entry.quantity}" 
+                               onchange="updateStockEntry('${entry.id}', 'quantity', parseInt(this.value))">
+                    </div>
+                    <button type="button" class="remove-stock" onclick="removeStockEntry('${entry.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function updateStockEntry(entryId, field, value) {
+            const entry = stockEntries.find(e => e.id == entryId);
+            if (entry) {
+                entry[field] = value;
+            }
+        }
+
+        function removeStockEntry(entryId) {
+            stockEntries = stockEntries.filter(entry => entry.id != entryId);
+            renderStockGrid();
+        }
+
+        // Form submission
+        function setupFormSubmission() {
+            const form = document.getElementById('productForm');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                submitProduct();
+            });
+        }
+
+        function submitProduct() {
+            const formData = new FormData(document.getElementById('productForm'));
+            
+            // Collect all the data
+            const productData = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                price: parseFloat(formData.get('price')),
+                category: formData.get('category'),
+                subcategory: formData.get('subcategory'),
+                salePrice: formData.get('salePrice') ? parseFloat(formData.get('salePrice')) : null,
+                visibility: formData.get('visibility') === 'on',
+                images: productImages.map(img => img.url), // In real app, upload to server first
+                tags: productTags,
+                availableColors: availableColors,
+                availableSizes: availableSizes,
+                fit: fitOptions,
+                stock: stockEntries.filter(entry => entry.size && entry.color),
+                brandId: 'current-seller-id', // Would be set from logged in user
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            // Validate required fields
+            if (!productData.name || !productData.description || !productData.price || 
+                !productData.category || !productData.subcategory) {
+                alert('Please fill in all required fields.');
                 return;
             }
 
-            tbody.innerHTML = pageData.map(item => {
-                const isSelected = selectedItems.has(item.id);
-                return `
-                    <tr>
-                        <td>
-                            <input type="checkbox" ${isSelected ? 'checked' : ''} 
-                                   onchange="toggleSelectItem(${item.id})">
-                        </td>
-                        <td>
-                            <div class="product-cell">
-                                <img src="${item.image}" alt="${item.name}" class="product-image">
-                                <div class="product-info">
-                                    <h4>${item.name}</h4>
-                                    <p>${item.subcategory}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td><code>${item.sku}</code></td>
-                        <td>${item.category}</td>
-                        <td>
-                            <div class="quantity-cell">
-                                <input type="number" class="quantity-input" value="${item.stock}" 
-                                       onchange="updateStock(${item.id}, this.value)" min="0">
-                                <div class="quantity-actions">
-                                    <button class="quantity-btn" onclick="adjustStock(${item.id}, 1)">+</button>
-                                    <button class="quantity-btn" onclick="adjustStock(${item.id}, -1)">-</button>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div>
-                                ${item.salePrice ? 
-                                    `<span style="text-decoration: line-through; color: #6b7280;">${item.price}</span><br>
-                                     <span style="color: var(--danger-color); font-weight: 600;">${item.salePrice}</span>` :
-                                    `<span>${item.price}</span>`
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding Product...';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                console.log('Product data:', productData);
+                
+                alert('Product added successfully!');
+                // In real app, redirect to products list or dashboard
+                if (confirm('Product added! Would you like to add another product?')) {
+                    resetForm();
+                } else {
+                    goToDashboard();
+                }
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                clearAutoSaveData();
+            }, 2000);
+        }
+
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            productImages = [];
+            productTags = [];
+            availableColors = [];
+            availableSizes = [];
+            fitOptions = [];
+            stockEntries = [];
+            
+            renderImagePreview();
+            renderTags('tagsContainer', productTags);
+            renderTags('colorsContainer', availableColors);
+            renderTags('sizesContainer', availableSizes);
+            renderTags('fitContainer', fitOptions);
+            renderStockGrid();
+        }
+
+        // Mobile responsiveness
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 993) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+
+        // Auto-save functionality (optional)
+        let autoSaveTimer;
+        function startAutoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                const formData = new FormData(document.getElementById('productForm'));
+                if (formData.get('name') || formData.get('description')) {
+                    // Save to localStorage as backup
+                    const autoSaveData = {
+                        formData: Object.fromEntries(formData),
+                        productImages: productImages,
+                        productTags: productTags,
+                        availableColors: availableColors,
+                        availableSizes: availableSizes,
+                        fitOptions: fitOptions,
+                        stockEntries: stockEntries,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('kajwelo_product_autosave', JSON.stringify(autoSaveData));
+                }
+            }, 30000); // Auto-save every 30 seconds
+        }
+
+        // Add auto-save listeners
+        document.getElementById('productForm').addEventListener('input', startAutoSave);
+        document.getElementById('productForm').addEventListener('change', startAutoSave);
+
+        // Load auto-saved data on page load
+        function loadAutoSavedData() {
+            const autoSaveData = localStorage.getItem('kajwelo_product_autosave');
+            if (autoSaveData) {
+                try {
+                    const data = JSON.parse(autoSaveData);
+                    const timeDiff = Date.now() - data.timestamp;
+                    
+                    // Only restore if less than 1 hour old
+                    if (timeDiff < 3600000) {
+                        if (confirm('Found auto-saved data from your last session. Would you like to restore it?')) {
+                            // Restore form data
+                            Object.entries(data.formData).forEach(([key, value]) => {
+                                const input = document.querySelector(`[name="${key}"]`);
+                                if (input) {
+                                    if (input.type === 'checkbox') {
+                                        input.checked = value === 'on';
+                                    } else {
+                                        input.value = value;
+                                    }
                                 }
-                            </div>
-                        </td>
-                        <td>
-                            <span class="stock-status ${item.status}">
-                                ${item.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                            </span>
-                        </td>
-                        <td>${formatDate(item.lastUpdated)}</td>
-                        <td>
-                            <div class="actions-cell">
-                                <button class="action-btn edit" onclick="editProduct(${item.id})" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete" onclick="deleteProduct(${item.id})" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        // Render card view
-        function renderCardView() {
-            const grid = document.getElementById('inventoryGrid');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const pageData = filteredData.slice(startIndex, endIndex);
-
-            if (pageData.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                        <div class="empty-title">No products found</div>
-                        <div class="empty-description">Try adjusting your filters or search terms</div>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = pageData.map(item => {
-                const isSelected = selectedItems.has(item.id);
-                return `
-                    <div class="inventory-card">
-                        <img src="${item.image}" alt="${item.name}" class="card-image">
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div>
-                                    <h4 class="card-title">${item.name}</h4>
-                                    <p class="card-category">${item.category} • ${item.subcategory}</p>
-                                </div>
-                                <input type="checkbox" ${isSelected ? 'checked' : ''} 
-                                       onchange="toggleSelectItem(${item.id})">
-                            </div>
+                            });
                             
-                            <div class="card-stats">
-                                <div class="card-stat">
-                                    <div class="value">${item.stock}</div>
-                                    <div class="label">Stock</div>
-                                </div>
-                                <div class="card-stat">
-                                    <div class="value">${item.salePrice || item.price}</div>
-                                    <div class="label">Price</div>
-                                </div>
-                            </div>
+                            // Restore arrays
+                            productImages = data.productImages || [];
+                            productTags = data.productTags || [];
+                            availableColors = data.availableColors || [];
+                            availableSizes = data.availableSizes || [];
+                            fitOptions = data.fitOptions || [];
+                            stockEntries = data.stockEntries || [];
                             
-                            <span class="stock-status ${item.status}">
-                                ${item.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                            </span>
-                            
-                            <div class="card-actions">
-                                <small style="color: #6b7280;">SKU: ${item.sku}</small>
-                                <div style="display: flex; gap: 0.5rem;">
-                                    <button class="action-btn edit" onclick="editProduct(${item.id})">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" onclick="deleteProduct(${item.id})">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Update pagination
-        function updatePagination() {
-            const totalItems = filteredData.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const startItem = (currentPage - 1) * itemsPerPage + 1;
-            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-
-            // Update page info
-            const pageInfo = `${startItem}-${endItem} of ${totalItems}`;
-            document.getElementById('pageInfo').textContent = pageInfo;
-            if (document.getElementById('cardPageInfo')) {
-                document.getElementById('cardPageInfo').textContent = pageInfo;
-            }
-
-            // Update pagination buttons
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            if (prevBtn) prevBtn.disabled = currentPage <= 1;
-            if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
-
-            // Update page numbers
-            updatePageNumbers(totalPages);
-        }
-
-        // Update page numbers
-        function updatePageNumbers(totalPages) {
-            const container = document.getElementById('pageNumbers') || document.getElementById('cardPageNumbers');
-            if (!container) return;
-
-            const maxVisible = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-            
-            if (endPage - startPage + 1 < maxVisible) {
-                startPage = Math.max(1, endPage - maxVisible + 1);
-            }
-
-            let pageNumbers = '';
-            
-            if (startPage > 1) {
-                pageNumbers += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
-                if (startPage > 2) {
-                    pageNumbers += `<span style="padding: 0 0.5rem; color: #6b7280;">...</span>`;
+                            // Re-render everything
+                            renderImagePreview();
+                            renderTags('tagsContainer', productTags);
+                            renderTags('colorsContainer', availableColors);
+                            renderTags('sizesContainer', availableSizes);
+                            renderTags('fitContainer', fitOptions);
+                            renderStockGrid();
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading auto-saved data:', e);
                 }
             }
-
-            for (let i = startPage; i <= endPage; i++) {
-                pageNumbers += `
-                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
-                            onclick="goToPage(${i})">${i}</button>
-                `;
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    pageNumbers += `<span style="padding: 0 0.5rem; color: #6b7280;">...</span>`;
-                }
-                pageNumbers += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
-            }
-
-            container.innerHTML = pageNumbers;
         }
 
-        // Change page
-        function changePage(direction) {
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            const newPage = currentPage + direction;
-            
-            if (newPage >= 1 && newPage <= totalPages) {
-                currentPage = newPage;
-                renderInventory();
-            }
+        // Load auto-saved data when page loads
+        setTimeout(loadAutoSavedData, 1000);
+
+        // Clear auto-save data when form is successfully submitted
+        function clearAutoSaveData() {
+            localStorage.removeItem('kajwelo_product_autosave');
         }
 
-        // Go to specific page
-        function goToPage(page) {
-            currentPage = page;
-            renderInventory();
-        }
 
-        // Toggle select all
-        function toggleSelectAll() {
-            const selectAll = document.getElementById('selectAll');
-            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"], .inventory-card input[type="checkbox"]');
-            
-            if (selectAll.checked) {
-                filteredData.forEach(item => selectedItems.add(item.id));
-            } else {
-                selectedItems.clear();
-            }
-            
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAll.checked;
-            });
-            
-            updateBulkActions();
-        }
 
-        // Toggle select item
-        function toggleSelectItem(itemId) {
-            if (selectedItems.has(itemId)) {
-                selectedItems.delete(itemId);
-            } else {
-                selectedItems.add(itemId);
-            }
-            
-            // Update select all checkbox
-            const totalVisible = document.querySelectorAll('tbody tr, .inventory-card').length;
-            const selectedVisible = Array.from(selectedItems).filter(id => 
-                filteredData.some(item => item.id === id)).length;
-            
-            const selectAll = document.getElementById('selectAll');
-            if (selectAll) {
-                selectAll.checked = selectedVisible > 0 && selectedVisible === totalVisible;
-                selectAll.indeterminate = selectedVisible > 0 && selectedVisible < totalVisible;
-            }
-            
-            updateBulkActions();
-        }
 
-        // Update bulk actions visibility
-        function updateBulkActions() {
-            const bulkActions = document.getElementById('bulkActions');
-            const selectedCount = document.getElementById('selectedCount');
-            
-            selectedCount.textContent = selectedItems.size;
-            
-            if (selectedItems.size > 0) {
-                bulkActions.classList.add('show');
-            } else {
-                bulkActions.classList.remove('show');
+        // Add this to your existing script
+function setupMobileBehavior() {
+    // Close sidebar when clicking on a link (for mobile)
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 993) {
+                toggleSidebar();
             }
-        }
+        });
+    });
+    
+    // Prevent zoom on input focus in mobile
+    document.addEventListener('touchstart', function() {}, {passive: true});
+}
 
-        // Update stock
-        function updateStock(itemId, newStock) {
-            const item = inventoryData.find(i => i
+// Call this in your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing initialization code ...
+    setupMobileBehavior();
+});
+
+// Update the toggleSidebar function to handle body scrolling
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const body = document.body;
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+    
+    // Prevent body scrolling when sidebar is open on mobile
+    if (window.innerWidth < 993) {
+        if (sidebar.classList.contains('open')) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+    }
+}
+
+// Update the toggleSidebar function to handle iPad behavior
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const body = document.body;
+    
+    // For iPad Pro in portrait (treated as mobile due to screen width)
+    if (window.innerWidth <= 1024) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+        
+        // Prevent body scrolling when sidebar is open
+        if (sidebar.classList.contains('open')) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+    }
+}
+
+// Add this to detect iPad specifically
+function isiPad() {
+    return navigator.userAgent.match(/(iPad)/) || 
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+// Update your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing initialization code ...
+    
+    // iPad-specific adjustments
+    if (isiPad()) {
+        document.body.classList.add('ipad-device');
+        
+        // Make sidebar links easier to tap
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.style.padding = '1rem 1.5rem';
+        });
+        
+        // Increase form input sizes slightly
+        document.querySelectorAll('.form-input, .form-select').forEach(input => {
+            input.style.minHeight = '44px';
+        });
+    }
+});
+
+
+
+
+
+
+    </script>
+</body>
+</html>
