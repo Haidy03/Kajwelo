@@ -1,93 +1,121 @@
 // 🔐 utils/auth.js
 import { Storage } from "./localStorageHelper.js";
-import { createUser } from "../models/userModel.js";
+import { User } from "../models/User.js";
+import { Customer } from "../models/Customer.js";
+import { Seller } from "../models/Seller.js";
+import { Admin } from "../models/Admin.js";
 
 const USERS_KEY = "users";
 
+
+
 // Add Auth object if not already present
-export const Auth = {
+export class Auth {
   // Login function: expects { email, password }
-  login({ email, password }) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+  static login(email, password) {
+    const users = Storage.get("users");
     const foundUser = users.find(u => u.email === email);
 
+
     if (!foundUser) {
-      return { success: false, reason: "email_not_found" };
+      return { success: false, message: "email_not_found" };
     }
 
     let decodedPassword;
     try {
       // Try decoding if it's Base64
-      decodedPassword = atob(foundUser.password);
+      decodedPassword = decodeUnicode(foundUser.password);
     } catch (e) {
       // If decoding fails, assume it's already plain text
       decodedPassword = foundUser.password;
     }
 
     if (decodedPassword !== password) {
-      return { success: false, reason: "wrong_password" };
+      return { success: false, message: "wrong_password" };
     }
 
-    localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
-    return { success: true };
-  },
+    Storage.set("loggedInUser", foundUser);
+    console.log(Storage.get("loggedInUser"))
 
-  register: function (formData) {
+    //console.log(foundUser)
+    return { success: true, message: "LoggedIn Successfuly" };
+  }
+
+  static register(formData) {
     const users = Storage.get(USERS_KEY, []);
-
+    const pendingConfirmUser = Storage.get("pendingConfirmUser", []);
     // Check if email exists
     if (users.find((u) => u.email === formData.email)) {
       return { success: false, message: "Email already registered." };
     }
 
-    // Check if username exists
-    if (users.find((u) => u.username === formData.username)) {
-      return { success: false, message: "Username already taken." };
-    }
-
-    // Hash the password but keep the same field name
-    const hashedPassword = btoa(formData.password);
     const confirmCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Create a full user object
-    const newUser = createUser(
-      {
-        ...formData,
-        password: hashedPassword // keep same key name
-      },
-      confirmCode
-    );
+    if (formData.role.toLowerCase() === "customer") {
+      const newCustomer = new Customer(formData.name, formData.email, encodeUnicode(formData.password),
+        { gender: formData.gender || null, address: formData.address || null, phone: formData.phone || null });
+      newCustomer.confirmCode = confirmCode;
+      users.push(newCustomer);
+      pendingConfirmUser.push(newCustomer.email)
+      Storage.set("pendingConfirmUser", pendingConfirmUser);
 
-    // Save to storage
-    users.push(newUser);
+    } else if (formData.role.toLowerCase() === "seller") {
+      if (users.find((u) => u.brandName === formData.brandName)) {
+        return { success: false, message: "Brand already registered." };
+      }
+      const newSeller = new Seller(formData.name, formData.email, encodeUnicode(formData.password),
+        {
+          brandName: formData.brandName || null, businessAddress: formData.address || null
+          , targetAudience: formData.targetAudience || null, phone: formData.phone
+        });
+
+      newSeller.confirmCode = confirmCode;
+      users.push(newSeller);
+      pendingConfirmUser.push(newSeller.email)
+      Storage.set("pendingConfirmUser", pendingConfirmUser);
+    } else if (formData.role.toLowerCase() === "admin") {
+      const newAdmin = new Admin(formData.name, formData.email, encodeUnicode(formData.password),
+        {adminLevel:formData.adminLevel});
+      newAdmin.isConfirmed = true;
+      users.push(newAdmin);
+    } else {
+      return { success: false, message: "Invalid Role" }
+    }
+
     Storage.set(USERS_KEY, users);
-
-    // Store email temporarily for confirm page
-    Storage.set("pendingConfirmUser", newUser.email);
-
-    return { success: true, code: confirmCode };
+    return { success: true, message: "registered Successfuly", code: confirmCode };
   }
-  ,
 
-  confirmEmail: function (email, code) {
+
+  static confirmEmail(email, code) {
     const users = Storage.get(USERS_KEY, []);
+    let pendingConfirmUser = Storage.get("pendingConfirmUser", []);
     const index = users.findIndex((u) => u.email === email);
     if (index !== -1 && users[index].confirmCode === code) {
       users[index].isConfirmed = true;
       Storage.set(USERS_KEY, users);
-      Storage.remove("pendingConfirmUser");
-      return { success: true };
+      pendingConfirmUser = pendingConfirmUser.filter(u => u !== email)
+      Storage.set("pendingConfirmUser", pendingConfirmUser);
+      return { success: true, message: "Confirmed" };
     }
-    return { success: false };
-  },
+    return { success: false, message: "Not Confirmed" };
+  }
 
   // Optional: logout function
-  logout: function () {
-    localStorage.removeItem("currentUser");
-  },
+  static logout() {
+    Storage.remove("loggedInUser");
+  }
 
   // Optional: get current user
-  getCurrentUser: function () {
-    return JSON.parse(localStorage.getItem("currentUser") || "null");
-  },
+  static getCurrentUser() {
+    return Storage.get("loggedInUser");
+  }
 };
+
+function encodeUnicode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+function decodeUnicode(base64) {
+  return decodeURIComponent(escape(atob(base64)));
+}

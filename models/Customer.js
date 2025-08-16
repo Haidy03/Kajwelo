@@ -3,27 +3,29 @@ import { Storage } from "../utils/localStorageHelper.js";
 import { Seller } from "./Seller.js";
 
 export class Customer extends User {
-  constructor(name, email, password, role, options = {}) {
-    super(name, email, password, role);
+  constructor(name, email, password, options = {}) {
+    super(name, email, password,options.phone);
 
     // Customer-specific fields
     this.address = options.address || null;
-    this.phone = options.phone || null;
     this.orderHistory = options.orderHistory || [];
     this.wishlist = options.wishlist || [];
     this.cart = options.cart || [];
     this.gender = options.gender || null;
     this.paymetMethod = options.paymentMethod || null;
+    this.role="customer";
   }
 
   // Customer-specific methods
   updateAdrress(newAdress) {
     this.address = newAdress;
+    User.updateCurrentUser(this)
     return { success: true, message: "Adress Updated Successfuly..!" };
   }
 
   updatePhone(newPhone) {
     this.phone = newPhone;
+    User.updateCurrentUser(this)
     return { success: true, message: "Phone Number Updated Successfuly..!" };
   }
 
@@ -31,6 +33,7 @@ export class Customer extends User {
     if (!this.wishlist.includes(item)) {
       this.wishlist.push(item);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Added to Wishlist" }
     } else {
       return { success: false, message: "Already in Wishlist" }
@@ -41,6 +44,7 @@ export class Customer extends User {
     if (!this.cart.includes(item)) {
       this.cart.push(item);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Added to Cart" }
     } else {
       return { success: false, message: "Already in Cart" }
@@ -51,6 +55,7 @@ export class Customer extends User {
     if (this.wishlist.includes(item)) {
       this.wishlist = this.wishlist.filter(i => i !== item);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Removed from Wishlist" }
     } else {
       return { success: false, message: "Not Found in Wishlist" }
@@ -61,6 +66,7 @@ export class Customer extends User {
     if (this.cart.includes(item)) {
       this.cart = this.cart.filter(i => i !== item);
       this.updatedAt = new Date();
+      User.updateCurrentUser(this)
       return { success: true, message: "Removed from Cart" }
     } else {
       return { success: false, message: "Not Found in Cart" }
@@ -77,7 +83,11 @@ export class Customer extends User {
       this.updatedAt = new Date();
 
       this.cart = []
-      //{ product: product1, quantity: 2, size: "XL", color: "red" }
+      User.updateCurrentUser(this)
+      //orderHistory[{{ product: product1, quantity: 2, size: "XL", color: "red" },
+      // { product: product2, quantity: 3, size: "L", color: "black" },
+      //orderedAt: timastamp}]
+
       const users = Storage.get("users");
 
       order.forEach(instance => {
@@ -110,6 +120,7 @@ export class Customer extends User {
               }
             })
           }
+
         })
       })
       return result
