@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kajwelo - Seller Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+            overflow-x:hidden;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.875rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--topbar-height);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 1.5rem;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+        }
+
+        .action-btn.primary:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-icon.sales { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.orders { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .stat-icon.products { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-icon.revenue { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .stat-change {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .stat-change.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-change.negative {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Orders Section */
+        .orders-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .orders-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .orders-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.delivered {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-badge.shipped {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-badge.processing {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-badge.pending {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0.75rem;
+            }
+            
+            .page-title {
+                font-size: 1.1rem;
+            }
+            
+            .dashboard-content {
+                padding: 1rem;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .action-btn {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .action-btn i {
+                font-size: 1.2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .orders-table th,
+            .orders-table td {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.875rem;
+            }
+            
+            .orders-table {
+                min-width: 500px;
+            }
+            
+            .user-profile span {
+                display: none;
+            }
+            
+            .notification-btn {
+                margin-right: 0.5rem;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 992px) {
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-section {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .sidebar {
+                left: 0;
+                position: fixed;
+            }
+            
+            .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .dashboard-content {
+                padding: 2rem;
+            }
+            
+            .quick-actions {
+                margin-bottom: 2.5rem;
+            }
+            
+            .stats-grid {
+                margin-bottom: 2.5rem;
+            }
+            
+            .charts-section {
+                margin-bottom: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .orders-table .hide-mobile {
+                display: none;
+            }
+        }
+
+        .text-center { text-align: center; }
+        .d-flex { display: flex; }
+        .align-items-center { align-items: center; }
+        .justify-content-between { justify-content: space-between; }
+        .gap-1 { gap: 1rem; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Kajwelo</div>
+            <div class="sidebar-subtitle">Seller Portal</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="#" class="sidebar-link " onclick="goToDashboard()"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToProducts()"><i class="fas fa-box-open"></i> Products</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToOrders()"><i class="fas fa-truck"></i> Orders</a></li>
+                <li><a href="#" class="sidebar-link active" onclick="goToAnalytics()"><i class="fas fa-chart-pie"></i> Analytics</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToCustomers()"><i class="fas fa-users"></i> Customers</a></li>
+                <li><a href="#" class="sidebar-link " onclick="goToInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToSettings()"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Seller Analytics</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">js</div>
+                    <span>John Seller</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon sales">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            +5.2%
+                        </div>
+                    </div>
+                    <div class="stat-value" id="total-sales-value">$0</div>
+                    <div class="stat-label">Total Sales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon orders">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            +2.1%
+                        </div>
+                    </div>
+                    <div class="stat-value" id="total-orders-value">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon products">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            +1.5%
+                        </div>
+                    </div>
+                    <div class="stat-value" id="top-product-name">N/A</div>
+                    <div class="stat-label">Top Product</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon revenue">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-change negative">
+                            -0.8%
+                        </div>
+                    </div>
+                    <div class="stat-value" id="avg-order-value">$0</div>
+                    <div class="stat-label">Avg. Order Value</div>
+                </div>
+            </div>
+
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-title">Monthly Sales</div>
+                    <canvas id="dailySalesChart" width="500" height="250"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Top Selling Products</div>
+                    <canvas id="topProductsChart" width="250" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- <div class="orders-section">
+                <div class="orders-header">
+                    <h2 class="orders-title">Recent Orders</h2>
+                    <a href="#" class="action-btn">View All</a>
+                </div>
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th class="hide-mobile">Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th class="text-center hide-mobile">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            console.log("Showing section:", sectionId);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
+        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+
+        const sellerAnalyticsData = {
+            sellerId: "seller123",
+            sellerName: "Store",
+            orders: [
+                {date: "2025-06-25", total: 150, products: [{ name: "Dress 102", quantity: 1, price: 150 }] },
+                {date: "2025-07-25", total: 200, products: [{ name: "Jacket 15", quantity: 1, price: 200 }] },
+                {date: "2025-08-25", total: 100, products: [{ name: "Yellow blouse", quantity: 2, price: 50 }] },
+                {date: "2025-09-25", total: 250, products: [{ name: "Yellow blouse", quantity: 1, price: 150 }, { name: "Yellow Blouse", quantity: 1, price: 100 }] },
+                {date: "2025-10-25", total: 180, products: [{ name: "Leather Bag", quantity: 1, price: 180 }] },
+                {date: "2025-11-25", total: 320, products: [{ name: "Yellow Blouse", quantity: 2, price: 300 }, { name: "Skirt 207", quantity: 1, price: 20 }] },
+                {date: "2025-12-25", total: 90, products: [{ name: "Skirt 207", quantity: 1, price: 20 }, { name: "Dress 102", quantity: 1, price: 70 }] },
+            ]
+        };
+
+        localStorage.setItem('sellerAnalyticsData', JSON.stringify(sellerAnalyticsData));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedData = localStorage.getItem('sellerAnalyticsData');
+            const analyticsData = JSON.parse(storedData);
+            const orders = analyticsData.orders;
+
+            const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
+            const totalOrders = orders.length;
+            const avgOrderValue = totalOrders > 0 ? (totalSales / totalOrders).toFixed(2) : 0;
+
+            document.getElementById('total-sales-value').innerText = `$${totalSales}`;
+            document.getElementById('total-orders-value').innerText = totalOrders;
+            document.getElementById('avg-order-value').innerText = `$${avgOrderValue}`;
+
+            const salesByDate = {};
+            orders.forEach(order => {
+                if (salesByDate[order.date]) {
+                    salesByDate[order.date] += order.total;
+                } else {
+                    salesByDate[order.date] = order.total;
+                }
+            });
+
+            const productSales = {};
+            orders.forEach(order => {
+                order.products.forEach(product => {
+                    if (productSales[product.name]) {
+                        productSales[product.name] += product.quantity;
+                    } else {
+                        productSales[product.name] = product.quantity;
+                    }
+                });
+            });
+
+            const sortedProducts = Object.entries(productSales).sort(([, a], [, b]) => b - a);
+            const topProductNames = sortedProducts.map(([name,]) => name);
+            const topProductQuantities = sortedProducts.map(([, quantity]) => quantity);
+            
+            if(topProductNames.length > 0) {
+                document.getElementById('top-product-name').innerText = topProductNames[0];
+            }
+
+            // --- Chart.js Configuration for Fixed Size ---
+            const fixedOptions = {
+                responsive: false, // This is the key change
+            };
+
+            new Chart(document.getElementById('dailySalesChart'), {
+                type: 'line',
+                data: {
+                    labels: Object.keys(salesByDate),
+                    datasets: [{
+                        label: 'Total Sales ($)',
+                        data: Object.values(salesByDate),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: fixedOptions
+            });
+
+            new Chart(document.getElementById('topProductsChart'), {
+                type: 'bar',
+                data: {
+                    labels: topProductNames,
+                    datasets: [{
+                        label: 'Units Sold',
+                        data: topProductQuantities,
+                        backgroundColor: [
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#667eea',
+                            '#764ba2'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: fixedOptions
+            });
+
+            const ordersTableBody = document.getElementById('orders-table-body');
+            ordersTableBody.innerHTML = '';
+
+            orders.slice(0, 5).forEach(order => {
+                const row = document.createElement('tr');
+                const statusBadge = `<span class="status-badge ${order.status}">${order.status}</span>`;
+                
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td class="hide-mobile">${order.date}</td>
+                    <td>$${order.total}</td>
+                    <td>${statusBadge}</td>
+                    <td class="text-center hide-mobile">
+                        <button class="icon-btn"><i class="fas fa-eye"></i></button>
+                        <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                    </td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>
