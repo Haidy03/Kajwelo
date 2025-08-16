@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kajwelo Inventory Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="../js/sellerNavigation.js"></script>
     <style>
         * {
             margin: 0;
@@ -831,7 +832,7 @@
         .notification {
             position: fixed;
             top: 20px;
-            right: 20px;
+            right: 0px;
             padding: 1rem 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -933,25 +934,69 @@
 </head>
 <body>
 
+   <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2 class="sidebar-logo"></i>Kajwelo</h2>
-            <p class="sidebar-subtitle">Seller Portal</p>
+            <div class="sidebar-logo">Kajwelo</div>
+            <div class="sidebar-subtitle">Seller Portal</div>
         </div>
-        <nav>
-            <ul class="sidebar-menu">
-                <li><a href="#" class="sidebar-link active" onclick="goToDashboard()"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToProducts()"><i class="fas fa-box-open"></i> Products</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToOrders()"><i class="fas fa-truck"></i> Orders</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToAnalytics()"><i class="fas fa-chart-pie"></i> Analytics</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToCustomers()"><i class="fas fa-users"></i> Customers</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToSettings()"><i class="fas fa-cog"></i> Settings</a></li>
-                
-            </ul>
-        </nav>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <button class="sidebar-link dashboard-btn" id="DashBtn">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link " id="AddProdBtn">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link active" id="InventoryBtn">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <span>Pending</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </li>
+        </ul>
     </aside>
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    
 
     <main class="main-content">
         <header class="topbar">
@@ -960,10 +1005,10 @@
                 <h1 class="page-title">Inventory Management</h1>
             </div>
             <div class="topbar-right">
-                <div class="search-box hide-mobile">
+                <!-- <div class="search-box hide-mobile">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
-                </div>
+                </div> -->
                 <button class="notification-btn">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
@@ -1640,6 +1685,15 @@
         }
         renderInventoryTable();
     }
+
+    // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
 </script>
 
 </body>
