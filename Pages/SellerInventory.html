@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -862,7 +861,8 @@
 
         /* New Styles for Product Modal from SellerInventory.html */
         .modal-content {
-            max-width: 600px; /* Wider modal for variants table */
+            max-width: 600px;
+            /* Wider modal for variants table */
         }
         .variants-section h3 {
             font-size: 1.25rem;
@@ -934,10 +934,8 @@
 </head>
 <body>
 
-   <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">Kajwelo</div>
@@ -945,72 +943,32 @@
         </div>
         
         <ul class="sidebar-menu">
-            <li>
-                <button class="sidebar-link dashboard-btn" id="DashBtn">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link " id="AddProdBtn">
-                    <i class="fas fa-box"></i>
-                    <span>Products</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Orders</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link">
-                    <i class="fas fa-users"></i>
-                    <span>Customers</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link active" id="InventoryBtn">
-                    <i class="fas fa-warehouse"></i>
-                    <span>Inventory</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link">
-                    <i class="fa-solid fa-hourglass-start"></i>
-                    <span>Pending</span>
-                </button>
-            </li>
-            <li>
-                <button class="sidebar-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </button>
-            </li>
+        
+             <ul class="sidebar-menu">
+                <li><a href="#" class="sidebar-link " onclick="goToDashboard()"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToProducts()"><i class="fas fa-box-open"></i> Products</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToOrders()"><i class="fas fa-truck"></i> Orders</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToAnalytics()"><i class="fas fa-chart-pie"></i> Analytics</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToCustomers()"><i class="fas fa-users"></i> Customers</a></li>
+                <li><a href="#" class="sidebar-link active" onclick="goToInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
+                <li><a href="#" class="sidebar-link" onclick="goToSettings()"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
         </ul>
     </aside>
 
     
 
     <main class="main-content">
-        <header class="topbar">
+       
+         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
                 <h1 class="page-title">Inventory Management</h1>
             </div>
             <div class="topbar-right">
-                <!-- <div class="search-box hide-mobile">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
-                </div> -->
                 <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
+                    <i 
+class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </button>
                 <div class="user-profile">
@@ -1020,7 +978,6 @@
                 </div>
             </div>
         </header>
-
         <div class="inventory-content">
             <div class="inventory-stats">
                 <div class="stat-card">
@@ -1069,32 +1026,39 @@
             </div>
 
             <div class="controls-bar">
-                <div class="controls-left">
+   
+                 <div class="controls-left">
                     <div class="search-box hide-tablet">
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" id="searchInputControls" class="search-input" placeholder="Search products...">
-                    </div>
+        
+                     </div>
                     <select id="categoryFilter" class="filter-select">
                         <option value="">All Categories</option>
                         <option value="electronics">Electronics</option>
-                        <option value="clothing">Clothing</option>
+               
+                 <option value="clothing">Clothing</option>
                         <option value="accessories">Accessories</option>
                         <option value="home">Home</option>
                     </select>
-                    <select id="stockFilter" class="filter-select">
+                    
+ <select id="stockFilter" class="filter-select">
                         <option value="">All Stock Levels</option>
                         <option value="high">In Stock</option>
                         <option value="low">Low Stock</option>
-                        <option value="out">Out of Stock</option>
+                   
+             <option value="out">Out of Stock</option>
                     </select>
                 </div>
                 <div class="controls-right">
                     <button class="btn btn-secondary hide-mobile" onclick="exportInventory()">
-                        <i class="fas fa-download"></i> Export
+               
+                 <i class="fas fa-download"></i> Export
                     </button>
                     <button class="btn btn-primary" onclick="openAddProductModal()">
                         <i class="fas fa-plus"></i> Add Product
-                    </button>
+                 
+                </button>
                 </div>
             </div>
 
@@ -1102,21 +1066,26 @@
                 <div class="table-header">
                     <h3 class="table-title">Product Inventory</h3>
                 </div>
+ 
                 <div class="table-container">
                     <table class="inventory-table">
                         <thead>
                             <tr>
-                                <th>Product</th>
+           
+                             <th>Product</th>
                                 <th>Category</th>
                                 <th>Stock</th>
-                                <th class="hide-mobile">Price</th>
+               
+                             <th class="hide-mobile">Price</th>
                                 <th class="hide-tablet">Last Updated</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                
+                          <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="inventoryTableBody">
-                            </tbody>
+       
+                             </tbody>
                     </table>
                 </div>
             </div>
@@ -1126,58 +1095,70 @@
 
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
+    
+             <div class="modal-header">
                 <h2 id="modalTitle" class="modal-title">Add New Product</h2>
                 <span class="close-btn" onclick="closeProductModal()">&times;</span>
             </div>
             <form id="productForm">
                 <input type="hidden" id="productSKU">
-                <div class="form-group">
+          
+               <div class="form-group">
                     <label for="productName" class="form-label">Product Name</label>
                     <input type="text" id="productName" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="productCategory" class="form-label">Category</label>
+             
+                <label for="productCategory" class="form-label">Category</label>
                     <select id="productCategory" class="form-input" required>
                         <option value="">Select a category</option>
                         <option value="electronics">Electronics</option>
-                        <option value="clothing">Clothing</option>
+                
+                 <option value="clothing">Clothing</option>
                         <option value="accessories">Accessories</option>
                         <option value="home">Home</option>
                     </select>
                 </div>
-                <div class="form-group">
+     
+                 <div class="form-group">
                     <label for="productPrice" class="form-label">Price ($)</label>
                     <input type="number" id="productPrice" class="form-input" step="0.01" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="lowStockThreshold" class="form-label">Low Stock Threshold</label>
+      
+                   <label for="lowStockThreshold" class="form-label">Low Stock Threshold</label>
                     <input type="number" id="lowStockThreshold" class="form-input" min="0" required>
                 </div>
                 
                 <div class="form-group variants-section">
-                    <h3>Product Variants</h3>
+       
+                     <h3>Product Variants</h3>
                     <table class="variants-table">
                         <thead>
                             <tr>
-                                <th>Color</th>
+             
+                             <th>Color</th>
                                 <th>Size</th>
                                 <th>Quantity</th>
+                 
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="variantsTableBody">
-                            </tbody>
+        
+                         </tbody>
                     </table>
                     <button type="button" class="btn btn-add-variant" id="addVariantBtn">
                         <i class="fas fa-plus"></i> Add Variant
-                    </button>
+        
+                     </button>
                 </div>
 
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="saveProductBtn">
-                        <span id="saveButtonText">Save Product</span>
+       
+                     <span id="saveButtonText">Save Product</span>
                     </button>
                 </div>
             </form>
@@ -1187,6 +1168,7 @@
 
     <script>
     // بيانات المخزون المحدثة مع خاصية 'visible'
+ 
     let inventoryData = [{
         id: 1,
         name: "Wireless Bluetooth Headphones",
@@ -1198,7 +1180,8 @@
         lastUpdated: "2025-08-14",
         image: "🎧",
         variants: [{
-            color: "Black",
+  
+             color: "Black",
             size: "One Size",
             quantity: 45
         }, {
@@ -1206,6 +1189,7 @@
             size: "One Size",
             quantity: 20
         }],
+     
         visible: true
     }, {
         id: 2,
@@ -1217,7 +1201,8 @@
         lowStockThreshold: 15,
         lastUpdated: "2025-08-13",
         image: "🧥",
-        variants: [{
+        
+ variants: [{
             color: "Blue",
             size: "M",
             quantity: 5
@@ -1226,6 +1211,7 @@
             size: "L",
             quantity: 3
         }],
+    
         visible: true
     }, {
         id: 3,
@@ -1237,7 +1223,8 @@
         lowStockThreshold: 5,
         lastUpdated: "2025-08-12",
         image: "👜",
-        variants: [{
+        
+ variants: [{
             color: "Red",
             size: "Standard",
             quantity: 0
@@ -1247,7 +1234,8 @@
         id: 4,
         name: "Athletic Running Shoes",
         sku: "ARS-004",
-        category: "clothing",
+        category: 
+ "clothing",
         price: 120.00,
         stock: 32,
         lowStockThreshold: 12,
@@ -1257,7 +1245,8 @@
             color: "Gray",
             size: "9",
             quantity: 10
-        }, {
+       
+         }, {
             color: "Black",
             size: "10",
             quantity: 22
@@ -1267,7 +1256,8 @@
         id: 5,
         name: "Smart Watch Pro",
         sku: "SWP-005",
-        category: "electronics",
+        
+ category: "electronics",
         price: 249.99,
         stock: 18,
         lowStockThreshold: 10,
@@ -1277,7 +1267,8 @@
             color: "Silver",
             size: "Standard",
             quantity: 18
-        }],
+      
+      }],
         visible: true
     }, {
         id: 6,
@@ -1289,6 +1280,7 @@
         lowStockThreshold: 20,
         lastUpdated: "2025-08-11",
         image: "👕",
+  
         variants: [{
             color: "White",
             size: "S",
@@ -1297,7 +1289,8 @@
             color: "White",
             size: "M",
             quantity: 3
-        }],
+      
+      }],
         visible: true
     }, {
         id: 7,
@@ -1309,7 +1302,8 @@
         lowStockThreshold: 8,
         lastUpdated: "2025-08-13",
         image: "🪴",
-        variants: [{
+ 
+         variants: [{
             color: "Terracotta",
             size: "Large",
             quantity: 22
@@ -1319,7 +1313,8 @@
         id: 8,
         name: "Leather Wallet",
         sku: "LW-008",
-        category: "accessories",
+   
+      category: "accessories",
         price: 65.00,
         stock: 0,
         lowStockThreshold: 10,
@@ -1329,10 +1324,10 @@
             color: "Brown",
             size: "Standard",
             quantity: 0
+ 
         }],
         visible: true
     }];
-
     // Arrays for dropdown options
     const allowedSizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
     const validColors = [
@@ -1342,7 +1337,6 @@
         "purple", "violet", "lavender", "indigo", "plum", "magenta", "fuchsia",
         "pink", "hotpink", "brown", "chocolate", "tan", "beige"
     ];
-
     let filteredData = [...inventoryData];
     let editingProductId = null;
 
@@ -1351,10 +1345,17 @@
         setupEventListeners();
         updateStats();
     });
-
     function setupEventListeners() {
-        document.getElementById('searchInput').addEventListener('input', filterInventory);
-        document.getElementById('searchInputControls').addEventListener('input', filterInventory);
+        // Updated to check if elements exist before adding listeners
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', filterInventory);
+        }
+        const searchInputControls = document.getElementById('searchInputControls');
+        if (searchInputControls) {
+            searchInputControls.addEventListener('input', filterInventory);
+        }
+        
         document.getElementById('categoryFilter').addEventListener('change', filterInventory);
         document.getElementById('stockFilter').addEventListener('change', filterInventory);
         document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
@@ -1390,35 +1391,39 @@
         const toggleClass = product.visible ? 'restock' : 'delete';
         const toggleIcon = product.visible ? 'fa-toggle-on' : 'fa-toggle-off';
         const toggleTitle = product.visible ? 'Hide Product' : 'Show Product';
-
         row.innerHTML = `
             <td>
                 <div class="product-info">
                     <div class="product-image">${product.image}</div>
                     <div class="product-details">
                         <div class="product-name">${product.name}</div>
+  
                         <div class="product-sku">SKU: ${product.sku}</div>
                     </div>
                 </div>
             </td>
             <td style="text-transform: capitalize;">${product.category}</td>
             <td><strong>${product.stock}</strong></td>
-            <td class="hide-mobile"><strong>$${product.price.toFixed(2)}</strong></td>
+  
+              <td class="hide-mobile"><strong>$${product.price.toFixed(2)}</strong></td>
             <td class="hide-tablet">${formatDate(product.lastUpdated)}</td>
             <td>
                 <span class="stock-level ${stockClass}">${stockStatus}</span>
             </td>
             <td>
                 <div class="actions">
+     
                     <button class="action-btn edit" onclick="editProduct(${product.id})" title="Edit Product">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="action-btn toggle ${toggleClass}" onclick="toggleProduct(${product.id})" title="${toggleTitle}">
-                        <i class="fas ${toggleIcon}"></i>
+         
+                         <i class="fas ${toggleIcon}"></i>
                     </button>
                     <button class="action-btn delete" onclick="deleteProduct(${product.id})" title="Delete Product">
                         <i class="fas fa-trash"></i>
-                    </button>
+            
+                </button>
                 </div>
             </td>
         `;
@@ -1435,7 +1440,7 @@
         switch (status) {
             case 'Out of Stock':
                 return 'out';
-            case 'Low Stock':
+            case 'Low of Stock':
                 return 'low';
             default:
                 return 'high';
@@ -1456,7 +1461,6 @@
         const searchTerm = searchInput.toLowerCase();
         const categoryFilter = document.getElementById('categoryFilter').value;
         const stockFilter = document.getElementById('stockFilter').value;
-
         filteredData = inventoryData.filter(product => {
             const matchesSearch = product.name.toLowerCase().includes(searchTerm) || product.sku.toLowerCase().includes(searchTerm);
             const matchesCategory = categoryFilter === "" || product.category === categoryFilter;
@@ -1464,7 +1468,6 @@
 
             return matchesSearch && matchesCategory && matchesStock;
         });
-
         renderInventoryTable();
     }
 
@@ -1497,7 +1500,8 @@
     function closeProductModal() {
         document.getElementById('productModal').classList.remove('active');
         document.getElementById('productForm').reset();
-        document.getElementById('variantsTableBody').innerHTML = ''; // Clear variants table
+        document.getElementById('variantsTableBody').innerHTML = '';
+        // Clear variants table
         editingProductId = null;
         document.getElementById('modalTitle').textContent = 'Add New Product';
         document.getElementById('saveButtonText').textContent = 'Save Product';
@@ -1532,7 +1536,8 @@
         } else {
             // Add new product
             const newProduct = {
-                id: inventoryData.length ? Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
+                id: inventoryData.length ?
+                Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
                 ...productData,
                 image: productData.name.charAt(0), // Simple placeholder
                 lastUpdated: new Date().toISOString().slice(0, 10),
@@ -1552,7 +1557,6 @@
         const productCategory = document.getElementById('productCategory').value;
         const productPrice = parseFloat(document.getElementById('productPrice').value);
         const lowStockThreshold = parseInt(document.getElementById('lowStockThreshold').value);
-
         if (!productName || !productCategory || isNaN(productPrice) || isNaN(lowStockThreshold)) {
             return null;
         }
@@ -1568,12 +1572,14 @@
 
             if (color && size && !isNaN(quantity)) {
                 variants.push({
-                    color: color,
+               
+                     color: color,
                     size: size,
                     quantity: quantity
                 });
                 totalStock += quantity;
             }
+      
         });
 
         return {
@@ -1584,6 +1590,7 @@
             lowStockThreshold: lowStockThreshold,
             stock: totalStock,
             variants: variants
+  
         };
     }
 
@@ -1596,19 +1603,22 @@
                 <select class="form-input-variant" onchange="updateVariantData(this)" data-variant-type="color" required>
                     <option value="">Select Color</option>
                     ${validColors.map(c => `<option value="${c}" ${c === color ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
+        
                 </select>
             </td>
             <td>
                 <select class="form-input-variant" onchange="updateVariantData(this)" data-variant-type="size" required>
                     <option value="">Select Size</option>
-                    ${allowedSizes.map(s => `<option value="${s}" ${s === size ? 'selected' : ''}>${s}</option>`).join('')}
+                    ${allowedSizes.map(s => `<option value="${s}" ${s === 
+                        size ? 'selected' : ''}>${s}</option>`).join('')}
                 </select>
             </td>
             <td>
                 <input type="number" class="form-input-variant" value="${quantity}" min="0" oninput="updateVariantData(this)" data-variant-type="quantity" required>
             </td>
             <td>
-                <button type="button" class="remove-variant" onclick="removeVariantRow(this)">
+         
+                     <button type="button" class="remove-variant" onclick="removeVariantRow(this)">
                     <i class="fas fa-trash"></i>
                 </button>
             </td>
@@ -1651,7 +1661,6 @@
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productPrice').value = product.price;
         document.getElementById('lowStockThreshold').value = product.lowStockThreshold;
-
         const variantsTableBody = document.getElementById('variantsTableBody');
         variantsTableBody.innerHTML = '';
 
