@@ -611,13 +611,14 @@
         </div>
         
         <ul class="sidebar-menu">
-            <li><a href="#" class="sidebar-link " onclick="goToDashboard()"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToProducts()"><i class="fas fa-box-open"></i> Products</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToOrders()"><i class="fas fa-truck"></i> Orders</a></li>
-                <li><a href="#" class="sidebar-link active" onclick="goToAnalytics()"><i class="fas fa-chart-pie"></i> Analytics</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToCustomers()"><i class="fas fa-users"></i> Customers</a></li>
-                <li><a href="#" class="sidebar-link " onclick="goToInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
-                <li><a href="#" class="sidebar-link" onclick="goToSettings()"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#" class="sidebar-link " onclick="gotodashboard()"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="sidebar-link" onclick="gotoproducts()"><i class="fas fa-box"></i> Products</a></li>
+                <li><a href="#" class="sidebar-link" onclick="gotoOrders()"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                <li><a href="#" class="sidebar-link active" onclick="gotoanalytics()"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                <li><a href="#" class="sidebar-link" onclick="gotoCustomers()"><i class="fas fa-users"></i> Customers</a></li>
+                <li><a href="#" class="sidebar-link " onclick="gotoInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
+                <li><a href="#" class="sidebar-link " onclick="gotoPending()"><i class="fa-solid fa-hourglass-start"></i> Pending</a></li>
+                <li><a href="#" class="sidebar-link" onclick="gotoSettings()"> <i class="fas fa-cog"></i> Settings</a></li>
         </ul>
     </aside>
 
@@ -730,6 +731,32 @@
     </div>
 
     <script>
+         function gotodashboard(){
+            window.location.href="sellerdashboard.html";
+        }
+        function gotoproducts(){
+            window.location.href="SelleraAddProduct.html";
+        }
+        function gotoOrders(){
+            window.location.href="sellerOrders.html";
+        }
+        function gotoanalytics(){
+            window.location.href="";
+        }
+        function gotoCustomers(){
+            window.location.href="sellerCustomers.html";
+        }
+        function gotoInventory(){
+            window.location.href="SellerInventory.html";
+        }
+        function gotoPending(){
+            window.location.href="sellerPending.html";
+        }
+        
+        function gotoSettings(){
+            window.location.href="";
+        }
+        
         function showSection(sectionId) {
             console.log("Showing section:", sectionId);
         }
