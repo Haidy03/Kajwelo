@@ -19,6 +19,7 @@ export const navbar = `
                 
 <button class="icon-btn" title="Wishlist" onclick="location.href='/cardGeneratot/wishlist.html'">
   <i class="fas fa-heart"></i>
+  <span class="cart-count" id="wishlistCount">3</span>
 </button>
                 <button class="icon-btn" title="Cart" id="cartBtn" onclick="location.href='/Pages/Cart.html'">
                     <i class="fas fa-shopping-cart"></i>

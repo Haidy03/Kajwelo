@@ -2,6 +2,7 @@ import { User } from "./User.js";
 import { Storage } from "../utils/localStorageHelper.js";
 import { Seller } from "./Seller.js";
 
+
 export class Customer extends User {
   constructor(name, email, password, options = {}) {
     super(name, email, password,options.phone);

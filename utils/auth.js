@@ -35,7 +35,6 @@ export class Auth {
     }
 
     Storage.set("loggedInUser", foundUser);
-    console.log(Storage.get("loggedInUser"))
 
     //console.log(foundUser)
     return { success: true, message: "LoggedIn Successfuly" };
@@ -43,6 +42,14 @@ export class Auth {
 
   static register(formData) {
     const users = Storage.get(USERS_KEY, []);
+    const suspendedUsers = Storage.get("suspendedUsers", []);
+    let previousUsers = Storage.get("previousUsers", [])
+    if (suspendedUsers.includes(formData.email)) return { success: false, message: "account is suspended" };
+    if (previousUsers.includes(formData.email)) {
+      alert("email was a previous user");
+      previousUsers=previousUsers.filter(u=>u!==formData.email);
+      Storage.set("previousUsers",previousUsers);
+    }
     const pendingConfirmUser = Storage.get("pendingConfirmUser", []);
     // Check if email exists
     if (users.find((u) => u.email === formData.email)) {
@@ -75,7 +82,7 @@ export class Auth {
       Storage.set("pendingConfirmUser", pendingConfirmUser);
     } else if (formData.role.toLowerCase() === "admin") {
       const newAdmin = new Admin(formData.name, formData.email, encodeUnicode(formData.password),
-        {adminLevel:formData.adminLevel});
+        { adminLevel: formData.adminLevel });
       newAdmin.isConfirmed = true;
       users.push(newAdmin);
     } else {
@@ -104,13 +111,46 @@ export class Auth {
   // Optional: logout function
   static logout() {
     Storage.remove("loggedInUser");
-    window.location.href="../login.html"
+    window.location.href = "../login.html"
   }
 
   // Optional: get current user
   static getCurrentUser() {
     return Storage.get("loggedInUser");
   }
+
+  static deleteAccount(accountID) {
+    let users = Storage.get("users", []);
+    const suspendedUsers = Storage.get("suspendedUsers", []);
+    const previousUsers = Storage.get("previousUsers", [])
+    const currentUser = Auth.getCurrentUser();
+    const accountIndex = users.findIndex(user => user.id === accountID);
+    if (accountIndex !== -1) {
+      if (currentUser instanceof Admin) {
+        suspendedUsers.push(users[accountIndex].email);
+        users = users.filter(user => user.id !== accountID);
+        Storage.set("users", users);
+        Storage.set("suspendedUsers", suspendedUsers);
+        return { success: true, message: "Account Suspended Successfully" }
+      } else if ((currentUser instanceof Customer) || (currentUser instanceof Seller)) {
+        if (accountID === currentUser.id) {
+          previousUsers.push(currentUser.email);
+          users = users.filter(user => user.id !== currentUser.id);
+          Storage.set("users", users);
+          Storage.set("previousUsers", previousUsers);
+          setInterval(() => {
+            Auth.logout();
+          }, 1500);
+          return { success: true, message: "Account Deleted Successfully" }
+        } else {
+          return { success: false, message: "Users Aren't allowed to delete other Users Accounts" }
+        }
+      }
+    } else {
+      return { success: false, message: "account not found" }
+    }
+  }
+
 };
 
 function encodeUnicode(str) {

@@ -16,6 +16,7 @@ export class User {
     this.isConfirmed = false;
     this.role = "user";
     this.confirmCode = null;
+    this.chats = [];
   }
 
   // Common methods for all users

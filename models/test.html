@@ -24,16 +24,32 @@
         import { Admin } from "../models/Admin.js";
         import { Product } from "../models/Product.js";
         import { Auth } from "../utils/auth.js"
+        import { Conversation } from "./Conversation.js";
+        import { Seeder } from "../JS/seeding.js";
 
         function encodeUnicode(str) {
-            return btoa(unescape(encodeURIComponent(str)));
-        }
+                return btoa(unescape(encodeURIComponent(str)));
+            }
 
         function decodeUnicode(base64) {
             return decodeURIComponent(escape(atob(base64)));
         }
 
         window.addEventListener("load", () => {
+            
+            // const users= Storage.get("users");
+            // const allProducts=[]
+            // users.forEach(user=>{
+            //     if(user instanceof Seller){
+            //         user.products.forEach(product=>{
+            //             allProducts.push(product);
+            //         })
+            //     }
+            // })
+            // console.log(allProducts)
+
+                //Seeder.run();
+
             //Test Sign Up
 
             // Simiulate Data Gathered From Registeration Form
@@ -86,120 +102,9 @@
             //     salePrice: 175
             // }
 
-            const allUsers = Storage.get("users");
-            const customer = allUsers.find(user => user.email === "Abdullah@test.com")
-            const brand = allUsers.find(user => user.email === "Mekkawi@test.com")
-            const admin = allUsers.find(user => user.email === "Haidy@test.com")
 
 
 
-
-            // Auth.login("Haidy@test.com", "Aa1234")
-            // const currentUser = Storage.get("loggedInUser");
-            if (brand instanceof Seller) {
-                // const rs=currentUser.products[0].show();
-                // alert(rs.message)
-                // if(rs.success){
-                //     User.updateCurrentUser(currentUser);
-                // }
-                // let rs = brand.hideProduct(brand.products[0].id)
-                // alert(rs.message)
-            }
-
-            if (admin instanceof Admin) {
-                // let rs = admin.verifyProduct(brand.id,brand.products[0].id)
-                // alert(rs.message)
-            }
-
-            if (customer instanceof Customer) {
-
-
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // const res = Auth.login("mekkawi@exmaple.com", "1234")
-            // const currentUser = Storage.get("loggedInUser");
-            // console.log(res)
-            //console.log(currentUser)
-            // if (res) {
-            //     alert(res.message)
-            // } else {
-            //     alert(res.message)
-            // }
-
-
-
-
-            //console.log(currentUser)
-            //console.log(currentUser instanceof Seller)
-
-
-            // // Seller Behaviour
-            // if (currentUser instanceof Seller) {
-            //     //alert("ana Rahma")
-            //     //console.log(currentUser.products[0] instanceof Product)
-
-            // }
-            // // Customer Behaviour
-            // else if (currentUser instanceof Customer) {
-            //     //console.log("ana customer")
-
-            //     // currentUser.addToWishlist()
-            //     //currentUser.cart = [product1, product2]
-            //     let order = [{ product: Skirt, quantity: 2, size: "XL", color: "Red", buyer: currentUser.id }
-            //         , { product: Skirt, quantity: 3, size: "L", color: "Black", buyer: currentUser.id }
-            //     ]
-
-
-
-            //     //currentUser.addToWishlist(Skirt);
-
-            //     // User.updateInDB(currentUser);
-
-            //     // let result = currentUser.checkout(order)
-            //     // if (result.success) {
-            //     //     //User.updateCurrentUser(currentUser)
-            //     //     console.log(result.message)
-            //     // } else {
-            //     //     alert(result.message)
-            //     // }
-            // }
-            // // Admin Behaviour
-            // else if (currentUser instanceof Admin) {
-            // }
-
-            const validColors = [
-                "black", "white", "gray", "silver", "red", "maroon", "crimson", "salmon",
-                "orange", "coral", "yellow", "gold", "green", "lime",
-                "blue", "navy", "skyblue", "azure", "royalblue", "teal", "turquoise", "aqua",
-                "purple", "violet", "lavender", "indigo", "plum", "magenta", "fuchsia",
-                "pink", "hotpink", "brown", "chocolate", "tan", "beige"];
-
-            for (let i = 0; i < validColors.length; i++) {
-                const element = document.createElement("div");
-                element.style.borderRadius = "50%"
-                element.style.backgroundColor = validColors[i]
-                document.body.appendChild(element)
-            }
-
-
-            //console.log(currentUser)
 
         })
 
