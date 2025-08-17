@@ -3,6 +3,16 @@ import { Admin } from "../models/Admin.js";
 import { Seller } from "../models/Seller.js";
 import { Customer } from "../models/Customer.js";
 
+const current = Auth.getCurrentUser();
+if (current instanceof Customer) {
+    window.location.href = "FinalHomePage.html"
+}
+else if (current instanceof Seller) {
+    window.location.href = "./Pages/sellerdashboard.html"
+}
+else if (current instanceof Admin) {
+    window.location.href = "./AdminDashboard/AdminDashBoard.html"
+}
 
 // Password match validation
 function validatePasswordMatch(passwordId, confirmPasswordId, errorId) {
@@ -137,7 +147,7 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
         return;
     }
     const result = Auth.login(email, password);
-    console.log(result.message)
+    if(!result.success) alert(result.message);
     if (result.success) {
         const currentUser = Auth.getCurrentUser();
         if (currentUser instanceof Customer) {
@@ -147,7 +157,7 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
             window.location.href = "./Pages/sellerdashboard.html"
         }
         else if (currentUser instanceof Admin) {
-            window.location.href=""
+            window.location.href = "./AdminDashboard/AdminDashBoard.html"
         }
         else {
             alert(result.message)
@@ -198,6 +208,7 @@ document.getElementById('signupBrandOwner').addEventListener('submit', (e) => {
         targetAudience
     };
     const result = Auth.register(formData);
+    if(!result.success) alert(result.message)
     if (result) {
         Auth.login(formData.email, formData.password);
         window.location.href = "./Pages/sellerdashboard.html"
@@ -242,6 +253,7 @@ document.getElementById('signupCustomer').addEventListener('submit', (e) => {
         phone
     };
     const result = Auth.register(formData);
+    if(!result.success) alert(result.message)
     if (result) {
         Auth.login(formData.email, formData.password);
         window.location.href = "FinalHomePage.html"
