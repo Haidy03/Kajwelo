@@ -48,62 +48,63 @@
 
         if (!product) {
           container.innerHTML = `
-          <div class="col-md-8">
-            <div class="alert alert-warning shadow-sm">
-              <strong>Heads up:</strong> No product selected. 
-              <a href="./products.html" class="alert-link">Go back to products</a>.
-            </div>
-          </div>`;
+      <div class="col-md-8">
+        <div class="alert alert-warning shadow-sm">
+          <strong>Heads up:</strong> No product selected. 
+          <a href="./products.html" class="alert-link">Go back to products</a>.
+        </div>
+      </div>`;
           return;
         }
 
         container.innerHTML = `
-        <div class="col-md-10 col-lg-8">
-          <div class="card shadow-sm">
-            <div class="row g-0">
-              <div class="col-md-5 p-3 d-flex align-items-center justify-content-center">
-                <img src="${product.image}" alt="${product.title}" class="img-fluid rounded" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Unavailable'">
+    <div class="col-md-10 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="row g-0">
+          <div class="col-md-5 p-3 d-flex align-items-center justify-content-center">
+            <img src="${product.image}" alt="${product.title}" class="img-fluid rounded" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Unavailable'">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <h2 class="card-title h3">${product.title}</h2>
+              <p class="text-muted mb-2"><strong>Brand:</strong> ${product.brand}</p>
+              <p class="fs-4 mb-4">
+                <span class="text-success fw-bold">${product.currentprice} $</span>
+                <span class="old-price text-muted ms-2">${product.oldprice} $</span>
+              </p>
+
+              <div class="d-flex gap-2">
+                <button id="addCartBtn" class="btn btn-primary">
+                  <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                </button>
+                <button id="wishlistBtn" class="btn btn-outline-danger">♡</button>
               </div>
-              <div class="col-md-7">
-                <div class="card-body">
-                  <h2 class="card-title h3">${product.title}</h2>
-                  <p class="text-muted mb-2"><strong>Brand:</strong> ${product.brand}</p>
-                  <p class="fs-4 mb-4">
-                    <span class="text-success fw-bold">${product.currentprice} $</span>
-                    <span class="old-price text-muted ms-2">${product.oldprice} $</span>
-                  </p>
 
-                  <div class="d-flex gap-2">
-                    <button id="addCartBtn" class="btn btn-primary">
-                      <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-                    </button>
-                    <button id="wishlistBtn" class="btn btn-outline-danger">♡</button>
-                  </div>
+              <hr class="my-4">
 
-                  <hr class="my-4">
-
-                  <div class="small text-muted">
-                    <p class="mb-1">SKU: #${product.id}</p>
-                    <p class="mb-0">Ships within 2–4 days.</p>
-                  </div>
-                </div>
+              <div class="small text-muted">
+                <p class="mb-1">SKU: #${product.id}</p>
+                <p class="mb-0">Ships within 2–4 days.</p>
               </div>
             </div>
           </div>
-
-          <!-- Optional: related actions -->
-          <div class="d-flex justify-content-between mt-3">
-            <button id="continueBtn" class="btn btn-outline-secondary">Continue Shopping</button>
-            <button id="clearSelectionBtn" class="btn btn-outline-dark">Clear Saved Selection</button>
-          </div>
         </div>
-      `;
+      </div>
+
+      <!-- Optional: related actions -->
+      <div class="d-flex justify-content-between mt-3">
+        <button id="continueBtn" class="btn btn-outline-secondary">Continue Shopping</button>
+        <button id="clearSelectionBtn" class="btn btn-outline-dark">Clear Saved Selection</button>
+      </div>
+    </div>
+  `;
 
         const wishlistBtn = document.getElementById("wishlistBtn");
         const addCartBtn = document.getElementById("addCartBtn");
         const continueBtn = document.getElementById("continueBtn");
         const clearSelectionBtn = document.getElementById("clearSelectionBtn");
 
+        // --- Initialize Wishlist State ---
         (function initWishlistState() {
           const loggedInUser = JSON.parse(
             localStorage.getItem("loggedInUser") || "null"
@@ -150,8 +151,51 @@
           }
         });
 
+        // --- Initialize Cart State ---
+        (function initCartState() {
+          const loggedInUser = JSON.parse(
+            localStorage.getItem("loggedInUser") || "null"
+          );
+          if (!loggedInUser || !Array.isArray(loggedInUser.cart)) return;
+          const isIn = loggedInUser.cart.some((item) => item.id === product.id);
+          if (isIn) {
+            addCartBtn.textContent = "✔ Added to Cart";
+            addCartBtn.classList.add("btn-success");
+          }
+        })();
+
         addCartBtn.addEventListener("click", function () {
-          alert(`${product.title} added to cart!`);
+          let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+          if (!loggedInUser) {
+            alert("You need to log in to use the cart!");
+            window.location.href = "/login-register.html";
+            return;
+          }
+          if (!Array.isArray(loggedInUser.cart)) {
+            loggedInUser.cart = [];
+          }
+          const idx = loggedInUser.cart.findIndex(
+            (item) => item.id === product.id
+          );
+          if (idx === -1) {
+            loggedInUser.cart.push(product);
+            addCartBtn.textContent = "✔ Added to Cart";
+            addCartBtn.classList.remove("btn-primary");
+            addCartBtn.classList.add("btn-success");
+          } else {
+            loggedInUser.cart.splice(idx, 1);
+            addCartBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Add to Cart`;
+            addCartBtn.classList.remove("btn-success");
+            addCartBtn.classList.add("btn-primary");
+          }
+          localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+          let users = JSON.parse(localStorage.getItem("users")) || [];
+          const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
+          if (userIndex !== -1) {
+            users[userIndex] = loggedInUser;
+            localStorage.setItem("users", JSON.stringify(users));
+          }
         });
 
         continueBtn.addEventListener("click", function () {
