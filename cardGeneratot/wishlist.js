@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
   try {
-    // Load loggedInUser
     let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (!loggedInUser || !Array.isArray(loggedInUser.wishlist)) {
@@ -8,17 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     let wishlist = loggedInUser.wishlist;
-
-    // Get the container where cards will be inserted
     const wishlistContainer = document.getElementById("wishlist-container");
 
-    // Update wishlist count in the heading
     const wishlistCount = document.querySelector("h4");
     if (wishlistCount) {
       wishlistCount.textContent = `Wishlist (${wishlist.length})`;
     }
 
-    // Display message if wishlist is empty
     if (wishlist.length === 0) {
       wishlistContainer.innerHTML = `
         <div class="col-12 text-center py-5">
@@ -31,29 +26,31 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Generate and insert cards for each wishlist item
     wishlistContainer.innerHTML = wishlist
-      .map(
-        (product) => `
+      .map((product) => {
+        const title = product.name || product.title || "Unnamed Product";
+        const brand = product.brand || product.category || "Unknown Brand";
+        const price = product.price || product.currentprice || 0;
+        const oldPrice = product.oldprice || null;
+
+        return `
       <div class="col-12" data-id="${product.id}">
         <div class="card wishlist-card border-0 shadow-sm pb-2 mb-3">
           <div class="card-body p-3">
             <div class="row">
               <div class="col-md-2">
-                <img src="${product.image}" alt="${product.title}" 
+                <img src="${product.image}" alt="${title}" 
                      class="img-fluid rounded" style="height: 80px; width: auto;">
               </div>
               <div class="col-md-8">
-                <h5 class="card-title mb-1">${product.title}</h5>
-                <p class="card-text text-muted mb-1 small">${product.brand}</p>
+                <h5 class="card-title mb-1">${title}</h5>
+                <p class="card-text text-muted mb-1 small">${brand}</p>
                 <div class="price-container d-flex align-items-center mb-2">
-                  <span class="fw-bold me-2">$${product.currentprice.toFixed(
-                    2
-                  )}</span>
+                  <span class="fw-bold me-2">$${price.toFixed(2)}</span>
                   ${
-                    product.oldprice
+                    oldPrice
                       ? `<span class="text-decoration-line-through text-muted small">
-                          $${product.oldprice.toFixed(2)}
+                          $${oldPrice.toFixed(2)}
                         </span>`
                       : ""
                   }
@@ -68,25 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
       </div>
-    `
-      )
+    `;
+      })
       .join("");
 
-    // Hook up remove buttons
+    // Remove buttons
     document.querySelectorAll(".remove-wishlist-btn").forEach((button) => {
       button.addEventListener("click", function () {
         const card = this.closest("[data-id]");
-        const productId = parseInt(card.getAttribute("data-id"));
+        const productId = card.getAttribute("data-id"); // keep as string (handles UUIDs too)
 
-        // Remove from loggedInUser.wishlist
         loggedInUser.wishlist = loggedInUser.wishlist.filter(
-          (item) => item.id !== productId
+          (item) => String(item.id) !== String(productId)
         );
 
-        // Save changes back
         localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
 
-        // Also update users array
         let users = JSON.parse(localStorage.getItem("users")) || [];
         const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
         if (userIndex !== -1) {
@@ -94,22 +88,19 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("users", JSON.stringify(users));
         }
 
-        // Remove card from DOM
         card.remove();
 
-        // Update counter
         if (wishlistCount) {
           wishlistCount.textContent = `Wishlist (${loggedInUser.wishlist.length})`;
         }
 
-        // Show empty message if none left
         if (loggedInUser.wishlist.length === 0) {
           wishlistContainer.innerHTML = `
             <div class="col-12 text-center py-5">
               <i class="fas fa-heart-broken fa-3x text-muted mb-3"></i>
               <h5 class="text-muted">Your wishlist is empty</h5>
               <p class="text-muted">Start adding items to see them here</p>
-              <a href="cardsss.html" class="btn btn-primary">Browse Products</a>
+              <a href="/cardGeneratot/cardsss.html" class="btn btn-primary">Browse Products</a>
             </div>
           `;
         }
