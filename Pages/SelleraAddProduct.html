@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>Kajwelo - Add Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="../css/SelerAddproduct.css"> -->
     <script src="../js/SellerAddPro.js"></script>
     <script src="../js/sellerNavigation.js"></script>
@@ -971,49 +972,49 @@
         
         <ul class="sidebar-menu">
             <li>
-                <button class="sidebar-link dashboard-btn" id="DashBtn">
+                <button class="sidebar-link dashboard-btn" id="DashBtn" onclick="gotodashboard()">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link active" id="AddProdBtn">
+                <button class="sidebar-link active" id="AddProdBtn" onclick="gotoproducts()">
                     <i class="fas fa-box"></i>
                     <span>Products</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link">
+                <button class="sidebar-link" onclick="gotoOrders()">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Orders</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link">
+                <button class="sidebar-link" onclick="gotoanalytics()">
                     <i class="fas fa-chart-line"></i>
                     <span>Analytics</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link">
+                <button class="sidebar-link" onclick="gotoCustomers()">
                     <i class="fas fa-users"></i>
                     <span>Customers</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" id="InventoryBtn">
+                <button class="sidebar-link" id="InventoryBtn" onclick="gotoInventory()">
                     <i class="fas fa-warehouse"></i>
                     <span>Inventory</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link">
+                <button class="sidebar-link" onclick="gotoPending()">
                     <i class="fa-solid fa-hourglass-start"></i>
                     <span>Pending</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link">
+                <button class="sidebar-link" onclick="gotoSettings()">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </button>
@@ -1202,6 +1203,32 @@
     </main>
 
     <script>
+         function gotodashboard(){
+            window.location.href="sellerdashboard.html";
+        }
+        function gotoproducts(){
+            window.location.href="SelleraAddProduct.html";
+        }
+        function gotoOrders(){
+            window.location.href="sellerOrders.html";
+        }
+        function gotoanalytics(){
+            window.location.href="";
+        }
+        function gotoCustomers(){
+            window.location.href="sellerCustomers.html";
+        }
+        function gotoInventory(){
+            window.location.href="SellerInventory.html";
+        }
+        function gotoPending(){
+            window.location.href="sellerPending.html";
+        }
+        
+        function gotoSettings(){
+            window.location.href="";
+        }
+
         // Global variables
         let productImages = [];
         let productTags = [];
