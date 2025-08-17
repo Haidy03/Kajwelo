@@ -1,8 +1,7 @@
 const accountForm = document.getElementById("accountForm");
 const statusEl = document.getElementById("status");
 
-const firstNameInput = document.getElementById("firstName");
-const lastNameInput = document.getElementById("lastName");
+const nameInput = document.getElementById("firstName"); // keeping the same ID from your HTML
 const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const addressInput = document.getElementById("address");
@@ -17,8 +16,7 @@ let user = JSON.parse(localStorage.getItem("loggedInUser"));
 function renderUserData() {
   if (!user) return;
 
-  firstNameInput.value = user.firstName || "";
-  lastNameInput.value = user.lastName || "";
+  nameInput.value = user.name || "";
   emailInput.value = user.email || "";
   phoneInput.value = user.phone || "";
   addressInput.value = user.address || "";
@@ -27,8 +25,9 @@ function renderUserData() {
   confirmPasswordInput.value = user.password ? atob(user.password) : "";
 
   if (user.gender) {
+    const savedGender = user.gender.toLowerCase();
     genderInputs.forEach((radio) => {
-      radio.checked = radio.value === user.gender;
+      radio.checked = radio.value.toLowerCase() === savedGender;
     });
   }
 }
@@ -47,13 +46,11 @@ accountForm.addEventListener("submit", function (e) {
   }
 
   // Update user object
-  user.firstName = firstNameInput.value;
-  user.lastName = lastNameInput.value;
+  user.name = nameInput.value;
   user.email = emailInput.value;
   user.phone = phoneInput.value;
   user.address = addressInput.value;
   user.password = btoa(passwordInput.value);
-  user.confirmPassword = btoa(confirmPasswordInput.value);
 
   genderInputs.forEach((radio) => {
     if (radio.checked) {
