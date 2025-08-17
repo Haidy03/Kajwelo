@@ -644,49 +644,49 @@
         
         <ul class="sidebar-menu">
             <li>
-                <button class="sidebar-link active" id="DashBtn">
+                <button class="sidebar-link active" id="DashBtn" onclick="gotodashboard()">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" id="AddProdBtn">
+                <button class="sidebar-link" id="AddProdBtn" onclick="gotoproducts()">
                     <i class="fas fa-box"></i>
                     <span>Products</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" onclick="showSection('orders')">
+                <button class="sidebar-link" onclick="gotoOrders()">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Orders</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" onclick="showSection('analytics')">
+                <button class="sidebar-link" onclick="gotoanalytics()">
                     <i class="fas fa-chart-line"></i>
                     <span>Analytics</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" onclick="showSection('customers')">
+                <button class="sidebar-link" onclick="gotoCustomers()">
                     <i class="fas fa-users"></i>
                     <span>Customers</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" id="InventoryBtn">
+                <button class="sidebar-link" id="InventoryBtn" onclick="gotoInventory()">
                     <i class="fas fa-warehouse"></i>
                     <span>Inventory</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" onclick="showSection('reviews')">
+                <button class="sidebar-link" onclick="gotoPending()">
                     <i class="fa-solid fa-hourglass-start"></i>
                     <span>Pending</span>
                 </button>
             </li>
             <li>
-                <button class="sidebar-link" onclick="showSection('settings')">
+                <button class="sidebar-link" onclick="gotoSettings()">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </button>
@@ -947,6 +947,32 @@
     </main>
 
     <script>
+         function gotodashboard(){
+            window.location.href="sellerdashboard.html";
+        }
+        function gotoproducts(){
+            window.location.href="SelleraAddProduct.html";
+        }
+        function gotoOrders(){
+            window.location.href="sellerOrders.html";
+        }
+        function gotoanalytics(){
+            window.location.href="";
+        }
+        function gotoCustomers(){
+            window.location.href="sellerCustomers.html";
+        }
+        function gotoInventory(){
+            window.location.href="SellerInventory.html";
+        }
+        function gotoPending(){
+            window.location.href="sellerPending.html";
+        }
+        
+        function gotoSettings(){
+            window.location.href="";
+        }
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
