@@ -909,114 +909,114 @@
             window.location.href="";
         }
         // Sample data for demonstration
-        let allProducts = [
-            {
-                id: 1,
-                name: "Oversized Graphic Tee",
-                category: "Men",
-                subcategory: "T-Shirts",
-                price: 24.99,
-                salePrice: 19.99,
-                status: "pending",
-                submittedDate: "2024-08-15",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
-                tags: ["Casual", "Cotton", "Summer"],
-                stock: 150
-            },
-            {
-                id: 2,
-                name: "Floral Summer Dress",
-                category: "Women",
-                subcategory: "Dresses",
-                price: 45.99,
-                salePrice: null,
-                status: "approved",
-                submittedDate: "2024-08-14",
-                image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=300&h=300&fit=crop",
-                tags: ["Floral", "Summer", "Casual"],
-                stock: 75
-            },
-            {
-                id: 3,
-                name: "Denim Skinny Jeans",
-                category: "Women",
-                subcategory: "Pants",
-                price: 59.99,
-                salePrice: 49.99,
-                status: "rejected",
-                submittedDate: "2024-08-13",
-                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300&h=300&fit=crop",
-                tags: ["Denim", "Skinny", "Classic"],
-                stock: 200,
-                rejectionReason: "Images need better lighting and product description needs more details."
-            },
-            {
-                id: 4,
-                name: "Classic Business Suit",
-                category: "Men",
-                subcategory: "Suits",
-                price: 299.99,
-                salePrice: null,
-                status: "pending",
-                submittedDate: "2024-08-16",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop",
-                tags: ["Formal", "Business", "Classic"],
-                stock: 50
-            },
-            {
-                id: 5,
-                name: "Athletic Shorts",
-                category: "Men",
-                subcategory: "Shorts",
-                price: 19.99,
-                salePrice: 15.99,
-                status: "pending",
-                submittedDate: "2024-08-16",
-                image: "https://images.unsplash.com/photo-1506629905607-676ae5d49824?w=300&h=300&fit=crop",
-                tags: ["Athletic", "Comfortable", "Sports"],
-                stock: 300
-            },
-            {
-                id: 6,
-                name: "Pleated Mini Skirt",
-                category: "Women",
-                subcategory: "Skirts",
-                price: 34.99,
-                salePrice: null,
-                status: "approved",
-                submittedDate: "2024-08-12",
-                image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=300&h=300&fit=crop",
-                tags: ["Pleated", "Mini", "Trendy"],
-                stock: 120
-            },
-            {
-                id: 7,
-                name: "Cotton Polo Shirt",
-                category: "Men",
-                subcategory: "T-Shirts",
-                price: 29.99,
-                salePrice: null,
-                status: "pending",
-                submittedDate: "2024-08-16",
-                image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=300&h=300&fit=crop",
-                tags: ["Polo", "Cotton", "Smart Casual"],
-                stock: 180
-            },
-            {
-                id: 8,
-                name: "Maxi Dress",
-                category: "Women",
-                subcategory: "Dresses",
-                price: 55.99,
-                salePrice: 44.99,
-                status: "rejected",
-                submittedDate: "2024-08-11",
-                image: "https://images.unsplash.com/photo-1566479179817-c8e0c5b1befe?w=300&h=300&fit=crop",
-                tags: ["Maxi", "Elegant", "Evening"],
-                stock: 65,
-                rejectionReason: "Size chart is missing and fabric composition needs to be specified."
-            }
-        ];
+        // let allProducts = [
+        //     {
+        //         id: 1,
+        //         name: "Oversized Graphic Tee",
+        //         category: "Men",
+        //         subcategory: "T-Shirts",
+        //         price: 24.99,
+        //         salePrice: 19.99,
+        //         status: "pending",
+        //         submittedDate: "2024-08-15",
+        //         image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
+        //         tags: ["Casual", "Cotton", "Summer"],
+        //         stock: 150
+        //     },
+        //     {
+        //         id: 2,
+        //         name: "Floral Summer Dress",
+        //         category: "Women",
+        //         subcategory: "Dresses",
+        //         price: 45.99,
+        //         salePrice: null,
+        //         status: "approved",
+        //         submittedDate: "2024-08-14",
+        //         image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=300&h=300&fit=crop",
+        //         tags: ["Floral", "Summer", "Casual"],
+        //         stock: 75
+        //     },
+        //     {
+        //         id: 3,
+        //         name: "Denim Skinny Jeans",
+        //         category: "Women",
+        //         subcategory: "Pants",
+        //         price: 59.99,
+        //         salePrice: 49.99,
+        //         status: "rejected",
+        //         submittedDate: "2024-08-13",
+        //         image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300&h=300&fit=crop",
+        //         tags: ["Denim", "Skinny", "Classic"],
+        //         stock: 200,
+        //         rejectionReason: "Images need better lighting and product description needs more details."
+        //     },
+        //     {
+        //         id: 4,
+        //         name: "Classic Business Suit",
+        //         category: "Men",
+        //         subcategory: "Suits",
+        //         price: 299.99,
+        //         salePrice: null,
+        //         status: "pending",
+        //         submittedDate: "2024-08-16",
+        //         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop",
+        //         tags: ["Formal", "Business", "Classic"],
+        //         stock: 50
+        //     },
+        //     {
+        //         id: 5,
+        //         name: "Athletic Shorts",
+        //         category: "Men",
+        //         subcategory: "Shorts",
+        //         price: 19.99,
+        //         salePrice: 15.99,
+        //         status: "pending",
+        //         submittedDate: "2024-08-16",
+        //         image: "https://images.unsplash.com/photo-1506629905607-676ae5d49824?w=300&h=300&fit=crop",
+        //         tags: ["Athletic", "Comfortable", "Sports"],
+        //         stock: 300
+        //     },
+        //     {
+        //         id: 6,
+        //         name: "Pleated Mini Skirt",
+        //         category: "Women",
+        //         subcategory: "Skirts",
+        //         price: 34.99,
+        //         salePrice: null,
+        //         status: "approved",
+        //         submittedDate: "2024-08-12",
+        //         image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=300&h=300&fit=crop",
+        //         tags: ["Pleated", "Mini", "Trendy"],
+        //         stock: 120
+        //     },
+        //     {
+        //         id: 7,
+        //         name: "Cotton Polo Shirt",
+        //         category: "Men",
+        //         subcategory: "T-Shirts",
+        //         price: 29.99,
+        //         salePrice: null,
+        //         status: "pending",
+        //         submittedDate: "2024-08-16",
+        //         image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=300&h=300&fit=crop",
+        //         tags: ["Polo", "Cotton", "Smart Casual"],
+        //         stock: 180
+        //     },
+        //     {
+        //         id: 8,
+        //         name: "Maxi Dress",
+        //         category: "Women",
+        //         subcategory: "Dresses",
+        //         price: 55.99,
+        //         salePrice: 44.99,
+        //         status: "rejected",
+        //         submittedDate: "2024-08-11",
+        //         image: "https://images.unsplash.com/photo-1566479179817-c8e0c5b1befe?w=300&h=300&fit=crop",
+        //         tags: ["Maxi", "Elegant", "Evening"],
+        //         stock: 65,
+        //         rejectionReason: "Size chart is missing and fabric composition needs to be specified."
+        //     }
+        // ];
 
         let filteredProducts = [...allProducts];
         let currentFilters = {
@@ -1060,9 +1060,9 @@
             document.getElementById('searchInput').addEventListener('input', debounce(updateFiltersFromUI, 300));
 
             // Sidebar navigation
-            document.getElementById('dashBtn').addEventListener('click', () => navigateTo('dashboard'));
-            document.getElementById('addProdBtn').addEventListener('click', () => navigateTo('add-product'));
-            document.getElementById('inventoryBtn').addEventListener('click', () => navigateTo('inventory'));
+            // document.getElementById('dashBtn').addEventListener('click', () => navigateTo('dashboard'));
+            // document.getElementById('addProdBtn').addEventListener('click', () => navigateTo('add-product'));
+            // document.getElementById('inventoryBtn').addEventListener('click', () => navigateTo('inventory'));
 
             // Mobile responsiveness
             window.addEventListener('resize', function() {
