@@ -112,22 +112,38 @@ window.addEventListener("load", function () {
     whishListBtn.innerHTML = "♡";
     whishListBtn.dataset.productId = product.id;
 
+    // 🔥 Check if this product is already in wishlist (on page load)
+    let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && Array.isArray(loggedInUser.wishlist)) {
+      const isInWishlist = loggedInUser.wishlist.some(
+        (item) => item.id === product.id
+      );
+      if (isInWishlist) {
+        whishListBtn.innerHTML = "❤";
+        whishListBtn.classList.add("active");
+      }
+    }
+
     // Prevent card click when pressing wishlist
+    // --- Add-to-Wishlist functionality ---
     whishListBtn.addEventListener("click", function (event) {
       event.stopPropagation();
-      // --- wishlist logic ---
+
       let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
         alert("You need to log in to use wishlist!");
-        window.location.href = "/login-register.html";
+        window.location.href = "/login.html";
         return;
       }
+
       if (!Array.isArray(loggedInUser.wishlist)) {
         loggedInUser.wishlist = [];
       }
+
       const existingIndex = loggedInUser.wishlist.findIndex(
         (item) => item.id === product.id
       );
+
       if (existingIndex === -1) {
         loggedInUser.wishlist.push(product);
         whishListBtn.innerHTML = "❤";
@@ -137,7 +153,9 @@ window.addEventListener("load", function () {
         whishListBtn.innerHTML = "♡";
         whishListBtn.classList.remove("active");
       }
+
       localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
       let users = JSON.parse(localStorage.getItem("users")) || [];
       const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
       if (userIndex !== -1) {
@@ -145,15 +163,41 @@ window.addEventListener("load", function () {
         localStorage.setItem("users", JSON.stringify(users));
       }
     });
+    // --- End Add-to-Wishlist functionality ---
 
-    // Add-to-cart (Quick View) button
+    // --- Add-to-Cart functionality ---
     const quickViewBtn = document.createElement("button");
     quickViewBtn.className = "quick-view-btn";
     quickViewBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Add to Cart`;
+
     quickViewBtn.addEventListener("click", function (event) {
       event.stopPropagation();
+
+      let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!loggedInUser) {
+        alert("You need to log in to add to cart!");
+        window.location.href = "/login.html";
+        return;
+      }
+
+      if (!Array.isArray(loggedInUser.cart)) {
+        loggedInUser.cart = [];
+      }
+
+      loggedInUser.cart.push(product);
+
+      localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
+      if (userIndex !== -1) {
+        users[userIndex] = loggedInUser;
+        localStorage.setItem("users", JSON.stringify(users));
+      }
+
       alert(`${product.title} added to cart!`);
     });
+    // --- End Add-to-Cart functionality ---
 
     overlay.appendChild(quickViewBtn);
     overlay.appendChild(whishListBtn);
