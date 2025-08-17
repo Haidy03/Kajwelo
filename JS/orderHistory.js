@@ -1,15 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Get container
-  const ordersContainer = document.getElementById("orders-container");
-  if (!ordersContainer) return;
+  const orderHistoryContainer = document.getElementById(
+    "orderHistory-container"
+  );
+  if (!orderHistoryContainer) return;
 
   // 2. Get user data
   const user = JSON.parse(localStorage.getItem("loggedInUser")) || {};
 
   // dummy data only for testing
   // remove in production bcs it overwrites actual data
-  if (!user.orders || user.orders.length === 0) {
-    user.orders = [
+  if (!user.orderHistory || user.orderHistory.length === 0) {
+    user.orderHistory = [
       {
         id: 1,
         title: "Summer Maxi Dress",
@@ -44,9 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
   }
   ///////////////////////////////////////////////////////
-  // 4. Display orders
-  if (user.orders?.length) {
-    ordersContainer.innerHTML = user.orders
+  // 4. Display orderHistory
+  if (user.orderHistory?.length) {
+    orderHistoryContainer.innerHTML = user.orderHistory
       .map(
         (product) => `
       <div class="col-12" data-id="${product.id}">
@@ -91,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("");
   } else {
-    ordersContainer.innerHTML = '<p class="text-muted">No orders found.</p>';
+    orderHistoryContainer.innerHTML =
+      '<p class="text-muted">No orderHistory found.</p>';
   }
 });
