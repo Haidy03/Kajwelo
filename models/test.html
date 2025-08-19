@@ -28,15 +28,51 @@
         import { Seeder } from "../JS/seeding.js";
 
         function encodeUnicode(str) {
-                return btoa(unescape(encodeURIComponent(str)));
-            }
+            return btoa(unescape(encodeURIComponent(str)));
+        }
 
         function decodeUnicode(base64) {
             return decodeURIComponent(escape(atob(base64)));
         }
 
         window.addEventListener("load", () => {
-            
+
+
+
+            // const order = {
+            //     products: [p1.id, p2.id, p3.id],
+            //     quantity: [qp1, qp2, qp3],
+            //     sizes: [sp1, sp2, sp3],
+            //     colors: [cp1, cp2, cp3],
+            //     shippingFee: 100,
+            //     totalPrice: qp1 * p1.price +... +shippingFee
+            // }
+
+
+            // loop on each product in order.products get sellerId
+            // total earnings = q * price 
+            // product.stock => color , size => q - q(bought)
+            // apped in orders for seller => { product , color , quantity , size , total order price , buyerId}
+            // customer order is appended in order History 
+
+            // cart => when forward to check out => object order => when submits checkout => order is appended
+            // cart => input number min =1 ,max => p.stock [{xl,red,5},{xl,black,2},{m,red,3}]
+
+            // cart =[p1,p2,p3] =
+            // order = [{}]
+
+
+
+
+
+
+
+
+
+
+
+
+
             // const users= Storage.get("users");
             // const allProducts=[]
             // users.forEach(user=>{
@@ -48,7 +84,7 @@
             // })
             // console.log(allProducts)
 
-                //Seeder.run();
+            //Seeder.run();
 
             //Test Sign Up
 
