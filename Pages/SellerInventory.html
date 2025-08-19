@@ -936,13 +936,13 @@
 
    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar"  style="overflow-y: hidden;">
         <div class="sidebar-header">
             <div class="sidebar-logo">Kajwelo</div>
             <div class="sidebar-subtitle">Seller Portal</div>
         </div>
         
-        <ul class="sidebar-menu">
+        
         
              <ul class="sidebar-menu">
                 <li><a href="#" class="sidebar-link " onclick="gotodashboard()"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -953,8 +953,16 @@
                 <li><a href="#" class="sidebar-link active" onclick="goToInventory()"><i class="fas fa-warehouse"></i> Inventory</a></li>
                 <li><a href="#" class="sidebar-link" onclick="gotoPending()"><i class="fa-solid fa-hourglass-start"></i> Pending</a></li>
                 <li><a href="#" class="sidebar-link" onclick="gotoSettings()"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" class="sidebar-link" onclick="gotoInbox()"><i class="fa-solid fa-inbox"></i> Inbox</a></li>
+
             </ul>
-        </ul>
+            <div>
+                <button class="sidebar-link">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>LOG OUT</span>
+                </button>
+            </div>
+        
     </aside>
 
     
