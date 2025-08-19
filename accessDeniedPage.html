@@ -61,7 +61,28 @@
             <p class="footer-text">© 2025 Kajwelo - Fashion & Style. All rights reserved.</p>
         </div>
     </footer>
+    <script type="module">
+        import { Auth } from "../utils/auth.js"
+        import { Admin } from "../models/Admin.js"
+        import { Customer } from "../models/Customer.js"
+        import { Seller } from "../models/Seller.js"
+        const currentUser = Auth.getCurrentUser();
+        window.addEventListener("load", doItFirst);
+        function doItFirst() {
 
+            const homeBtn = document.getElementById("home");
+            if (currentUser instanceof Seller) {
+                homeBtn.href = "../Pages/sellerdashboard.html"
+            } else if (currentUser instanceof Customer) {
+                homeBtn.href = "../FinalHomePage.html"
+            } else if (currentUser instanceof Admin) {
+                homeBtn.href = "../AdminDashboard/AdminDashBoard.html"
+            } else {
+                homeBtn.href = "../FinalHomePage.html"
+            }
+        }
+
+    </script>
 
 </body>
 
