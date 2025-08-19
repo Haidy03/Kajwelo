@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+    </style>
+</head>
+
+
+<body>
+    <div class="container mt-5">
+        <h2>Seller Dashboard</h2>
+        <canvas id="sellerEarningsChart" height="100"></canvas>
+
+        <h2 class="mt-5">Admin Dashboard</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="productVerificationChart" height="100"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="salesBySellerChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import { Charts } from "./charts.js";
+        import { Auth } from "../utils/auth.js";
+
+        // Example: logged in as Seller
+        const currentSeller = Auth.getCurrentUser();
+        if (currentSeller && currentSeller.role === "seller") {
+            Charts.renderSellerEarningsChart(currentSeller.id, "sellerEarningsChart");
+        }
+
+        // Admin charts
+        Charts.renderAdminProductVerificationChart("productVerificationChart");
+        Charts.renderAdminSalesBySellerChart("salesBySellerChart");
+    </script>
+
+</body>
+
+</html>

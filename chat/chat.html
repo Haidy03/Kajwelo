@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chat-message {
+      max-width: 70%;
+      padding: 8px 12px;
+      border-radius: 15px;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+    }
+    .chat-message.self {
+      background-color: #d1e7ff; /* light blue */
+      margin-left: auto;
+      text-align: right;
+    }
+    .chat-message.other {
+      background-color: #f0f0f0; /* light gray */
+      margin-right: auto;
+      text-align: left;
+    }
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: #fff;
+    }
+  </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+  <h2>Your Chats</h2>
+  <ul id="chatList" class="list-group"></ul>
+</div>
+
+<!-- Chat Modal -->
+<div class="modal fade" id="chatModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="chatModalTitle" class="modal-title">Chat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="chatBox" class="chat-box"></div>
+      </div>
+      <div class="modal-footer">
+        <input type="text" id="chatInput" class="form-control" placeholder="Type a message...">
+        <button id="sendBtn" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { Storage } from "../utils/localStorageHelper.js";
+  import { Auth } from "../utils/auth.js";
+  import { Conversation } from "../models/Conversation.js";
+
+  const currentUser = Auth.getCurrentUser();
+  const chatList = document.getElementById("chatList");
+  const chatBox = document.getElementById("chatBox");
+  const chatModalTitle = document.getElementById("chatModalTitle");
+  const chatInput = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
+
+  let activeConversation = null;
+  let activeParticipant = null;
+
+
+
+
+
+
+
+
+  
+  // Helper: render chat messages
+  function renderMessages(convo) {
+    chatBox.innerHTML = "";
+    convo.messages.forEach(msg => {
+      const div = document.createElement("div");
+      div.classList.add("chat-message");
+      if (msg.senderId === currentUser.id) {
+        div.classList.add("self");
+      } else {
+        div.classList.add("other");
+      }
+      div.innerText = msg.content;
+      chatBox.appendChild(div);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight; // auto scroll
+  }
+
+  // Populate chat list from currentUser.chats
+  function loadChatList() {
+    chatList.innerHTML = "";
+    const users = Storage.get("users", []);
+
+    if (!currentUser.chats) return;
+
+    currentUser.chats.forEach(c => {
+      const otherId = c.participants.sender===currentUser.id? c.participants.reciever :c.participants.sender
+      const otherUser = users.find(u => u.id === otherId);
+
+      const li = document.createElement("li");
+      li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+      li.innerText = otherUser?.name || "Unknown";
+      li.style.cursor = "pointer";
+      li.onclick = () => {
+        activeConversation = c;
+        activeParticipant = otherUser;
+        chatModalTitle.innerText = `Chat with ${otherUser?.name}`;
+        renderMessages(c);
+        const modal = new bootstrap.Modal(document.getElementById("chatModal"));
+        modal.show();
+      };
+
+      chatList.appendChild(li);
+    });
+  }
+
+  // Send message (through Conversation class)
+  sendBtn.addEventListener("click", () => {
+    const text = chatInput.value.trim();
+    if (!text || !activeConversation || !activeParticipant) return;
+
+    // Use Conversation.send() → updates both users' chats in Storage
+    Conversation.send(text, activeParticipant.id);
+
+    // Refresh currentUser from Storage after sending
+    const users = Storage.get("users", []);
+    const refreshedUser = users.find(u => u.id === currentUser.id);
+    const updatedConvo = refreshedUser.chats.find(c => c.id === activeConversation.id);
+
+    // Update state and re-render
+    activeConversation = updatedConvo;
+    renderMessages(activeConversation);
+
+    chatInput.value = "";
+  });
+
+  // Initial load
+  loadChatList();
+</script>
+</body>
+</html>

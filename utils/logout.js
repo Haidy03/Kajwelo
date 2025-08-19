@@ -9,7 +9,7 @@ import { Admin } from "../models/Admin.js";
 
 const currentUser = Auth.getCurrentUser();
 if (currentUser instanceof Seller || currentUser instanceof Admin)
-  window.location.href = "accessDeniedPage.html";
+  window.location.href = "/accessDeniedPage.html";
 
 
 document.body.insertAdjacentHTML("afterbegin", navbar)
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!currentUser) {
     logoutBtn.style.display = "none";
     loginBtn.addEventListener("click", () => {
-      window.location.href = "login.html";
+      window.location.href = "/login.html";
     })
     cartCount.style.display = "none";
     wishlistCount.style.display = "none";
