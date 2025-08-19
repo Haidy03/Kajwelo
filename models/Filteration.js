@@ -1,7 +1,9 @@
 // importing local storage helper to use its methods
 // get(key) , set(key,value) ,remove(key) , clear() ,has(key)
+
 import { Storage } from "../utils/localStorageHelper.js"
 import { Seller } from "../models/Seller.js";
+
 
 
 // Filtering class to retrive product 
@@ -26,7 +28,7 @@ export class retrive {
 
         return { success: true, message: "Retrived All Products Successfully", products: allProducts }
     }
-    
+
     // false => customer || seller  show verified only --- true => admin show all
     static allProductsByCategory(cat, access = false) {
         const users = Storage.get("users");
