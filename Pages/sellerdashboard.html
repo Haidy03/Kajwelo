@@ -742,15 +742,15 @@
                         <i class="fas fa-plus"></i>
                         <span>Add Product</span>
                     </button>
-                    <button class="action-btn" onclick="showSection('orders')">
+                    <button class="action-btn" onclick="gotoOrders()">
                         <i class="fas fa-eye"></i>
                         <span>View Orders</span>
                     </button>
-                    <button class="action-btn" onclick="showSection('analytics')">
+                    <button class="action-btn" onclick="gotoanalytics()">
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports</span>
                     </button>
-                    <button class="action-btn" onclick="showSection('inventory')">
+                    <button class="action-btn" onclick="gotoInventory()">
                         <i class="fas fa-boxes"></i>
                         <span>Inventory</span>
                     </button>
@@ -832,7 +832,7 @@
                 <div class="orders-section">
                     <div class="orders-header">
                         <h3 class="orders-title">Recent Orders</h3>
-                        <button class="action-btn" onclick="showSection('orders')">View All</button>
+                        <button class="action-btn" onclick="gotoOrders()">View All</button>
                     </div>
                     
                     <div class="table-container">
@@ -970,7 +970,7 @@
             window.location.href="sellerOrders.html";
         }
         function gotoanalytics(){
-            window.location.href="";
+            window.location.href="SellerAnalytics.html";
         }
         function gotoCustomers(){
             window.location.href="sellerCustomers.html";
