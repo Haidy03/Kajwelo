@@ -636,7 +636,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
             <div class="sidebar-logo">Kajwelo</div>
             <div class="sidebar-subtitle">Seller Portal</div>
@@ -691,7 +691,20 @@
                     <span>Settings</span>
                 </button>
             </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoInbox()">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>Inbox</span>
+                </button>
+            </li>
         </ul>
+
+        <div>
+            <button class="sidebar-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>LOG OUT</span>
+            </button>
+        </div>
     </aside>
 
     <!-- Main Content -->
