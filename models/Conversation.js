@@ -7,6 +7,7 @@ export class Conversation {
         this.participants = { sender: Auth.getCurrentUser().id, reciever: reciverId };
         this.messages = [];
         this.updatedAt = new Date();
+        this.class="conversation";
     }
 
     static send(messageContent, reciverId) {

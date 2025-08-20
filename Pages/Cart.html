@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/Finalhomepage.css" />
-  
+    <link rel="stylesheet" href="../CSS/Finalhomepage.css">
     <style>
         .cart-container {
             min-height: 80vh;
@@ -52,332 +52,558 @@
         .delivery-info {
             font-size: 0.9rem;
         }
+
+        /* === Variant selectors (chips) === */
+        .variant-group .btn {
+            border-radius: 9999px;
+            padding: .25rem .75rem;
+        }
+
+        .color-dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, .2);
+            margin-right: .35rem;
+            vertical-align: -2px;
+        }
+
+        .btn[disabled],
+        .btn.disabled {
+            pointer-events: none;
+            opacity: .55;
+        }
+
+        .variant-hidden {
+            display: none !important;
+        }
+
+        .size-out-of-stock {
+            position: relative;
+        }
+
+        .size-out-of-stock::after {
+            content: "Out of stock";
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #dc3545;
+            white-space: nowrap;
+        }
+
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-exceeded {
+            color: #dc3545;
+            font-weight: bold;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .product-category {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
     </style>
 </head>
+
 <body>
-    
- <!-- <div id="navbar"></div> -->
-<div class="container-fluid py-4">
-    <div class="row g-4">
-        <!-- Products Section -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">
-                        Shopping Cart (<span id="cart-count">0</span>)
-                    </h5>
-                </div>
-                <div class="card-body p-0" id="cart-items-container">
-                    <!-- Product items will be dynamically inserted here -->
-                    <div class="empty-cart-message d-flex justify-content-center align-items-center">
-                        <h4 class="text-muted">Your cart is empty</h4>
+    <div class="container-fluid py-4">
+        <div class="row g-4">
+            <!-- Products Section -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            Shopping Cart (<span id="cart-count">0</span>)
+                        </h5>
+                    </div>
+                    <div class="card-body p-0" id="cart-items-container">
+                        <!-- Product items will be dynamically inserted here -->
+                        <div class="empty-cart-message d-flex justify-content-center align-items-center">
+                            <h4 class="text-muted">Your cart is empty</h4>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Order Summary Section -->
-        <div class="col-lg-4">
-            <div class="card shadow-sm summary-card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Order Summary</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Subtotal:</span>
-                        <span class="fw-bold">EGP <span id="cart-subtotal">0.00</span></span>
+            <!-- Order Summary Section -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm summary-card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Order Summary</h5>
                     </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Delivery:</span>
-                        <span class="fw-bold">EGP <span id="delivery-cost">0.00</span></span>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal:</span>
+                            <span class="fw-bold">EGP <span id="cart-subtotal">0.00</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Delivery:</span>
+                            <span class="fw-bold text-success" id="delivery-cost">Free</span>
+                        </div>
+                        <div id="delivery-info" class="delivery-info text-muted mb-3"></div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-bold">Total:</span>
+                            <span class="fw-bold">EGP <span id="cart-total">0.00</span></span>
+                        </div>
                     </div>
-                    <div id="delivery-info" class="delivery-info text-muted mb-3"></div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="fw-bold">Total:</span>
-                        <span class="fw-bold">EGP <span id="cart-total">0.00</span></span>
+                    <div class="card-footer bg-white">
+                        <button class="btn btn-danger w-100" id="checkout-btn" disabled>
+                            Proceed to Checkout
+                        </button>
                     </div>
-                </div>
-                <div class="card-footer bg-white">
-                    <button class="btn btn-danger w-100" id="checkout-btn" disabled>
-                        Proceed to Checkout
-                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
- <!-- Footer Placeholder -->
-    <!-- <div id="footer"></div> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../utils/logout.js"></script>
+    <script type="module">
+        import { Auth } from "../utils/auth.js";
+        import { Storage } from "../utils/localStorageHelper.js";
 
+        Auth.apply_Autherization("customer");
 
+        const currentUser = Auth.getCurrentUser();
 
+        const cartState = {
+            items: [],
+            subtotal: 0,
+            deliveryCost: 0,
+            total: 0,
+            allSizes: ["XS", "S", "M", "L", "XL", "2XL"],
 
+            init: function () {
+                this.loadCartItems();
+                this.updateUI();
+            },
 
+            loadCartItems: function () {
+                // Use the current user's cart
+                this.items = currentUser.cart || [];
 
+                // Add default delivery info if not present
+                this.items.forEach(item => {
+                    if (!item.deliveryPrice) item.deliveryPrice = 0;
+                    if (!item.deliveryInfo) item.deliveryInfo = "Free standard delivery";
+                    if (!item.discount) item.discount = 0;
+                    if (!item.size && item.availableSizes && item.availableSizes.length > 0) item.size = item.availableSizes[0];
+                    if (!item.color && item.availableColors && item.availableColors.length > 0) item.color = item.availableColors[0];
+                    if (!item.quantity) item.quantity = 1;
+                });
+            },
 
+            calculateSubtotal: function () {
+                this.subtotal = this.items.reduce((total, item) => {
+                    // Use salePrice if available, otherwise use regular price
+                    const price = item.salePrice !== null ? item.salePrice : item.price;
+                    return total + (price * item.quantity);
+                }, 0);
+            },
 
-  <script type="module" src="../utils/logout.js"></script>
+            calculateDeliveryCost: function () {
+                this.deliveryCost = this.items.reduce((max, item) => {
+                    return Math.max(max, item.deliveryPrice || 0);
+                }, 0);
+            },
 
+            calculateTotal: function () {
+                this.total = this.subtotal + this.deliveryCost;
+            },
 
-   <!-- <script type="module">
-    import { footer } from '../components/footer.js';
-    document.getElementById('footer').innerHTML = footer;
-  </script>     
+            // Get available stock for a specific variant
+            getVariantQty: function (item, size, color) {
+                const variant = item.stock.find(v =>
+                    v.size === size && v.color === color
+                );
+                return variant ? variant.quantity : 0;
+            },
 
-<script type="module">
-    import { navbar } from '../components/navbar.js';
-    document.getElementById('navbar').innerHTML = navbar;
-  </script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
-<script>
-    const cartState = {
-        items: [],
-        subtotal: 0,
-        deliveryCost: 0,
-        total: 0,
+            // Get available colors for a specific size
+            getAvailableColors: function (item, size) {
+                return item.stock
+                    .filter(v => v.size === size && v.quantity > 0)
+                    .map(v => v.color);
+            },
 
-        init: function() {
-            this.loadSampleItems();
-            this.updateUI();
-        },
+            // Check if a size has any available stock
+            isSizeAvailable: function (item, size) {
+                return item.stock.some(v =>
+                    v.size === size && v.quantity > 0
+                );
+            },
 
-        loadSampleItems: function() {
-            // Sample products
-            this.items = [
-                {
-                    id: 1,
-                    name: "Premium T-Shirt",
-                    size: "XL",
-                    price: 100,
-                    discount: 10,
-                    image: "https://ar.dockland.com.eg/cdn/shop/files/S25TSSM32BK_1.jpg?v=1752136382",
-                    stock: 10,
-                    quantity: 2,
-                    deliveryPrice: 0,
-                    deliveryInfo: "Free standard delivery"
-                },
-                {
-                    id: 2,
-                    name: "Casual Jeans",
-                    size: "L",
-                    price: 200,
-                    discount: 15,
-                    image: "https://m.media-amazon.com/images/I/31eltgVJqaL._SY1000_.jpg",
-                    stock: 5,
-                    quantity: 1,
-                    deliveryPrice: 100,
-                    deliveryInfo: "Express delivery (1-2 business days)"
-                },
-                {
-                    id: 3,
-                    name: "Casual Jeans",
-                    size: "L",
-                    price: 200,
-                    discount: 15,
-                    image: "https://m.media-amazon.com/images/I/31eltgVJqaL._SY1000_.jpg",
-                    stock: 5,
-                    quantity: 1,
-                    deliveryPrice: 100,
-                    deliveryInfo: "Express delivery (1-2 business days)"
+            // Ensure selected variant is valid and adjust quantity if needed
+            ensureSelectedVariant: function (item) {
+                // If no sizes or colors available, return early
+                if (!item.availableSizes || !item.availableColors) return false;
+
+                // If current size has no available colors, find first available size
+                if (this.getAvailableColors(item, item.size).length === 0) {
+                    for (const size of item.availableSizes) {
+                        if (this.getAvailableColors(item, size).length > 0) {
+                            item.size = size;
+                            break;
+                        }
+                    }
                 }
-            ];
-        },
 
-        calculateSubtotal: function() {
-            this.subtotal = this.items.reduce((total, item) => {
-                return total + (this.getFinalPrice(item) * item.quantity);
-            }, 0);
-        },
+                // If current color is not available for selected size, pick first available color
+                const availableColors = this.getAvailableColors(item, item.size);
+                if (!availableColors.includes(item.color) && availableColors.length > 0) {
+                    item.color = availableColors[0];
+                }
 
-        calculateDeliveryCost: function() {
-            this.deliveryCost = this.items.reduce((max, item) => {
-                return Math.max(max, item.deliveryPrice || 0);
-            }, 0);
-        },
+                // Adjust quantity if it exceeds available stock for the selected variant
+                const variantStock = this.getVariantQty(item, item.size, item.color);
+                if (item.quantity > variantStock) {
+                    item.quantity = variantStock;
+                    return true; // Indicate that quantity was adjusted
+                }
 
-        calculateTotal: function() {
-            this.total = this.subtotal + this.deliveryCost;
-        },
+                return false; // Quantity was not adjusted
+            },
 
-        getDeliveryInfo: function() {
-            if (this.items.length === 0) return "";
+            getDeliveryInfo: function () {
+                if (this.items.length === 0) return "";
 
-            const allFreeDelivery = this.items.every(item => item.deliveryPrice === 0);
-            if (allFreeDelivery) {
-                return "All items qualify for free delivery";
-            }
+                const allFreeDelivery = this.items.every(item => item.deliveryPrice === 0);
+                if (allFreeDelivery) {
+                    return "All items qualify for free delivery";
+                }
 
-            const hasFreeDelivery = this.items.some(item => item.deliveryPrice === 0);
-            const hasPaidDelivery = this.items.some(item => item.deliveryPrice > 0);
+                const hasFreeDelivery = this.items.some(item => item.deliveryPrice === 0);
+                const hasPaidDelivery = this.items.some(item => item.deliveryPrice > 0);
 
-            if (hasFreeDelivery && hasPaidDelivery) {
-                return "Some items have additional delivery charges";
-            }
+                if (hasFreeDelivery && hasPaidDelivery) {
+                    return "Some items have additional delivery charges";
+                }
 
-            return "Express delivery applied";
-        },
+                return "Express delivery applied";
+            },
 
-        getFinalPrice: function(item) {
-            return item.price * (1 - (item.discount / 100));
-        },
+            getFinalPrice: function (item) {
+                // Use salePrice if available, otherwise use regular price
+                return item.salePrice !== null ? item.salePrice : item.price;
+            },
 
-        updateUI: function() {
-            this.calculateSubtotal();
-            this.calculateDeliveryCost();
-            this.calculateTotal();
-            this.renderCartItems();
-            this.updateSummary();
-        },
+            updateUI: function () {
+                this.calculateSubtotal();
+                this.calculateDeliveryCost();
+                this.calculateTotal();
+                this.renderCartItems();
+                this.updateSummary();
+            },
 
-        renderCartItems: function() {
-            const container = document.getElementById('cart-items-container');
+            renderCartItems: function () {
+                const container = document.getElementById('cart-items-container');
 
-            if (this.items.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-cart-message d-flex justify-content-center align-items-center">
-                        <h4 class="text-muted">Your cart is empty</h4>
-                    </div>
-                `;
-                return;
-            }
+                if (this.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart-message d-flex justify-content-center align-items-center">
+                            <h4 class="text-muted">Your cart is empty</h4>
+                        </div>
+                    `;
+                    return;
+                }
 
-            container.innerHTML = '';
+                container.innerHTML = '';
 
-            this.items.forEach(item => {
-                const finalPrice = this.getFinalPrice(item);
-                const stockWarning = item.stock < 10 ?
-                    `<p class="stock-warning mb-1">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Only ${item.stock} left in stock
-                    </p>` :
-                    `<a href="#" class="text-decoration-none">View product details</a>`;
+                this.items.forEach(item => {
+                    const quantityAdjusted = this.ensureSelectedVariant(item);
+                    const finalPrice = this.getFinalPrice(item);
+                    const variantStock = this.getVariantQty(item, item.size, item.color);
 
-                const deliveryInfo = item.deliveryPrice > 0 ?
-                    `<p class="text-muted small mb-1"><i class="fas fa-truck"></i> ${item.deliveryInfo}</p>` :
-                    `<p class="text-success small mb-1"><i class="fas fa-check-circle"></i> Free delivery</p>`;
+                    const deliveryInfo = item.deliveryPrice > 0
+                        ? `<p class="text-muted small mb-1"><i class="fas fa-truck"></i> ${item.deliveryInfo}</p>`
+                        : `<p class="text-success small mb-1"><i class="fas fa-check-circle"></i> Free delivery</p>`;
 
-                const itemElement = document.createElement('div');
-                itemElement.className = 'card mb-3';
-                itemElement.dataset.id = item.id;
-                itemElement.innerHTML = `
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <img src="${item.image}" alt="${item.name}" class="img-fluid product-image rounded">
+                    const stockWarning = variantStock < 10
+                        ? `<p class="stock-warning mb-1">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Only ${variantStock} left in stock
+                            </p>`
+                        : `<a href="#" class="text-decoration-none">View product details</a>`;
+
+                    // Build Size Chips - Show available sizes from product data
+                    const selectedSize = item.size;
+                    const sizeChips = item.availableSizes.map(size => {
+                        const isAvailable = this.isSizeAvailable(item, size);
+                        const isSelected = size === selectedSize;
+                        const inputId = `size-${item.id}-${size}`;
+                        const outOfStockClass = !isAvailable ? 'size-out-of-stock' : '';
+
+                        return `
+                            <div class="d-inline-block position-relative">
+                                <input type="radio" class="btn-check size-option" name="size-${item.id}" 
+                                    id="${inputId}" value="${size}" 
+                                    ${isSelected ? 'checked' : ''} 
+                                    ${isAvailable ? '' : 'disabled'}>
+                                <label class="btn btn-outline-secondary btn-sm me-2 mb-2 ${outOfStockClass}" 
+                                    for="${inputId}">${size}</label>
                             </div>
-                            <div class="col-md-6">
-                                <h5 class="product-name">${item.name}</h5>
-                                <p class="mb-1">Size: ${item.size}</p>
-                                ${deliveryInfo}
-                                ${stockWarning}
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <p class="product-price mb-1">EGP ${finalPrice.toFixed(2)}</p>
-                                <p class="text-muted small mb-2">
-                                    <span class="original-price">EGP ${item.price.toFixed(2)}</span>
-                                    <span class="badge bg-success discount-badge ms-1">${item.discount}% OFF</span>
-                                </p>
+                        `;
+                    }).join('');
+
+                    // Build Color Chips - Only show colors available for selected size
+                    const selectedColor = item.color;
+                    const availableColorsForSize = this.getAvailableColors(item, item.size);
+
+                    const colorChips = item.availableColors.map(color => {
+                        const isAvailable = availableColorsForSize.includes(color);
+                        const isSelected = color === selectedColor;
+                        const inputId = `color-${item.id}-${color}`;
+
+                        return `
+                            <input type="radio" class="btn-check color-option" name="color-${item.id}" 
+                                id="${inputId}" value="${color}" 
+                                ${isSelected ? 'checked' : ''} 
+                                ${isAvailable ? '' : 'disabled'}>
+                            <label class="btn btn-outline-secondary btn-sm me-2 mb-2 ${isAvailable ? '' : 'variant-hidden'}" 
+                                for="${inputId}">
+                                <span class="color-dot" style="background:${color}"></span>${color}
+                            </label>
+                        `;
+                    }).join('');
+
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'card mb-3';
+                    itemElement.dataset.id = item.id;
+
+                    itemElement.innerHTML = `
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="${item.image}" alt="${item.name}" class="img-fluid product-image rounded">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="product-name">${item.name}</h5>
+                                    ${item.category ? `<p class="product-category mb-1">${item.category}${item.subcategory ? ' > ' + item.subcategory : ''}</p>` : ''}
+
+                                    <!-- Size chips - Show available sizes -->
+                                    <div class="variant-group mb-2">
+                                        <div class="small text-muted fw-semibold mb-1">Size</div>
+                                        ${sizeChips}
+                                    </div>
+
+                                    <!-- Color chips - Only show available colors for selected size -->
+                                    <div class="variant-group mb-2">
+                                        <div class="small text-muted fw-semibold mb-1">Color</div>
+                                        ${colorChips}
+                                    </div>
+
+                                    ${deliveryInfo}
+                                    ${stockWarning}
+                                    ${quantityAdjusted ? `<p class="text-danger small mb-1 mt-2"><i class="fas fa-exclamation-triangle"></i> Quantity adjusted to available stock</p>` : ''}
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    ${item.salePrice ? `
+                                        <p class="product-price mb-1">EGP ${item.salePrice.toFixed(2)}</p>
+                                        <p class="text-muted small mb-2">
+                                            <span class="original-price">EGP ${item.price.toFixed(2)}</span>
+                                            <span class="badge bg-success discount-badge ms-1">${Math.round((1 - item.salePrice / item.price) * 100)}% OFF</span>
+                                        </p>
+                                    ` : `
+                                        <p class="product-price mb-1">EGP ${item.price.toFixed(2)}</p>
+                                    `}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button class="btn text-danger p-0 remove-item" data-id="${item.id}">
-                                <i class="fas fa-trash-alt"></i> Remove
-                            </button>
-                            <div class="d-flex align-items-center quantity-control">
-                                <button class="btn btn-outline-secondary decrease-quantity" data-id="${item.id}">
-                                    <i class="fas fa-minus"></i>
+                        <div class="card-footer bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="btn text-danger p-0 remove-item" data-id="${item.id}">
+                                    <i class="fas fa-trash-alt"></i> Remove
                                 </button>
-                                <span class="mx-2 quantity">${item.quantity}</span>
-                                <button class="btn btn-outline-secondary increase-quantity" data-id="${item.id}">
-                                    <i class="fas fa-plus"></i>
-                                </button>
+                                <div class="d-flex align-items-center quantity-control">
+                                    <button class="btn btn-outline-secondary quantity-btn decrease-quantity" data-id="${item.id}">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="mx-2 quantity ${item.quantity > variantStock ? 'quantity-exceeded' : ''}">${item.quantity}</span>
+                                    <button class="btn btn-outline-secondary quantity-btn increase-quantity" data-id="${item.id}">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
-                container.appendChild(itemElement);
+                    // Add event listeners for size changes
+                    const sizeOptions = itemElement.querySelectorAll(`.size-option`);
+                    sizeOptions.forEach(option => {
+                        option.addEventListener('change', (e) => {
+                            if (e.target.checked) {
+                                item.size = e.target.value;
+
+                                // When size changes, update available colors
+                                const availableColors = this.getAvailableColors(item, item.size);
+
+                                // If current color is not available for new size, select first available color
+                                if (!availableColors.includes(item.color) && availableColors.length > 0) {
+                                    item.color = availableColors[0];
+                                }
+
+                                // Check if quantity exceeds available stock for new variant
+                                const newVariantStock = this.getVariantQty(item, item.size, item.color);
+                                if (item.quantity > newVariantStock) {
+                                    item.quantity = newVariantStock;
+                                }
+
+                                this.updateUI();
+                            }
+                        });
+                    });
+
+                    // Add event listeners for color changes
+                    const colorOptions = itemElement.querySelectorAll(`.color-option`);
+                    colorOptions.forEach(option => {
+                        option.addEventListener('change', (e) => {
+                            if (e.target.checked) {
+                                item.color = e.target.value;
+
+                                // Check if quantity exceeds available stock for new variant
+                                const newVariantStock = this.getVariantQty(item, item.size, item.color);
+                                if (item.quantity > newVariantStock) {
+                                    item.quantity = newVariantStock;
+                                }
+
+                                this.updateUI();
+                            }
+                        });
+                    });
+
+                    // Add event listeners for quantity buttons
+                    const increaseBtn = itemElement.querySelector('.increase-quantity');
+                    const decreaseBtn = itemElement.querySelector('.decrease-quantity');
+
+                    increaseBtn.addEventListener('click', () => {
+                        this.increaseQuantity(item.id);
+                    });
+
+                    decreaseBtn.addEventListener('click', () => {
+                        this.decreaseQuantity(item.id);
+                    });
+
+                    // Add event listener for remove button
+                    const removeBtn = itemElement.querySelector('.remove-item');
+                    removeBtn.addEventListener('click', () => {
+                        this.removeItem(item.id);
+                        currentUser.removeFromCart(item);
+                    });
+
+                    container.appendChild(itemElement);
+                });
+            },
+
+            updateSummary: function () {
+                document.getElementById('cart-count').textContent = this.items.length;
+                document.getElementById('cart-subtotal').textContent = this.subtotal.toFixed(2);
+                document.getElementById('cart-total').textContent = this.total.toFixed(2);
+
+                document.getElementById('delivery-info').textContent = this.getDeliveryInfo();
+
+                const checkoutBtn = document.getElementById('checkout-btn');
+                checkoutBtn.disabled = this.items.length === 0;
+
+                const deliveryCostElement = document.getElementById('delivery-cost');
+                if (this.deliveryCost > 0) {
+                    deliveryCostElement.textContent = this.deliveryCost.toFixed(2);
+                    deliveryCostElement.classList.remove('text-success');
+                } else {
+                    deliveryCostElement.textContent = 'Free';
+                    deliveryCostElement.classList.add('text-success');
+                }
+            },
+
+            removeItem: function (itemId) {
+                this.items = this.items.filter(item => item.id !== itemId);
+                this.updateUI();
+            },
+
+            increaseQuantity: function (itemId) {
+                const item = this.items.find(item => item.id === itemId);
+                const variantStock = this.getVariantQty(item, item.size, item.color);
+
+                if (item && item.quantity < variantStock) {
+                    item.quantity++;
+                    this.updateUI();
+                } else {
+                    alert("Cannot add more than available stock");
+                }
+            },
+
+            decreaseQuantity: function (itemId) {
+                const item = this.items.find(item => item.id === itemId);
+                if (item && item.quantity > 1) {
+                    item.quantity--;
+                    this.updateUI();
+                } else if (item && item.quantity === 1) {
+                    if (confirm("Remove this item from your cart?")) {
+                        this.removeItem(itemId);
+                    }
+                }
+            },
+
+            checkout: function () {
+                if (this.items.length > 0) {
+                    // Create the order object
+                    const order = {
+                        products: this.items.map(item => ({
+                            productId: item.id,
+                            size: item.size,
+                            color: item.color,
+                            quantity: item.quantity
+                        })),
+                        shippingFee: this.deliveryCost,
+                        totalPrice: this.total,
+                        customerId: currentUser.id
+                    };
+
+                    // Show alert with order details
+                    //alert(`Proceeding to checkout with order:\n\n${JSON.stringify(order, null, 2)}`);
+
+                    // Return the order object
+                    return order;
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cartState.init();
+
+            document.getElementById('checkout-btn').addEventListener('click', () => {
+                const order = cartState.checkout();
+                // You can use the order object here for further processing
+                Storage.set("order",order)
+                window.location.href="../CheckOut/CheckOut.html"
+
             });
-        },
-
-        updateSummary: function() {
-            document.getElementById('cart-count').textContent = this.items.length;
-            document.getElementById('cart-subtotal').textContent = this.subtotal.toFixed(2);
-            document.getElementById('delivery-cost').textContent = this.deliveryCost.toFixed(2);
-            document.getElementById('cart-total').textContent = this.total.toFixed(2);
-
-            document.getElementById('delivery-info').textContent = this.getDeliveryInfo();
-
-            const checkoutBtn = document.getElementById('checkout-btn');
-            checkoutBtn.disabled = this.items.length === 0;
-
-            const deliveryCostElement = document.getElementById('delivery-cost');
-            if (this.deliveryCost > 0) {
-                deliveryCostElement.classList.remove('text-success');
-            } else {
-                deliveryCostElement.classList.add('text-success');
-                deliveryCostElement.textContent = 'Free';
-            }
-        },
-
-        removeItem: function(itemId) {
-            this.items = this.items.filter(item => item.id !== itemId);
-            this.updateUI();
-        },
-
-        increaseQuantity: function(itemId) {
-            const item = this.items.find(item => item.id === itemId);
-            if (item && item.quantity < item.stock) {
-                item.quantity++;
-                this.updateUI();
-            } else {
-                alert("Cannot add more than available stock");
-            }
-        },
-
-        decreaseQuantity: function(itemId) {
-            const item = this.items.find(item => item.id === itemId);
-            if (item && item.quantity > 1) {
-                item.quantity--;
-                this.updateUI();
-            } else if (item && item.quantity === 1) {
-                if (confirm("Remove this item from your cart?")) {
-                    this.removeItem(itemId);
-                }
-            }
-        },
-
-        checkout: function() {
-            if (this.items.length > 0) {
-                alert(`Proceeding to checkout with total: EGP ${this.total.toFixed(2)}`);
-            }
-        }
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        cartState.init();
-
-        document.getElementById('cart-items-container').addEventListener('click', (e) => {
-            const itemId = parseInt(e.target.closest('[data-id]')?.dataset.id);
-            if (!itemId) return;
-
-            if (e.target.closest('.remove-item')) {
-                cartState.removeItem(itemId);
-            } else if (e.target.closest('.increase-quantity')) {
-                cartState.increaseQuantity(itemId);
-            } else if (e.target.closest('.decrease-quantity')) {
-                cartState.decreaseQuantity(itemId);
-            }
         });
-
-        document.getElementById('checkout-btn').addEventListener('click', () => {
-            cartState.checkout();
-        });
-    });
-</script>
+    </script>
 </body>
+
 </html>

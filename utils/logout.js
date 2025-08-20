@@ -7,9 +7,11 @@ import { Customer } from "../models/Customer.js";
 import { Seller } from "../models/Seller.js";
 import { Admin } from "../models/Admin.js";
 
-const currentUser = Auth.getCurrentUser();
-if (currentUser instanceof Seller || currentUser instanceof Admin)
-  window.location.href = "/accessDeniedPage.html";
+
+
+let currentUser = Auth.getCurrentUser();
+// if (currentUser instanceof Seller || currentUser instanceof Admin)
+//   window.location.href = "/accessDeniedPage.html";
 
 
 document.body.insertAdjacentHTML("afterbegin", navbar)
@@ -34,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cartCount.style.display = "none";
     wishlistCount.style.display = "none";
     cartBtn.addEventListener("click", () => {
-      alert("you must login/register to access cart..!")
+      
+      //alert("you must login/register to access cart..!")
     });
   } else {
     loginBtn.style.display = "none";
@@ -44,12 +47,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentUser.cart.length == 0) {
       cartCount.style.display = "none";
     } else {
-      cartCount.textContent = currentUser.cart.length;
+      setInterval(() => {
+        currentUser = Auth.getCurrentUser();
+        if (currentUser.cart.length !== 0) {
+          cartCount.textContent = currentUser.cart.length;
+        }else{
+          cartCount.style.display = "none";
+        }
+
+      }, 100)
     }
     if (currentUser.wishlist.length == 0) {
       wishlistCount.style.display = "none";
     } else {
-      wishlistCount.textContent = currentUser.wishlist.length;
+      setInterval(() => {
+        currentUser = Auth.getCurrentUser();
+        if (currentUser.wishlist.length !== 0) {
+          wishlistCount.textContent = currentUser.wishlist.length;
+        }else{
+          wishlistCount.style.display = "none";
+        }
+
+      }, 100)
     }
   }
 });

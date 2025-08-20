@@ -6,14 +6,11 @@ import { Customer } from "../models/Customer.js";
 import { Seller } from "../models/Seller.js";
 import { Admin } from "../models/Admin.js";
 import { Product } from "../models/Product.js";
+import { Order } from "../models/Order.js";
+import { Conversation } from "../models/Conversation.js";
+import { Message } from "../models/Message.js";
 
-// القاموس (Class Registry)
-const classMap = {
-    customer: Customer,
-    seller: Seller,
-    admin: Admin,
-    product: Product
-};
+
 
 export const Storage = {
     set(key, value) {
@@ -52,7 +49,15 @@ export const Storage = {
 
 // دالة عامة لإعادة بناء الـ instance
 export function reviveInstance(obj) {
-
+    // القاموس (Class Registry)
+    const classMap = {
+        customer: Customer,
+        seller: Seller,
+        admin: Admin,
+        product: Product,
+        order: Order,
+        // conversation: Conversation,
+    };
     if (!obj || typeof obj !== "object") return obj;
 
     const key = (obj.role || obj.class || "").toLowerCase();

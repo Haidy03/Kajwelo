@@ -1,11 +1,12 @@
 import { User } from "./User.js";
 import { Storage } from "../utils/localStorageHelper.js";
 import { Seller } from "./Seller.js";
+import { Order } from "../models/Order.js"
 
 
 export class Customer extends User {
   constructor(name, email, password, options = {}) {
-    super(name, email, password,options.phone);
+    super(name, email, password, options.phone);
 
     // Customer-specific fields
     this.address = options.address || null;
@@ -14,7 +15,7 @@ export class Customer extends User {
     this.cart = options.cart || [];
     this.gender = options.gender || null;
     this.paymetMethod = options.paymentMethod || null;
-    this.role="customer";
+    this.role = "customer";
   }
 
   // Customer-specific methods
@@ -75,58 +76,13 @@ export class Customer extends User {
   }
 
   checkout(order) {
-    let result = { success: false, message: "Order Isn't Valid No Elements" };
-    if (order && order.length !== 0) {
-      this.orderHistory.push({
-        ...order,
-        orderedAt: new Date()
-      });
-      this.updatedAt = new Date();
-
-      this.cart = []
+    if (order.products.length !== 0) {
+      order.updateSellersEarning();
+      order.status="Checked Out - Waiting to be Shipped"
+      this.orderHistory.push(order)
+      this.cart=[];
       User.updateCurrentUser(this)
-      //orderHistory[{{ product: product1, quantity: 2, size: "XL", color: "red" },
-      // { product: product2, quantity: 3, size: "L", color: "black" },
-      //orderedAt: timastamp}]
-
-      const users = Storage.get("users");
-
-      order.forEach(instance => {
-        users.forEach(user => {
-          if (user instanceof Seller && user.id === instance.product.sellerId) {
-            const inventory = user.products;
-            inventory.forEach(product => {
-
-              if (product.id === instance.product.id) {
-
-                if (!product.availableSizes.includes(instance.size)) result = { success: false, message: "Size isn't availabe in inventory" };
-                if (!product.availableColors.includes(instance.color)) result = { success: false, message: "Color isn't availabe in inventory" };
-                let stock = product.stock;
-
-                stock.forEach(variation => {
-                  if (variation.color == instance.color && variation.size == instance.size) {
-
-                    if (variation.quantity < instance.quantity) result = { success: false, message: "Out Of Stock" };
-                    else if (variation.quantity >= instance.quantity) {
-                      variation.quantity -= instance.quantity;
-                      if (variation.quantity == 0) product.stock = stock.filter(v => v.quantity !== 0)
-                      if (product.stock.length == 0) product.visibility = false;
-                      user.orders.push(instance)
-                      user.updateTotalEarnings();
-                      User.updateInDB(user);
-                      result = { success: true, message: "Order CheckedOut..!" }
-                    }
-                  }
-                })
-              }
-            })
-          }
-
-        })
-      })
-      return result
     }
-    return result
   }
 
 

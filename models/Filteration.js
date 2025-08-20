@@ -24,7 +24,25 @@ export class retrive {
             })
         })
 
-        if (allProducts.length == 0) return { success: false, message: "No Products Found", products: null }
+        if (allProducts.length == 0) return { success: false, message: "No Products Found", products: [] }
+
+        return { success: true, message: "Retrived All Products Successfully", products: allProducts }
+    }
+
+    static allValidProducts() {
+        const users = Storage.get("users");
+        const sellers = users.filter(user => user instanceof Seller)
+        let allProducts = [];
+
+        sellers.forEach(seller => {
+            seller.products.forEach(product => {
+                allProducts.push(product);
+            })
+        })
+
+        allProducts = allProducts.filter(product => (product.isVerified !== false) ) //&& (product.visibility !== false))
+        //console.log(allProducts)
+        if (allProducts.length == 0) return { success: false, message: "No Products Found", products: [] }
 
         return { success: true, message: "Retrived All Products Successfully", products: allProducts }
     }
@@ -106,6 +124,23 @@ export class retrive {
                 return { success: true, message: " Retrived Successfully", products: allProducts }
             }
         }
+    }
+
+    static getTotalCustomer(sellerId) {
+
+        const users = Storage.get("users", []);
+        const targeted = users.find(user => user.id === sellerId);
+        let customersCount = 0;
+        let customersIds = [];
+        if (targeted instanceof Seller) {
+            targeted.orders.forEach(order => {
+                if (!customersIds.includes(order.customerId))
+                    customersIds.push(order.customerId)
+            })
+        }
+
+        customersCount = customersIds.length;
+        return customersCount;
     }
 
 

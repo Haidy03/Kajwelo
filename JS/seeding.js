@@ -4,7 +4,9 @@ import { Storage } from "../utils/localStorageHelper.js";
 import { Admin } from "../models/Admin.js";
 import { Seller } from "../models/Seller.js";
 import { Customer } from "../models/Customer.js";
+import { Order } from "../models/Order.js";
 import { Conversation } from "../models/Conversation.js";
+import { Message } from "../models/Message.js";
 import { User } from "../models/User.js";
 
 export class Seeder {

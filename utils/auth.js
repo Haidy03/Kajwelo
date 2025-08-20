@@ -47,8 +47,8 @@ export class Auth {
     if (suspendedUsers.includes(formData.email)) return { success: false, message: "account is suspended" };
     if (previousUsers.includes(formData.email)) {
       alert("email was a previous user");
-      previousUsers=previousUsers.filter(u=>u!==formData.email);
-      Storage.set("previousUsers",previousUsers);
+      previousUsers = previousUsers.filter(u => u !== formData.email);
+      Storage.set("previousUsers", previousUsers);
     }
     const pendingConfirmUser = Storage.get("pendingConfirmUser", []);
     // Check if email exists
@@ -148,6 +148,25 @@ export class Auth {
       }
     } else {
       return { success: false, message: "account not found" }
+    }
+  }
+
+  static apply_Autherization(role) {
+    const currentUser = Auth.getCurrentUser();
+    switch (role) {
+      default:
+        if ((currentUser instanceof Seller) || (currentUser instanceof Admin)) window.location.href = "../accessDeniedPage.html";
+        break;
+      case "customer":
+        if (!(currentUser instanceof Customer)) window.location.href = "../accessDeniedPage.html";
+        break;
+
+      case "seller":
+        if (!(currentUser instanceof Seller)) window.location.href = "../accessDeniedPage.html";
+        break;
+      case "admin":
+        if (!(currentUser instanceof Admin)) window.location.href = "../accessDeniedPage.html";
+        break;
     }
   }
 
