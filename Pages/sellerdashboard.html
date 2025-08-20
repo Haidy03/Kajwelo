@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kajwelo - Seller Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="../css/sellerdashboard.css"> -->
+    <script src="../js/sellerdashboard.js"></script>
+    <script src="../js/sellerNavigation.js"></script>
+    <style>
+         
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+            overflow-x:hidden;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.875rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--topbar-height);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 1.5rem;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+        }
+
+        .action-btn.primary:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-icon.sales { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.orders { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .stat-icon.products { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-icon.revenue { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .stat-change {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .stat-change.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-change.negative {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Orders Section */
+        .orders-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .orders-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .orders-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.delivered {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-badge.shipped {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-badge.processing {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-badge.pending {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* Responsive Breakpoints */
+
+        /* Extra Small devices (phones, 320px and up) */
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0.75rem;
+            }
+            
+            .page-title {
+                font-size: 1.1rem;
+            }
+            
+            .dashboard-content {
+                padding: 1rem;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .action-btn {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .action-btn i {
+                font-size: 1.2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .chart-placeholder {
+                height: 150px;
+            }
+            
+            .orders-table th,
+            .orders-table td {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.875rem;
+            }
+            
+            .orders-table {
+                min-width: 500px;
+            }
+            
+            .user-profile span {
+                display: none;
+            }
+            
+            .notification-btn {
+                margin-right: 0.5rem;
+            }
+        }
+
+        /* Small devices (landscape phones, 481px and up) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Medium devices (tablets, 769px and up) */
+        @media (min-width: 769px) and (max-width: 992px) {
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-section {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        /* Large devices (desktops, 993px and up) */
+        @media (min-width: 993px) {
+            .sidebar {
+                left: 0;
+                position: fixed;
+            }
+            
+            .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {
+            .dashboard-content {
+                padding: 2rem;
+            }
+            
+            .quick-actions {
+                margin-bottom: 2.5rem;
+            }
+            
+            .stats-grid {
+                margin-bottom: 2.5rem;
+            }
+            
+            .charts-section {
+                margin-bottom: 2.5rem;
+            }
+        }
+
+        /* Hidden columns on mobile */
+        @media (max-width: 768px) {
+            .orders-table .hide-mobile {
+                display: none;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .d-flex { display: flex; }
+        .align-items-center { align-items: center; }
+        .justify-content-between { justify-content: space-between; }
+        .gap-1 { gap: 1rem; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 1rem; }
+
+    </style>
+  
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Kajwelo</div>
+            <div class="sidebar-subtitle">Seller Portal</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <button class="sidebar-link active" id="DashBtn" onclick="gotodashboard()">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" id="AddProdBtn" onclick="gotoproducts()">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoOrders()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoanalytics()">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoCustomers()">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" id="InventoryBtn" onclick="gotoInventory()">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoPending()">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <span>Pending</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoInbox()">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>Inbox</span>
+                </button>
+            </li>
+        </ul>
+
+        <div>
+            <button class="sidebar-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>LOG OUT</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
+            </div>
+            
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                    <span>John Seller</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <!-- Quick Actions                                   Workingg on ittttttttt                       -->
+                <div class="quick-actions">
+                    <button class="action-btn primary" id="addproductbtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Product</span>
+                    </button>
+                    <button class="action-btn" onclick="gotoOrders()">
+                        <i class="fas fa-eye"></i>
+                        <span>View Orders</span>
+                    </button>
+                    <button class="action-btn" onclick="gotoanalytics()">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </button>
+                    <button class="action-btn" onclick="gotoInventory()">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory</span>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon sales">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span class="stat-change positive">+12.5%</span>
+                        </div>
+                        <div class="stat-value">$24,680</div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon orders">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <span class="stat-change positive">+8.2%</span>
+                        </div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon products">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <span class="stat-change negative">-2.1%</span>
+                        </div>
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Active Products</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon revenue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="stat-change positive">+15.7%</span>
+                        </div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Customers</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h3 class="chart-title">Sales Analytics</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; opacity: 0.7;"></i>
+                            <div class="mt-1">
+                                <div>Monthly Sales Trend</div>
+                                <small style="opacity: 0.8;">Interactive chart would go here</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Top Categories</h3>
+                        <div class="chart-placeholder" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                            <i class="fas fa-chart-pie" style="font-size: 3rem; opacity: 0.7;"></i>
+                            <div class="mt-1">
+                                <div>Category Performance</div>
+                                <small style="opacity: 0.8;">Pie chart would go here</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="orders-section">
+                    <div class="orders-header">
+                        <h3 class="orders-title">Recent Orders</h3>
+                        <button class="action-btn" onclick="gotoOrders()">View All</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th class="hide-mobile">Product</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th class="hide-mobile">Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>#KJ-1001</strong></td>
+                                    <td>Sarah Johnson</td>
+                                    <td class="hide-mobile">Classic Denim Jacket</td>
+                                    <td><strong>$89.99</strong></td>
+                                    <td><span class="status-badge delivered">Delivered</span></td>
+                                    <td class="hide-mobile">Aug 12, 2025</td>
+                                    <td>
+                                        <button class="icon-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>#KJ-1002</strong></td>
+                                    <td>Mike Chen</td>
+                                    <td class="hide-mobile">Athletic Sneakers</td>
+                                    <td><strong>$120.00</strong></td>
+                                    <td><span class="status-badge shipped">Shipped</span></td>
+                                    <td class="hide-mobile">Aug 11, 2025</td>
+                                    <td>
+                                        <button class="icon-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>#KJ-1003</strong></td>
+                                    <td>Emma Wilson</td>
+                                    <td class="hide-mobile">Summer Dress</td>
+                                    <td><strong>$75.50</strong></td>
+                                    <td><span class="status-badge processing">Processing</span></td>
+                                    <td class="hide-mobile">Aug 10, 2025</td>
+                                    <td>
+                                        <button class="icon-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>#KJ-1004</strong></td>
+                                    <td>David Brown</td>
+                                    <td class="hide-mobile">Designer Handbag</td>
+                                    <td><strong>$299.99</strong></td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td class="hide-mobile">Aug 9, 2025</td>
+                                    <td>
+                                        <button class="icon-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Sections -->
+            <div id="products-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Products Management</h2>
+                    <p style="color: #6b7280;">Product management interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="orders-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Orders Management</h2>
+                    <p style="color: #6b7280;">Orders management interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="analytics-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Sales Analytics</h2>
+                    <p style="color: #6b7280;">Analytics interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="customers-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Customer Management</h2>
+                    <p style="color: #6b7280;">Customer management interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="inventory-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Inventory Management</h2>
+                    <p style="color: #6b7280;">Inventory management interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="reviews-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Reviews & Ratings</h2>
+                    <p style="color: #6b7280;">Reviews management interface would go here...</p>
+                </div>
+            </div>
+
+            <div id="settings-section" class="content-section">
+                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Account Settings</h2>
+                    <p style="color: #6b7280;">Settings interface would go here...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+         function gotodashboard(){
+            window.location.href="sellerdashboard.html";
+        }
+        function gotoproducts(){
+            window.location.href="SelleraAddProduct.html";
+        }
+        function gotoOrders(){
+            window.location.href="sellerOrders.html";
+        }
+        function gotoanalytics(){
+            window.location.href="SellerAnalytics.html";
+        }
+        function gotoCustomers(){
+            window.location.href="sellerCustomers.html";
+        }
+        function gotoInventory(){
+            window.location.href="SellerInventory.html";
+        }
+        function gotoPending(){
+            window.location.href="sellerPending.html";
+        }
+        
+        function gotoSettings(){
+            window.location.href="SellerSettings.html";
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Update active link
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard Overview',
+                'products': 'Products Management',
+                'orders': 'Orders Management',
+                'analytics': 'Sales Analytics',
+                'customers': 'Customer Management',
+                'inventory': 'Inventory Management',
+                'reviews': 'Reviews & Ratings',
+                'settings': 'Account Settings'
+            };
+            
+            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+            
+            // Close mobile sidebar
+            if (window.innerWidth < 993) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        }
+
+        // Sample data animation for stats
+        function animateStats() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                const finalValue = stat.textContent;
+                stat.textContent = '0';
+                
+                let current = 0;
+                const target = parseInt(finalValue.replace(/[^0-9]/g, ''));
+                const increment = target / 50;
+                const prefix = finalValue.replace(/[0-9,]/g, '');
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = finalValue;
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = prefix + Math.floor(current).toLocaleString();
+                    }
+                }, 30);
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(animateStats, 500);
+            
+            // Set initial active section
+            document.getElementById('dashboard-section').classList.add('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth < 993 && 
+                !sidebar.contains(e.target) && 
+                !menuToggle.contains(e.target) &&
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 993) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+
+        // Add smooth scrolling for mobile navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 993) {
+                    setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 300);
+                }
+            });
+        });
+
+        // Add loading states for action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.classList.contains('loading')) {
+                    const originalContent = this.innerHTML;
+                    this.classList.add('loading');
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Loading...</span>';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalContent;
+                        this.disabled = false;
+                        this.classList.remove('loading');
+                    }, 1000);
+                }
+            });
+        });
+
+        // Add hover effects for stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+            });
+        });
+
+        // Touch support for mobile devices
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth < 993) {
+                // Swipe right to open sidebar
+                if (touchEndY - touchStartY > swipeThreshold && touchStartY < 100) {
+                    if (!sidebar.classList.contains('open')) {
+                        toggleSidebar();
+                    }
+                }
+                // Swipe left to close sidebar
+                if (touchStartY - touchEndY > swipeThreshold && sidebar.classList.contains('open')) {
+                    toggleSidebar();
+                }
+            }
+        }
+
+        // Prevent zoom on double tap for better mobile experience
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

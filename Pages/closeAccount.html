@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>close Account</title>
+
+    <link rel="stylesheet" href="../CSS/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../CSS/userprofileStyle.css" />
+
+
+    <link rel="stylesheet" href="../CSS/Finalhomepage.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/css/bootstrap.min.css">
+    <script type="module" src="../utils/logout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+<script type="module" src="../utils/localStorageHelper.js"></script>
+
+
+    <!---->
+  </head>
+
+  <body class="bg-light">
+    <div class="main-content">
+      <!-- Sidebar -->
+      <div class="sidebar-col min-vh-100">
+        <div class="sidebar-container bg-white border rounded">
+          <div class="sidebar-content">
+            <div class="list-group list-group-flush">
+              <a
+                onclick="location.href='/Pages/userProfile.html'"
+                class="list-group-item list-group-item-action d-flex align-items-center"
+              >
+                <i class="fa fa-user me-2"></i> My Kajwelo profile
+              </a>
+
+              <a
+                class="list-group-item list-group-item-action d-flex align-items-center"
+                             onclick="location.href='/Pages/ordersHistory.html'"
+
+                >
+                <i class="fa fa-box me-3"></i>
+                Orders
+            </a>
+              <a
+                href="#"
+                class="list-group-item list-group-item-action d-flex align-items-center"
+              >
+                <i class="fa fa-envelope me-3"></i> Inbox
+              </a>
+              
+
+              
+
+
+              <a
+                               onclick="location.href='/cardGeneratot/wishlist.html'"
+
+                class="list-group-item list-group-item-action d-flex align-items-center"
+              >
+                <i class="fa fa-heart me-3"></i> Wishlist
+              </a>
+
+              
+             
+            </div>
+
+            <hr class="my-2" />
+                
+
+
+
+            
+
+            
+              <a
+                href="/Pages/accountManage.html"
+                class="list-group-item list-group-item-action d-flex align-items-center"
+              >
+                 Account Management
+              </a>
+
+<br>
+
+              <div class="list-group list-group-flush">
+               <div
+                class="d-flex align-items-center px-3 py-3 bg-secondary bg-opacity-25 fw-bold"
+              >
+                <span>Close account</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="content-col">
+    <div class="account-section bg-white p-4 rounded min-vh-100">
+      <!-- Main Content Area -->
+        <div class="container-fluid py-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Close Account</h4>
+
+
+          </div>
+
+          <!-- orders Items -->
+          
+<div id="account-countainer" class="row g-3">
+            
+
+<div class="col-12">
+    <div class="card p-3">
+        <h5>Delete Your Account</h5>
+        <p class="text-danger">This action is irreversible!</p>
+        <div class="mb-3">
+            <input type="password" id="deletePassword" class="form-control" placeholder="Enter your password to confirm">
+        </div>
+        <button id="deleteAccountBtn" class="btn btn-danger">Delete Account</button>
+        <div id="deleteStatus" class="mt-2"></div>
+    </div>
+</div>
+
+
+
+    <script src="../JS/bootstrap.bundle.min.js"></script>
+
+                       <script src="../JS/closeAccount.js"></script>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/Finalhomepage.css" />
+  
+    <style>
+        .cart-container {
+            min-height: 80vh;
+        }
+
+        .product-image {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .discount-badge {
+            font-size: 0.8rem;
+        }
+
+        .quantity-control {
+            width: 120px;
+        }
+
+        .stock-warning {
+            color: #dc3545;
+        }
+
+        .summary-card {
+            position: sticky;
+            top: 20px;
+        }
+
+        .empty-cart-message {
+            min-height: 300px;
+        }
+
+        .delivery-info {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    
+ <!-- <div id="navbar"></div> -->
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Products Section -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        Shopping Cart (<span id="cart-count">0</span>)
+                    </h5>
+                </div>
+                <div class="card-body p-0" id="cart-items-container">
+                    <!-- Product items will be dynamically inserted here -->
+                    <div class="empty-cart-message d-flex justify-content-center align-items-center">
+                        <h4 class="text-muted">Your cart is empty</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Section -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm summary-card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal:</span>
+                        <span class="fw-bold">EGP <span id="cart-subtotal">0.00</span></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Delivery:</span>
+                        <span class="fw-bold">EGP <span id="delivery-cost">0.00</span></span>
+                    </div>
+                    <div id="delivery-info" class="delivery-info text-muted mb-3"></div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total:</span>
+                        <span class="fw-bold">EGP <span id="cart-total">0.00</span></span>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <button class="btn btn-danger w-100" id="checkout-btn" disabled>
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Footer Placeholder -->
+    <!-- <div id="footer"></div> -->
+
+
+
+
+
+
+
+
+  <script type="module" src="../utils/logout.js"></script>
+
+
+   <!-- <script type="module">
+    import { footer } from '../components/footer.js';
+    document.getElementById('footer').innerHTML = footer;
+  </script>     
+
+<script type="module">
+    import { navbar } from '../components/navbar.js';
+    document.getElementById('navbar').innerHTML = navbar;
+  </script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+<script>
+    const cartState = {
+        items: [],
+        subtotal: 0,
+        deliveryCost: 0,
+        total: 0,
+
+        init: function() {
+            this.loadSampleItems();
+            this.updateUI();
+        },
+
+        loadSampleItems: function() {
+            // Sample products
+            this.items = [
+                {
+                    id: 1,
+                    name: "Premium T-Shirt",
+                    size: "XL",
+                    price: 100,
+                    discount: 10,
+                    image: "https://ar.dockland.com.eg/cdn/shop/files/S25TSSM32BK_1.jpg?v=1752136382",
+                    stock: 10,
+                    quantity: 2,
+                    deliveryPrice: 0,
+                    deliveryInfo: "Free standard delivery"
+                },
+                {
+                    id: 2,
+                    name: "Casual Jeans",
+                    size: "L",
+                    price: 200,
+                    discount: 15,
+                    image: "https://m.media-amazon.com/images/I/31eltgVJqaL._SY1000_.jpg",
+                    stock: 5,
+                    quantity: 1,
+                    deliveryPrice: 100,
+                    deliveryInfo: "Express delivery (1-2 business days)"
+                },
+                {
+                    id: 3,
+                    name: "Casual Jeans",
+                    size: "L",
+                    price: 200,
+                    discount: 15,
+                    image: "https://m.media-amazon.com/images/I/31eltgVJqaL._SY1000_.jpg",
+                    stock: 5,
+                    quantity: 1,
+                    deliveryPrice: 100,
+                    deliveryInfo: "Express delivery (1-2 business days)"
+                }
+            ];
+        },
+
+        calculateSubtotal: function() {
+            this.subtotal = this.items.reduce((total, item) => {
+                return total + (this.getFinalPrice(item) * item.quantity);
+            }, 0);
+        },
+
+        calculateDeliveryCost: function() {
+            this.deliveryCost = this.items.reduce((max, item) => {
+                return Math.max(max, item.deliveryPrice || 0);
+            }, 0);
+        },
+
+        calculateTotal: function() {
+            this.total = this.subtotal + this.deliveryCost;
+        },
+
+        getDeliveryInfo: function() {
+            if (this.items.length === 0) return "";
+
+            const allFreeDelivery = this.items.every(item => item.deliveryPrice === 0);
+            if (allFreeDelivery) {
+                return "All items qualify for free delivery";
+            }
+
+            const hasFreeDelivery = this.items.some(item => item.deliveryPrice === 0);
+            const hasPaidDelivery = this.items.some(item => item.deliveryPrice > 0);
+
+            if (hasFreeDelivery && hasPaidDelivery) {
+                return "Some items have additional delivery charges";
+            }
+
+            return "Express delivery applied";
+        },
+
+        getFinalPrice: function(item) {
+            return item.price * (1 - (item.discount / 100));
+        },
+
+        updateUI: function() {
+            this.calculateSubtotal();
+            this.calculateDeliveryCost();
+            this.calculateTotal();
+            this.renderCartItems();
+            this.updateSummary();
+        },
+
+        renderCartItems: function() {
+            const container = document.getElementById('cart-items-container');
+
+            if (this.items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-message d-flex justify-content-center align-items-center">
+                        <h4 class="text-muted">Your cart is empty</h4>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+
+            this.items.forEach(item => {
+                const finalPrice = this.getFinalPrice(item);
+                const stockWarning = item.stock < 10 ?
+                    `<p class="stock-warning mb-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Only ${item.stock} left in stock
+                    </p>` :
+                    `<a href="#" class="text-decoration-none">View product details</a>`;
+
+                const deliveryInfo = item.deliveryPrice > 0 ?
+                    `<p class="text-muted small mb-1"><i class="fas fa-truck"></i> ${item.deliveryInfo}</p>` :
+                    `<p class="text-success small mb-1"><i class="fas fa-check-circle"></i> Free delivery</p>`;
+
+                const itemElement = document.createElement('div');
+                itemElement.className = 'card mb-3';
+                itemElement.dataset.id = item.id;
+                itemElement.innerHTML = `
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="${item.image}" alt="${item.name}" class="img-fluid product-image rounded">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="product-name">${item.name}</h5>
+                                <p class="mb-1">Size: ${item.size}</p>
+                                ${deliveryInfo}
+                                ${stockWarning}
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <p class="product-price mb-1">EGP ${finalPrice.toFixed(2)}</p>
+                                <p class="text-muted small mb-2">
+                                    <span class="original-price">EGP ${item.price.toFixed(2)}</span>
+                                    <span class="badge bg-success discount-badge ms-1">${item.discount}% OFF</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn text-danger p-0 remove-item" data-id="${item.id}">
+                                <i class="fas fa-trash-alt"></i> Remove
+                            </button>
+                            <div class="d-flex align-items-center quantity-control">
+                                <button class="btn btn-outline-secondary decrease-quantity" data-id="${item.id}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-2 quantity">${item.quantity}</span>
+                                <button class="btn btn-outline-secondary increase-quantity" data-id="${item.id}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(itemElement);
+            });
+        },
+
+        updateSummary: function() {
+            document.getElementById('cart-count').textContent = this.items.length;
+            document.getElementById('cart-subtotal').textContent = this.subtotal.toFixed(2);
+            document.getElementById('delivery-cost').textContent = this.deliveryCost.toFixed(2);
+            document.getElementById('cart-total').textContent = this.total.toFixed(2);
+
+            document.getElementById('delivery-info').textContent = this.getDeliveryInfo();
+
+            const checkoutBtn = document.getElementById('checkout-btn');
+            checkoutBtn.disabled = this.items.length === 0;
+
+            const deliveryCostElement = document.getElementById('delivery-cost');
+            if (this.deliveryCost > 0) {
+                deliveryCostElement.classList.remove('text-success');
+            } else {
+                deliveryCostElement.classList.add('text-success');
+                deliveryCostElement.textContent = 'Free';
+            }
+        },
+
+        removeItem: function(itemId) {
+            this.items = this.items.filter(item => item.id !== itemId);
+            this.updateUI();
+        },
+
+        increaseQuantity: function(itemId) {
+            const item = this.items.find(item => item.id === itemId);
+            if (item && item.quantity < item.stock) {
+                item.quantity++;
+                this.updateUI();
+            } else {
+                alert("Cannot add more than available stock");
+            }
+        },
+
+        decreaseQuantity: function(itemId) {
+            const item = this.items.find(item => item.id === itemId);
+            if (item && item.quantity > 1) {
+                item.quantity--;
+                this.updateUI();
+            } else if (item && item.quantity === 1) {
+                if (confirm("Remove this item from your cart?")) {
+                    this.removeItem(itemId);
+                }
+            }
+        },
+
+        checkout: function() {
+            if (this.items.length > 0) {
+                alert(`Proceeding to checkout with total: EGP ${this.total.toFixed(2)}`);
+            }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        cartState.init();
+
+        document.getElementById('cart-items-container').addEventListener('click', (e) => {
+            const itemId = parseInt(e.target.closest('[data-id]')?.dataset.id);
+            if (!itemId) return;
+
+            if (e.target.closest('.remove-item')) {
+                cartState.removeItem(itemId);
+            } else if (e.target.closest('.increase-quantity')) {
+                cartState.increaseQuantity(itemId);
+            } else if (e.target.closest('.decrease-quantity')) {
+                cartState.decreaseQuantity(itemId);
+            }
+        });
+
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            cartState.checkout();
+        });
+    });
+</script>
+</body>
+</html>
