@@ -394,6 +394,11 @@ body {
         left: 0;
     }
 
+    /* Ensure nav labels appear when sidebar is toggled open */
+    .sidebar.active .d-lg-inline {
+        display: inline !important;
+    }
+
     .main-content {
         margin-left: 0;
     }

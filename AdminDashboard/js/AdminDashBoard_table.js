@@ -15,7 +15,6 @@ function renderTableHeaders(section) {
             { field: 'description', label: 'Description' },
             { field: 'productCount', label: 'Products' },
             { field: 'status', label: 'Status' },
-            { field: 'sellerName', label: 'Seller' },
             { field: 'actions', label: 'Actions' }
         ],
         'customers': [
@@ -47,7 +46,6 @@ function renderTableHeaders(section) {
             { field: 'name', label: 'Seller Name' },
             { field: 'email', label: 'Email' },
             { field: 'products', label: 'Products' },
-            { field: 'categories', label: 'Categories' },
             { field: 'actions', label: 'Actions' }
         ],
         'admins': [
@@ -240,20 +238,20 @@ function getFilteredData() {
             if (appState.currentFilter === 'high-value') {
                 return item.totalSpent >= 1000;
             }
-            if (['Electronics', 'Clothing', 'Sports', 'Home & Kitchen'].includes(appState.currentFilter)) {
+            if (appState.currentSection === 'products' && dataStore.products.some(p => p.category === appState.currentFilter)) {
                 return item.category === appState.currentFilter;
             }
             return item.status === appState.currentFilter || item.role === appState.currentFilter;
         });
     }
 
-    // Apply seller filter for products and categories
-    if ((appState.currentSection === 'products' || appState.currentSection === 'categories') && appState.filterBySeller) {
+    // Apply seller filter for products only
+    if (appState.currentSection === 'products' && appState.filterBySeller) {
         data = data.filter(item => item.sellerId === appState.filterBySeller);
     }
 
     // Attach sellerName for display/sorting
-    if (appState.currentSection === 'products' || appState.currentSection === 'categories') {
+    if (appState.currentSection === 'products') {
         data = data.map(item => ({
             ...item,
             sellerName: getSellerNameById(item.sellerId)
@@ -319,7 +317,7 @@ function renderTable() {
         if (appState.currentSection === 'products') {
             rowHtml += `
                 <td>${item.name}</td>
-                <td><span class="badge bg-secondary">${item.category}</span></td>
+                <td><button class="btn btn-link p-0 category-link" data-name="${item.category}" title="View Category"><span class="badge bg-secondary">${item.category}</span></button></td>
                 <td><strong>${item.price.toFixed(2)}</strong></td>
                 <td>${item.stock}</td>
                 <td>${getStatusBadge(item)}</td>
@@ -331,9 +329,8 @@ function renderTable() {
             rowHtml += `
                 <td><strong>${item.name}</strong></td>
                 <td>${truncatedDesc}</td>
-                <td><span class="badge bg-primary">${item.productCount}</span></td>
+                <td><span class="badge bg-primary">${dataStore.products.filter(p => p.category === item.name).length}</span></td>
                 <td>${getStatusBadge(item)}</td>
-                <td><span class="badge bg-light text-dark">${item.sellerName || getSellerNameById(item.sellerId)}</span></td>
             `;
         } else if (appState.currentSection === 'customers') {
             rowHtml += `
@@ -369,11 +366,6 @@ function renderTable() {
                 <td>
                     <button class="btn btn-sm btn-outline-primary view-products" data-id="${item.id}">
                         <i class="fas fa-box me-1"></i>View (${getProductsBySeller(item.id).length})
-                    </button>
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-outline-info view-categories" data-id="${item.id}">
-                        <i class="fas fa-tags me-1"></i>View (${getCategoriesBySeller(item.id).length})
                     </button>
                 </td>
             `;
@@ -426,11 +418,25 @@ function renderTable() {
 
 // Get action buttons for each section
 function getActionButtons(section, item) {
-    if (section === 'products' || section === 'categories' || section === 'customers' || section === 'admins') {
+    if (section === 'products' || section === 'customers' || section === 'admins') {
         return `
             <div class="btn-group" role="group">
                 <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
                     <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+    } else if (section === 'categories') {
+        return `
+            <div class="btn-group" role="group">
+                <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-info action-btn view-category-products" data-id="${item.id}" data-name="${item.name}" title="View Products">
+                    <i class="fas fa-box-open"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
                     <i class="fas fa-trash"></i>
@@ -442,6 +448,9 @@ function getActionButtons(section, item) {
             <div class="btn-group" role="group">
                 <button class="btn btn-sm btn-outline-warning action-btn contact-seller" data-id="${item.id}" title="Contact">
                     <i class="fas fa-envelope"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary action-btn reset-password" data-id="${item.id}" title="Reset Password">
+                    <i class="fas fa-key"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
                     <i class="fas fa-trash"></i>
@@ -529,6 +538,14 @@ function addTableEventListeners() {
         button.addEventListener('click', handleActionClick);
     });
 
+    // Category link in products table
+    document.querySelectorAll('.category-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const name = e.target.closest('button').dataset.name;
+            showCategoryInfo(name);
+        });
+    });
+
     // Password toggle buttons
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -559,13 +576,7 @@ function addTableEventListeners() {
         });
     });
 
-    document.querySelectorAll('.view-categories').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const sellerId = parseInt(e.target.closest('button').dataset.id);
-            navigateToSellerItems(sellerId, 'categories');
-        });
-    });
-}
+    }
 
 // Handle action button clicks
 function handleActionClick(e) {
@@ -575,9 +586,11 @@ function handleActionClick(e) {
         button.classList.contains('verify-item') ? 'verify' :
             button.classList.contains('delete-item') ? 'delete' :
                 button.classList.contains('contact-seller') ? 'contact' :
-                    button.classList.contains('view-order') ? 'view-order' :
-                        button.classList.contains('print-invoice') ? 'print-invoice' :
-                            button.classList.contains('mark-read') ? 'mark-read' : null;
+                    button.classList.contains('reset-password') ? 'reset-password' :
+                        button.classList.contains('view-category-products') ? 'view-category-products' :
+                            button.classList.contains('view-order') ? 'view-order' :
+                                button.classList.contains('print-invoice') ? 'print-invoice' :
+                                    button.classList.contains('mark-read') ? 'mark-read' : null;
 
     switch (action) {
         case 'view':
@@ -597,6 +610,12 @@ function handleActionClick(e) {
             break;
         case 'print-invoice':
             printInvoice(id);
+            break;
+        case 'reset-password':
+            resetSellerPassword(id);
+            break;
+        case 'view-category-products':
+            viewCategoryProducts(button.dataset.name);
             break;
         case 'mark-read':
             markAsRead(id);
@@ -637,6 +656,15 @@ function deleteItem(id) {
     if (confirm('Are you sure you want to delete this item?')) {
         const index = dataStore[appState.currentSection].findIndex(item => item.id === id);
         if (index !== -1) {
+            // If deleting a category, also delete all products with this category
+            if (appState.currentSection === 'categories') {
+                const categoryName = dataStore.categories[index].name;
+                const beforeCount = dataStore.products.length;
+                dataStore.products = dataStore.products.filter(p => p.category !== categoryName);
+                const removed = beforeCount - dataStore.products.length;
+                showToast(`Deleted ${removed} product(s) belonging to category "${categoryName}"`, 'info');
+            }
+
             dataStore[appState.currentSection].splice(index, 1);
             renderTable();
             updatePagination();
@@ -646,6 +674,55 @@ function deleteItem(id) {
             showToast('Item deleted successfully', 'success');
         }
     }
+}
+
+function resetSellerPassword(id) {
+    const seller = dataStore.sellers.find(s => s.id === id);
+    if (!seller) return;
+    if (confirm('Are you sure you want to reset this seller password to default (123)?')) {
+        // Set default password if not exists, then reset to default
+        if (!seller.password) {
+            seller.password = '123';
+        } else {
+            seller.password = '123';
+        }
+        showToast('Seller password has been reset to default (123)', 'success');
+    }
+}
+
+function viewCategoryProducts(categoryName) {
+    // Update active nav link to Products
+    document.querySelectorAll('.sidebar-menu .nav-link').forEach(navLink => {
+        navLink.classList.remove('active');
+    });
+    const targetLink = document.querySelector('[data-section="products"]');
+    if (targetLink) {
+        targetLink.classList.add('active');
+    }
+
+    // Load products section then apply category filter
+    loadSection('products');
+    appState.currentFilter = categoryName;
+    renderTable();
+    updatePagination();
+}
+
+function showCategoryInfo(categoryName) {
+    const category = dataStore.categories.find(c => c.name === categoryName) || { name: categoryName, description: 'No description available', status: 'active' };
+    const count = dataStore.products.filter(p => p.category === categoryName).length;
+
+    const content = `
+        <div class="row">
+            <div class="col-md-12">
+                <p><strong>Category Name:</strong> ${category.name}</p>
+                <p><strong>Description:</strong> ${category.description || 'No description available'}</p>
+                <p><strong>Products:</strong> ${count}</p>
+                <p><strong>Status:</strong> ${getStatusBadge(category)}</p>
+            </div>
+        </div>
+    `;
+
+    showItemModal('Category Details', content);
 }
 
 function contactSeller(id) {
@@ -736,7 +813,7 @@ function getItemDetailsHTML(item) {
                 <div class="col-md-12">
                     <p><strong>Category Name:</strong> ${item.name}</p>
                     <p><strong>Description:</strong> ${item.description}</p>
-                    <p><strong>Products:</strong> ${item.productCount}</p>
+                    <p><strong>Products:</strong> ${dataStore.products.filter(p => p.category === item.name).length}</p>
                     <p><strong>Status:</strong> ${getStatusBadge(item)}</p>
                 </div>
             </div>

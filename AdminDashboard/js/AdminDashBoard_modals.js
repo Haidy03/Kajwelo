@@ -113,19 +113,6 @@ function generateFormHTML(section, item = null) {
                         <input type="number" class="form-control" id="itemProductCount" min="0" value="0">
                     </div>
                 </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <label for="itemSeller" class="form-label">Seller</label>
-                        <select class="form-select" id="itemSeller" required>
-                            <option value="">Select Seller</option>
-                            ${dataStore.sellers.filter(s => s.status === 'active').map(seller =>
-                `<option value="${seller.id}">${seller.name}</option>`
-            ).join('')}
-                        </select>
-                        <div class="invalid-feedback">Please select a seller</div>
-                    </div>
-                </div>
 
                 <div class="mb-3">
                     <label for="itemDescription" class="form-label">Description</label>
@@ -464,9 +451,6 @@ function populateFormFields(item) {
     if (appState.currentSection === 'categories') {
         const productCountField = document.getElementById('itemProductCount');
         if (productCountField && item.productCount !== undefined) productCountField.value = item.productCount;
-
-        const sellerField = document.getElementById('itemSeller');
-        if (sellerField && item.sellerId) sellerField.value = item.sellerId;
     }
 
     if (appState.currentSection === 'customers') {
@@ -633,9 +617,6 @@ function buildItemData(itemId) {
         case 'categories':
             const productCountField = document.getElementById('itemProductCount');
             if (productCountField) commonData.productCount = parseInt(productCountField.value);
-
-            const categorySellerField = document.getElementById('itemSeller');
-            if (categorySellerField) commonData.sellerId = parseInt(categorySellerField.value);
             break;
 
         case 'customers':
@@ -713,8 +694,14 @@ function openMessageSellerModal(sellerId) {
     appState.currentMessageSeller = seller;
     document.getElementById('messageSellerTitle').textContent = `Send Message to ${seller.name}`;
 
-    // Clear form
-    document.getElementById('messageSubject').value = '';
+    // Hide subject field if present and clear form
+    const subjEl = document.getElementById('messageSubject');
+    if (subjEl) {
+        subjEl.required = false;
+        const wrapper = subjEl.closest('.mb-3');
+        if (wrapper) wrapper.classList.add('d-none');
+        subjEl.value = '';
+    }
     document.getElementById('messageBody').value = '';
 
     messageSellerModal.show();
@@ -730,7 +717,6 @@ function sendMessage() {
         return;
     }
 
-    const subject = document.getElementById('messageSubject').value;
     const body = document.getElementById('messageBody').value;
     const seller = appState.currentMessageSeller;
 
@@ -742,6 +728,5 @@ function sendMessage() {
 
     // Reset form
     form.classList.remove('was-validated');
-    document.getElementById('messageSubject').value = '';
     document.getElementById('messageBody').value = '';
 }

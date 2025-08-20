@@ -6,7 +6,7 @@ function updateSectionTitle(section) {
         'categories': 'Categories',
         'sellers': 'Sellers',
         'customers': 'Customers',
-        'verificationRequests': 'Verification Requests',
+        'verificationRequests': 'V Requests',
         'inbox': 'Inbox',
         'admins': 'Admins',
         'settings': 'Settings',

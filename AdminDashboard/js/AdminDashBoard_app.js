@@ -25,6 +25,10 @@ function setupEventListeners() {
     document.getElementById('sidebarToggle').addEventListener('click', () => {
         document.querySelector('.sidebar').classList.toggle('active');
     });
+    // Header toggle for small screens
+    document.getElementById('headerSidebarToggle')?.addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('active');
+    });
 
     document.getElementById('searchInput').addEventListener('input', (e) => {
         appState.searchQuery = e.target.value.toLowerCase();
