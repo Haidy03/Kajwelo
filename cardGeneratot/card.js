@@ -4,6 +4,8 @@ const products = [
     title: "Summer Maxi Dress",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "7c22390e-d8e2-45dc-9a1d-e51e062284b3",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Nike",
@@ -13,6 +15,7 @@ const products = [
     title: "Silk Blouse",
     currentprice: 200,
     oldprice: 400,
+    sellerId: "217edb04-89b6-4074-8af7-823f3c77c061",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "LC",
@@ -22,6 +25,8 @@ const products = [
     title: "Evening Cocktail Dress",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "3d1a1067-e8c2-40b8-8036-8a5d8984c35e",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Defacto",
@@ -31,6 +36,8 @@ const products = [
     title: "Chiffon Blouse",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "53b16c84-cd03-4deb-bda8-221ef0f5db6f",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Adidas",
@@ -40,6 +47,8 @@ const products = [
     title: "Floral Wrap Dress",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "7c22390e-d8e2-45dc-9a1d-e51e062284b3",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Nike",
@@ -49,6 +58,7 @@ const products = [
     title: "Lace Detail Blouse",
     currentprice: 300,
     oldprice: 400,
+    sellerId: "217edb04-89b6-4074-8af7-823f3c77c061",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "LC",
@@ -58,6 +68,8 @@ const products = [
     title: "Vintage Midi Dress",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "3d1a1067-e8c2-40b8-8036-8a5d8984c35e",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Defacto",
@@ -67,6 +79,8 @@ const products = [
     title: "Striped Cotton Blouse",
     currentprice: 300,
     oldprice: 400,
+
+    sellerId: "53b16c84-cd03-4deb-bda8-221ef0f5db6f",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
     brand: "Adidas",
