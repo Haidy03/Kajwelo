@@ -6,6 +6,7 @@ export class Message {
         this.readAt = null;
         this.status = false; // false means sent but not read So true is sent and read
         this.content = content;
+        this.class="message"
     }
 
     isRead() {
