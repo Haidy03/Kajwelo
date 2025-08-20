@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kajwelo - Seller Inbox</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.875rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--topbar-height);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Inbox Container */
+        .inbox-container {
+            display: flex;
+            height: calc(100vh - var(--topbar-height));
+            overflow: hidden;
+        }
+
+        /* Inbox Sidebar */
+        .inbox-sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .inbox-search {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .compose-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .compose-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.25rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .filter-item:hover {
+            background: #f3f4f6;
+        }
+
+        .filter-item.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .filter-item i {
+            margin-right: 0.75rem;
+            width: 16px;
+            text-align: center;
+        }
+
+        .filter-count {
+            margin-left: auto;
+            background: #e5e7eb;
+            color: #6b7280;
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .filter-item.active .filter-count {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Messages List */
+        .messages-list {
+            flex: 1;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+        }
+
+        .messages-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+
+        .messages-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .message-item {
+            display: flex;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .message-item:hover {
+            background: #f8f9fa;
+        }
+
+        .message-item.unread {
+            background: #fefefe;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .message-item.selected {
+            background: #e0e7ff;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 0.875rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .message-subject {
+            font-size: 0.875rem;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-preview {
+            font-size: 0.75rem;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            padding: 0.25rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+            color: var(--primary-color);
+        }
+
+        .action-btn.starred {
+            color: var(--warning-color);
+        }
+
+        /* Message Detail */
+        .message-detail {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .detail-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+
+        .detail-subject {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .detail-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .message-body {
+            line-height: 1.6;
+            color: var(--dark-color);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .inbox-sidebar {
+                position: fixed;
+                left: -100%;
+                top: var(--topbar-height);
+                height: calc(100vh - var(--topbar-height));
+                z-index: 500;
+                transition: left 0.3s ease;
+            }
+
+            .inbox-sidebar.open {
+                left: 0;
+            }
+
+            .messages-list {
+                width: 100%;
+            }
+
+            .message-detail {
+                position: fixed;
+                top: var(--topbar-height);
+                left: 100%;
+                width: 100%;
+                height: calc(100vh - var(--topbar-height));
+                z-index: 600;
+                transition: left 0.3s ease;
+            }
+
+            .message-detail.open {
+                left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message-actions {
+                display: none;
+            }
+
+            .message-item:hover .message-actions {
+                display: flex;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+
+            .detail-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .sidebar {
+                left: 0;
+                position: fixed;
+            }
+            
+            .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        .sidebar-filter-toggle {
+            display: none;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar-filter-toggle {
+                display: block;
+            }
+        }
+        /* #submitsendbtn
+        {
+
+        } */
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Kajwelo</div>
+            <div class="sidebar-subtitle">Seller Portal</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <button class="sidebar-link" onclick="gotoDashboard()">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoProducts()">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoOrders()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoAnalytics()">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoCustomers()">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoInventory()">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoPending()">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <span>Pending</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link" onclick="gotoSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </li>
+            <li>
+                <button class="sidebar-link active" onclick="gotoInbox()">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>Inbox</span>
+                </button>
+            </li>
+        </ul>
+
+        <div>
+            <button class="sidebar-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>LOG OUT</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Inbox</h1>
+            </div>
+            
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                    <span>John Seller</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Inbox Container -->
+        <div class="inbox-container">
+            <!-- Inbox Sidebar -->
+            <aside class="inbox-sidebar" id="inboxSidebar">
+                <button class="sidebar-filter-toggle" onclick="toggleInboxSidebar()">
+                    <i class="fas fa-filter"></i> Filters
+                </button>
+
+                <div class="inbox-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search messages..." id="searchInput">
+                </div>
+
+                <button class="compose-btn" onclick="openComposeModal()">
+                    <i class="fas fa-edit"></i> Compose
+                </button>
+
+                <div class="filter-section">
+                    <div class="filter-title">Folders</div>
+                    <div class="filter-item active" data-filter="all">
+                        <i class="fas fa-inbox"></i>
+                        <span>All Messages</span>
+                        <span class="filter-count" id="allCount">12</span>
+                    </div>
+                    <div class="filter-item" data-filter="starred">
+                        <i class="fas fa-star"></i>
+                        <span>Starred</span>
+                        <span class="filter-count" id="starredCount">3</span>
+                    </div>
+                    <div class="filter-item" data-filter="trash">
+                        <i class="fas fa-trash"></i>
+                        <span>Trash</span>
+                        <span class="filter-count" id="trashCount">2</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Messages List -->
+            <div class="messages-list">
+                <div class="messages-header">
+                    <h2 class="messages-title" id="messagesTitle">All Messages</h2>
+                </div>
+                <div id="messagesList">
+                    <!-- Messages will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Message Detail -->
+            <div class="message-detail" id="messageDetail">
+                <div class="empty-state">
+                    <i class="fas fa-envelope-open"></i>
+                    <h3>Select a message</h3>
+                    <p>Choose a message from the list to read it here</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Compose Modal -->
+    <div class="modal" id="composeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Compose Message</h3>
+                <button class="close-btn" onclick="closeComposeModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto;">
+                <form id="composeForm" >
+                    <div class="form-group">
+                        <label class="form-label" for="toField">To:</label>
+                        <input type="email" class="form-input" id="toField" placeholder="recipient@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="subjectField">Subject:</label>
+                        <input type="text" class="form-input" id="subjectField" placeholder="Enter subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="messageField">Message:</label>
+                        <textarea class="form-textarea" id="messageField" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    <!-- <button id="submitsendbtn" class="compose-btn">Send</button> -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeComposeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample messages data
+        let messages = [
+            {
+                id: 1,
+                sender: 'Customer Support',
+                email: 'support@kajwelo.com',
+                subject: 'Welcome to Kajwelo Seller Portal',
+                body: 'Welcome to Kajwelo! We\'re excited to have you as a seller on our platform. This message contains important information about getting started with your seller account.',
+                time: '2025-08-21T10:30:00',
+                unread: true,
+                starred: false,
+                deleted: false
+            },
+            {
+                id: 2,
+                sender: 'Sarah Johnson',
+                email: 'sarah.j@email.com',
+                subject: 'Question about Classic Denim Jacket',
+                body: 'Hi! I\'m interested in purchasing the Classic Denim Jacket from your store. Could you please let me know if it\'s available in size Medium?',
+                time: '2025-08-21T09:15:00',
+                unread: true,
+                starred: true,
+                deleted: false
+            },
+            {
+                id: 3,
+                sender: 'Mike Chen',
+                email: 'mike.chen@email.com',
+                subject: 'Order Update Request',
+                body: 'Hello, I placed an order yesterday (Order #KJ-1002) and I need to update my shipping address. Can you please help me with this?',
+                time: '2025-08-20T16:45:00',
+                unread: false,
+                starred: false,
+                deleted: false
+            },
+            {
+                id: 4,
+                sender: 'Emma Wilson',
+                email: 'emma.w@email.com',
+                subject: 'Product Review',
+                body: 'Thank you for the wonderful Summer Dress! The quality is excellent and it fits perfectly. I\'ll definitely be ordering more from your store.',
+                time: '2025-08-20T14:20:00',
+                unread: false,
+                starred: true,
+                deleted: false
+            },
+            {
+                id: 5,
+                sender: 'David Brown',
+                email: 'david.b@email.com',
+                subject: 'Refund Request',
+                body: 'I received the Designer Handbag but unfortunately it doesn\'t meet my expectations. I would like to request a refund. Please let me know the process.',
+                time: '2025-08-19T11:30:00',
+                unread: false,
+                starred: false,
+                deleted: true
+            },
+            {
+                id: 6,
+                sender: 'Lisa Martinez',
+                email: 'lisa.m@email.com',
+                subject: 'Bulk Order Inquiry',
+                body: 'Hi, I represent a local boutique and I\'m interested in placing a bulk order for your products. Could we discuss wholesale pricing?',
+                time: '2025-08-19T08:45:00',
+                unread: false,
+                starred: true,
+                deleted: false
+            },
+            {
+                id: 7,
+                sender: 'Payment Team',
+                email: 'payments@kajwelo.com',
+                subject: 'Monthly Payment Summary',
+                body: 'Your monthly payment summary is now available. You\'ve earned $2,450 this month from your sales on Kajwelo platform.',
+                time: '2025-08-18T15:30:00',
+                unread: false,
+                starred: false,
+                deleted: false
+            },
+            {
+                id: 8,
+                sender: 'Tom Wilson',
+                email: 'tom.w@email.com',
+                subject: 'Shipping Delay Complaint',
+                body: 'My order was supposed to arrive 3 days ago but I still haven\'t received it. This is very disappointing. Please resolve this issue immediately.',
+                time: '2025-08-18T12:00:00',
+                unread: false,
+                starred: false,
+                deleted: true
+            }
+        ];
+
+        let currentFilter = 'all';
+        let selectedMessageId = null;
+
+        // Navigation functions
+        function gotoDashboard() { window.location.href = "sellerdashboard.html"; }
+        function gotoProducts() { window.location.href = "SelleraAddProduct.html"; }
+        function gotoOrders() { window.location.href = "sellerOrders.html"; }
+        function gotoAnalytics() { window.location.href = "SellerAnalytics.html"; }
+        function gotoCustomers() { window.location.href = "sellerCustomers.html"; }
+        function gotoInventory() { window.location.href = "SellerInventory.html"; }
+        function gotoPending() { window.location.href = "sellerPending.html"; }
+        function gotoSettings() { window.location.href = "SellerSettings.html"; }
+        function gotoInbox() { window.location.href = "sellerInbox.html"; }
+
+        // Sidebar toggle functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function toggleInboxSidebar() {
+            const inboxSidebar = document.getElementById('inboxSidebar');
+            inboxSidebar.classList.toggle('open');
+        }
+
+        // Filter functions
+        function initializeFilters() {
+            const filterItems = document.querySelectorAll('.filter-item');
+            filterItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    filterItems.forEach(f => f.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                    
+                    // Get filter type
+                    const filter = item.dataset.filter;
+                    currentFilter = filter;
+                    
+                    // Update messages title
+                    const titles = {
+                        'all': 'All Messages',
+                        'starred': 'Starred Messages',
+                        'trash': 'Trash'
+                    };
+                    document.getElementById('messagesTitle').textContent = titles[filter];
+                    
+                    // Filter and display messages
+                    filterMessages(filter);
+                    
+                    // Close mobile sidebar
+                    if (window.innerWidth <= 992) {
+                        document.getElementById('inboxSidebar').classList.remove('open');
+                    }
+                });
+            });
+        }
+
+        function filterMessages(filter) {
+            let filteredMessages;
+            
+            switch(filter) {
+                case 'starred':
+                    filteredMessages = messages.filter(msg => msg.starred && !msg.deleted);
+                    break;
+                case 'trash':
+                    filteredMessages = messages.filter(msg => msg.deleted);
+                    break;
+                default:
+                    filteredMessages = messages.filter(msg => !msg.deleted);
+            }
+            
+            renderMessages(filteredMessages);
+            updateFilterCounts();
+        }
+
+        function updateFilterCounts() {
+            const allCount = messages.filter(msg => !msg.deleted).length;
+            const starredCount = messages.filter(msg => msg.starred && !msg.deleted).length;
+            const trashCount = messages.filter(msg => msg.deleted).length;
+            
+            document.getElementById('allCount').textContent = allCount;
+            document.getElementById('starredCount').textContent = starredCount;
+            document.getElementById('trashCount').textContent = trashCount;
+        }
+
+        // Message rendering
+        function renderMessages(messagesToRender) {
+            const messagesList = document.getElementById('messagesList');
+            
+            if (messagesToRender.length === 0) {
+                messagesList.innerHTML = `
+                    <div class="empty-state" style="height: 300px;">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No messages found</h3>
+                        <p>There are no messages in this folder</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            messagesList.innerHTML = messagesToRender.map(message => {
+                const timeAgo = formatTimeAgo(message.time);
+                const initials = getInitials(message.sender);
+                
+                return `
+                    <div class="message-item ${message.unread ? 'unread' : ''} ${selectedMessageId === message.id ? 'selected' : ''}" 
+                         data-id="${message.id}" onclick="selectMessage(${message.id})">
+                        <div class="message-avatar">${initials}</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <div class="message-sender">${message.sender}</div>
+                                <div class="message-time">${timeAgo}</div>
+                            </div>
+                            <div class="message-subject">${message.subject}</div>
+                            <div class="message-preview">${message.body.substring(0, 80)}...</div>
+                        </div>
+                        <div class="message-actions">
+                            <button class="action-btn ${message.starred ? 'starred' : ''}" onclick="toggleStar(event, ${message.id})" title="Star message">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteMessage(event, ${message.id})" title="Delete message">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectMessage(messageId) {
+            const message = messages.find(msg => msg.id === messageId);
+            if (!message) return;
+            
+            selectedMessageId = messageId;
+            
+            // Mark as read
+            if (message.unread) {
+                message.unread = false;
+                updateFilterCounts();
+                renderMessages(getFilteredMessages());
+            }
+            
+            // Update selected state
+            document.querySelectorAll('.message-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-id="${messageId}"]`).classList.add('selected');
+            
+            // Show message detail
+            showMessageDetail(message);
+            
+            // Show detail panel on mobile
+            if (window.innerWidth <= 992) {
+                document.getElementById('messageDetail').classList.add('open');
+            }
+        }
+
+        function showMessageDetail(message) {
+            const messageDetail = document.getElementById('messageDetail');
+            const formattedDate = formatDate(message.time);
+            
+            messageDetail.innerHTML = `
+                <div class="detail-header">
+                    <button class="btn btn-secondary" onclick="closeMessageDetail()" style="display: none; margin-bottom: 1rem;" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <div class="detail-subject">${message.subject}</div>
+                    <div class="detail-meta">
+                        <div><strong>From:</strong> ${message.sender} &lt;${message.email}&gt;</div>
+                        <div><strong>Date:</strong> ${formattedDate}</div>
+                        <div>
+                            <button class="action-btn ${message.starred ? 'starred' : ''}" onclick="toggleStar(event, ${message.id})" title="Star message">
+                                <i class="fas fa-star"></i> ${message.starred ? 'Starred' : 'Star'}
+                            </button>
+                            <button class="action-btn" onclick="deleteMessage(event, ${message.id})" title="Delete message">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <div class="message-body">${message.body}</div>
+                </div>
+            `;
+            
+            // Show back button on mobile
+            if (window.innerWidth <= 992) {
+                document.getElementById('backBtn').style.display = 'block';
+            }
+        }
+
+        function closeMessageDetail() {
+            if (window.innerWidth <= 992) {
+                document.getElementById('messageDetail').classList.remove('open');
+            }
+        }
+
+        // Message actions
+        function toggleStar(event, messageId) {
+            event.stopPropagation();
+            
+            const message = messages.find(msg => msg.id === messageId);
+            if (message) {
+                message.starred = !message.starred;
+                updateFilterCounts();
+                renderMessages(getFilteredMessages());
+                
+                // Update detail view if this message is selected
+                if (selectedMessageId === messageId) {
+                    showMessageDetail(message);
+                }
+            }
+        }
+
+        function deleteMessage(event, messageId) {
+            event.stopPropagation();
+            
+            const message = messages.find(msg => msg.id === messageId);
+            if (message) {
+                if (currentFilter === 'trash') {
+                    // Permanently delete if in trash
+                    const index = messages.findIndex(msg => msg.id === messageId);
+                    messages.splice(index, 1);
+                    
+                    // Clear detail if this message was selected
+                    if (selectedMessageId === messageId) {
+                        document.getElementById('messageDetail').innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-envelope-open"></i>
+                                <h3>Select a message</h3>
+                                <p>Choose a message from the list to read it here</p>
+                            </div>
+                        `;
+                        selectedMessageId = null;
+                    }
+                } else {
+                    // Move to trash
+                    message.deleted = true;
+                    
+                    // Clear detail if this message was selected and not in trash view
+                    if (selectedMessageId === messageId && currentFilter !== 'trash') {
+                        document.getElementById('messageDetail').innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-envelope-open"></i>
+                                <h3>Select a message</h3>
+                                <p>Choose a message from the list to read it here</p>
+                            </div>
+                        `;
+                        selectedMessageId = null;
+                    }
+                }
+                
+                updateFilterCounts();
+                renderMessages(getFilteredMessages());
+                closeMessageDetail();
+            }
+        }
+
+        // Search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filteredMessages = getFilteredMessages().filter(message => 
+                    message.sender.toLowerCase().includes(query) ||
+                    message.subject.toLowerCase().includes(query) ||
+                    message.body.toLowerCase().includes(query)
+                );
+                renderMessages(filteredMessages);
+            });
+        }
+
+        // Compose modal functions
+        function openComposeModal() {
+            document.getElementById('composeModal').classList.add('show');
+        }
+
+        function closeComposeModal() {
+            document.getElementById('composeModal').classList.remove('show');
+            document.getElementById('composeForm').reset();
+        }
+
+        function sendMessage() {
+            const to = document.getElementById('toField').value;
+            const subject = document.getElementById('subjectField').value;
+            const messageBody = document.getElementById('messageField').value;
+            
+            if (!to || !subject || !messageBody) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Add new message (this would typically send to server)
+            const newMessage = {
+                id: Date.now(),
+                sender: 'You',
+                email: 'seller@kajwelo.com',
+                subject: subject,
+                body: messageBody,
+                time: new Date().toISOString(),
+                unread: false,
+                starred: false,
+                deleted: false
+            };
+            
+            messages.unshift(newMessage);
+            updateFilterCounts();
+            renderMessages(getFilteredMessages());
+            closeComposeModal();
+            
+            alert('Message sent successfully!');
+        }
+
+        // Utility functions
+        function getFilteredMessages() {
+            switch(currentFilter) {
+                case 'starred':
+                    return messages.filter(msg => msg.starred && !msg.deleted);
+                case 'trash':
+                    return messages.filter(msg => msg.deleted);
+                default:
+                    return messages.filter(msg => !msg.deleted);
+            }
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase();
+        }
+
+        function formatTimeAgo(timestamp) {
+            const now = new Date();
+            const messageTime = new Date(timestamp);
+            const diffInHours = Math.floor((now - messageTime) / (1000 * 60 * 60));
+            
+            if (diffInHours < 1) return 'Just now';
+            if (diffInHours < 24) return `${diffInHours}h ago`;
+            
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays < 7) return `${diffInDays}d ago`;
+            
+            return messageTime.toLocaleDateString();
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            initializeSearch();
+            updateFilterCounts();
+            renderMessages(getFilteredMessages());
+            
+            // Close modal when clicking outside
+            document.getElementById('composeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeComposeModal();
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const inboxSidebar = document.getElementById('inboxSidebar');
+                const messageDetail = document.getElementById('messageDetail');
+                
+                if (window.innerWidth >= 993) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                    inboxSidebar.classList.remove('open');
+                    messageDetail.classList.remove('open');
+                    
+                    if (document.getElementById('backBtn')) {
+                        document.getElementById('backBtn').style.display = 'none';
+                    }
+                } else {
+                    if (document.getElementById('backBtn') && selectedMessageId) {
+                        document.getElementById('backBtn').style.display = 'block';
+                    }
+                }
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const overlay = document.getElementById('sidebarOverlay');
+            const inboxSidebar = document.getElementById('inboxSidebar');
+            const filterToggle = document.querySelector('.sidebar-filter-toggle');
+            
+            if (window.innerWidth < 993) {
+                // Close main sidebar
+                if (!sidebar.contains(e.target) && 
+                    !menuToggle.contains(e.target) &&
+                    sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+                
+                // Close inbox sidebar
+                if (!inboxSidebar.contains(e.target) && 
+                    !filterToggle.contains(e.target) &&
+                    inboxSidebar.classList.contains('open')) {
+                    inboxSidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
