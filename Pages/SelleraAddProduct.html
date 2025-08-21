@@ -8,10 +8,6 @@
     <title>Kajwelo - Add Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="../css/SelerAddproduct.css"> -->
-    <script type="module" src="../JS/sellerOnly.js"></script>
-    <script src="../js/SellerAddPro.js"></script>
-    <script src="../js/sellerNavigation.js"></script>
     <style>
         * {
             margin: 0;
@@ -31,7 +27,6 @@
             --sidebar-width: 280px;
             --topbar-height: 70px;
         }
-
 
         .error-message {
             color: #ce1010;
@@ -400,29 +395,15 @@
             background-color: rgba(102, 126, 234, 0.1);
         }
 
-        /* Error state for image upload */
         .image-upload-container.error {
             border: 2px dashed var(--danger-color);
             background-color: rgba(239, 68, 68, 0.05);
-        }
-
-        .error-message {
-            color: var(--danger-color);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        /* Show error when container has error class */
-        .image-upload-container.error+.error-message {
-            display: block;
         }
 
         .required-asterisk {
             color: var(--danger-color);
         }
 
-        /* Make sure error message is initially hidden */
         #imageError {
             display: none;
             color: var(--danger-color);
@@ -628,25 +609,6 @@
             transform: translateX(24px);
         }
 
-        /* Color Picker */
-        .color-input-container {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .color-input {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .color-value {
-            flex: 1;
-        }
-
         /* Responsive */
         @media (min-width: 768px) {
             .form-row {
@@ -706,9 +668,7 @@
             }
         }
 
-        /* Add these media queries to your existing CSS */
-
-        /* Extra small devices (phones, 600px and down) */
+        /* Mobile optimizations */
         @media (max-width: 600px) {
             .topbar {
                 padding: 0.75rem 1rem;
@@ -791,58 +751,9 @@
             }
         }
 
-        /* Small devices (portrait tablets and large phones, 600px and up) */
-        @media (min-width: 600px) and (max-width: 768px) {
-            .form-row.two-cols {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row.three-cols {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .stock-item {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .remove-stock {
-                grid-column: span 2;
-            }
-        }
-
-        /* Medium devices (landscape tablets, 768px and up) */
-        @media (min-width: 768px) and (max-width: 992px) {
-            .form-row.three-cols {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .product-form {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Large devices (laptops/desktops, 992px and up) */
-        @media (min-width: 992px) and (max-width: 1200px) {
-
-            /* Minor adjustments for medium-large screens */
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
-        }
-
-        /* Extra large devices (large laptops and desktops, 1200px and up) */
-        @media (min-width: 1200px) {
-            /* Your existing large screen styles are good */
-        }
-
-        /* Additional touch-friendly improvements */
+        /* Touch-friendly improvements */
         @media (hover: none) {
 
-            /* For touch devices */
             .sidebar-link,
             .btn,
             .menu-toggle,
@@ -852,7 +763,6 @@
             .remove-stock,
             .add-stock-btn {
                 min-height: 44px;
-                /* Apple's recommended minimum tap target size */
             }
 
             .form-input,
@@ -860,136 +770,15 @@
             .form-textarea {
                 min-height: 44px;
                 font-size: 16px;
-                /* Prevents iOS zoom on input */
             }
 
             input,
             select,
             textarea {
                 font-size: 16px;
-                /* Prevents iOS zoom on input */
-            }
-        }
-
-
-        /* iPad Pro Portrait (1024px) */
-        @media (min-width: 993px) and (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
-
-            .product-form {
-                grid-template-columns: 1.5fr 1fr;
-            }
-
-            .form-row.two-cols {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row.three-cols {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .section-title {
-                font-size: 1rem;
-            }
-
-            .form-label {
-                font-size: 0.8125rem;
-            }
-
-            .form-input,
-            .form-select {
-                padding: 0.65rem;
-                font-size: 0.8125rem;
-            }
-
-            .btn {
-                padding: 0.65rem 1.25rem;
-                font-size: 0.875rem;
-            }
-        }
-
-        /* iPad Pro Landscape (1366px) */
-        @media (min-width: 1025px) and (max-width: 1366px) {
-            .sidebar {
-                width: 260px;
-            }
-
-            .main-content {
-                margin-left: 260px;
-            }
-
-            .product-form {
-                grid-template-columns: 2fr 1fr;
-            }
-
-            .form-row.two-cols {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .form-row.three-cols {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-
-            .section-title {
-                font-size: 1.1rem;
-            }
-
-            .form-label {
-                font-size: 0.875rem;
-            }
-
-            .form-input,
-            .form-select {
-                padding: 0.75rem;
-                font-size: 0.875rem;
-            }
-        }
-
-        /* iPad-specific touch improvements */
-        @media (hover: none) and (pointer: coarse) {
-
-            /* Larger tap targets for iPad */
-            .sidebar-link,
-            .btn,
-            .menu-toggle,
-            .notification-btn,
-            .remove-image,
-            .tag-remove,
-            .remove-stock,
-            .add-stock-btn {
-                min-height: 48px;
-            }
-
-            .form-input,
-            .form-select,
-            .form-textarea {
-                min-height: 48px;
-            }
-
-            /* Prevent zoom on input focus */
-            input,
-            select,
-            textarea {
-                font-size: 16px;
-            }
-
-            /* Better spacing for touch */
-            .form-row {
-                margin-bottom: 1.25rem;
-            }
-
-            .form-group {
-                margin-bottom: 0.75rem;
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -1060,14 +849,12 @@
             </li>
         </ul>
 
-
         <div>
             <button class="sidebar-link">
                 <i class="fa-solid fa-right-from-bracket" id="logoutBtn"></i>
                 <span>LOG OUT</span>
             </button>
         </div>
-
     </aside>
 
     <!-- Main Content -->
@@ -1100,7 +887,7 @@
             <div class="form-header">
                 <h2 class="form-title">Create New Product</h2>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary dashboard-btn">
+                    <button type="button" class="btn btn-secondary dashboard-btn" onclick="gotodashboard()">
                         <i class="fas fa-arrow-left"></i>
                         Back to Dashboard
                     </button>
@@ -1135,6 +922,7 @@
                                 placeholder="Detailed product description..." required></textarea>
                         </div>
                     </div>
+
                     <div class="form-row two-cols">
                         <div class="form-group">
                             <label class="form-label required">Category</label>
@@ -1148,7 +936,6 @@
                             <label class="form-label required">Subcategory</label>
                             <select class="form-input form-select" name="subcategory" id="subcategorySelect" required>
                                 <option value="">Select Subcategory</option>
-                                <!-- Options will be dynamically populated -->
                             </select>
                         </div>
                     </div>
@@ -1206,8 +993,6 @@
                     <div class="image-preview" id="imagePreview"></div>
                 </div>
 
-
-
                 <!-- Stock Management -->
                 <div class="form-section full-width">
                     <h3 class="section-title">
@@ -1222,18 +1007,11 @@
                         Add Stock Entry
                     </button>
                 </div>
-
-
             </form>
         </div>
     </main>
-
+    <script type="module" src="../JS/sellerOnly.js"></script>
     <script>
-        // Navigation functions
-        function gotodashboard() {
-            window.location.href = "sellerdashboard.html";
-        }
-
         function gotoproducts() {
             window.location.href = "SelleraAddProduct.html";
         }
@@ -1266,10 +1044,53 @@
             window.location.href = "sellerInbox.html";
         }
 
+    </script>
+    <script type="module">
+        import { Product } from "../models/Product.js";
+        import { Auth } from "../utils/auth.js";
+        import { Seller } from "../models/Seller.js"
+
+
+        // window.gotoproducts = function () {
+        //     window.location.href = "SelleraAddProduct.html";
+        // };
+
+        // window.gotoOrders = function () {
+        //     window.location.href = "sellerOrders.html";
+        // };
+
+        // window.gotoanalytics = function () {
+        //     window.location.href = "SellerAnalytics.html";
+        // };
+
+        // window.gotoCustomers = function () {
+        //     window.location.href = "sellerCustomers.html";
+        // };
+
+        // window.gotoInventory = function () {
+        //     window.location.href = "SellerInventory.html";
+        // };
+
+        // window.gotoPending = function () {
+        //     window.location.href = "sellerPending.html";
+        // };
+
+        // window.gotoSettings = function () {
+        //     window.location.href = "SellerSettings.html";
+        // };
+
+        // window.gotoInbox = function () {
+        //     window.location.href = "sellerInbox.html";
+        // };
+
+
+        const currentUser = Auth.getCurrentUser();
+
         // Global variables
         let productImages = [];
         let productTags = [];
         let stockEntries = [];
+        let stockManagementInitialized = false;
 
         // Subcategory mappings
         const subcategoryOptions = {
@@ -1293,28 +1114,120 @@
                 initializeTagInputs();
             }
 
-            if (document.getElementById('addStockBtn')) {
-                initializeStockManagement();
-            }
-
             if (document.getElementById('productForm')) {
                 setupFormSubmission();
                 setupCategoryDependency();
+                setupPriceValidation();
             }
 
             setupMobileBehavior();
 
-            // Load auto-saved data after a short delay
-            setTimeout(loadAutoSavedData, 1000);
+            // Initialize stock management last
+            if (document.getElementById('addStockBtn')) {
+                initializeStockManagement();
+            }
 
-            // Add only one default stock entry
+            // Load auto-saved data after initialization
+            setTimeout(() => {
+                loadAutoSavedData();
+                // Add auto-save listeners
+                const form = document.getElementById('productForm');
+                if (form) {
+                    form.addEventListener('input', startAutoSave);
+                    form.addEventListener('change', startAutoSave);
+                }
+            }, 500);
+        });
+
+        // Navigation functions
+        function gotodashboard() {
+            if (hasUnsavedChanges() && !confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
+                return;
+            }
+            window.location.href = "sellerdashboard.html";
+        }
+
+        window.gotodashboard=gotodashboard;
+
+        // Check if form has unsaved changes
+        function hasUnsavedChanges() {
+            const form = document.getElementById('productForm');
+            if (!form) return false;
+
+            const formData = new FormData(form);
+            return formData.get('name') || formData.get('description') ||
+                productImages.length > 0 || productTags.length > 0;
+        }
+
+        // Price validation setup
+        function setupPriceValidation() {
+            const mainPrice = document.getElementById('mainPriceId');
+            const salePrice = document.getElementById('salePriceId');
+            const errorDiv = document.getElementById('errordiv');
+            const errorDiv2 = document.getElementById('errordiv2');
+
+            if (mainPrice && errorDiv) {
+                mainPrice.addEventListener('input', function () {
+                    const value = parseFloat(this.value);
+                    if (isNaN(value) || value < 0) {
+                        this.classList.add('error');
+                        errorDiv.style.display = 'block';
+                    } else {
+                        this.classList.remove('error');
+                        errorDiv.style.display = 'none';
+                    }
+                });
+            }
+
+            if (salePrice && errorDiv2) {
+                salePrice.addEventListener('input', function () {
+                    const value = parseFloat(this.value);
+                    if (this.value && (isNaN(value) || value < 0)) {
+                        this.classList.add('error');
+                        errorDiv2.style.display = 'block';
+                    } else {
+                        this.classList.remove('error');
+                        errorDiv2.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // FIXED: Stock management functionality
+        function initializeStockManagement() {
+            // Only initialize once
+            if (stockManagementInitialized) return;
+
+            const addStockBtn = document.getElementById('addStockBtn');
+            if (!addStockBtn) return;
+
+            // Clear any existing event listeners by cloning the button
+            const newAddStockBtn = addStockBtn.cloneNode(true);
+            addStockBtn.parentNode.replaceChild(newAddStockBtn, addStockBtn);
+
+            // Add single event listener with proper event handling
+            newAddStockBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                addStockEntry();
+            });
+
+            // Initialize with one default entry only if array is empty
             if (stockEntries.length === 0) {
                 addDefaultStockEntry();
             }
-        });
 
-        // Add default stock entry (only one)
+            stockManagementInitialized = true;
+            //console.log('Stock management initialized with', stockEntries.length, 'entries');
+        }
+
         function addDefaultStockEntry() {
+            // Only add if no entries exist
+            if (stockEntries.length > 0) {
+                console.log('Default entry skipped - entries exist:', stockEntries.length);
+                return;
+            }
+
             const stockId = Date.now() + Math.random();
             stockEntries.push({
                 id: stockId,
@@ -1322,7 +1235,106 @@
                 color: '',
                 quantity: 0
             });
+            //console.log('Added default stock entry. Total entries:', stockEntries.length);
             renderStockGrid();
+        }
+
+        function addStockEntry() {
+            // Prevent adding multiple entries at once
+            const stockId = Date.now() + Math.random();
+            stockEntries.push({
+                id: stockId,
+                size: '',
+                color: '',
+                quantity: 0
+            });
+            console.log('Added new stock entry. Total entries:', stockEntries.length);
+            renderStockGrid();
+
+            // Save the updated state
+            startAutoSave();
+        }
+
+        function renderStockGrid() {
+            const stockGrid = document.getElementById('stockItemsContainer');
+            if (!stockGrid) {
+                console.error('Stock grid container not found');
+                return;
+            }
+
+            if (stockEntries.length === 0) {
+                stockGrid.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">Add stock entries for your product.</p>';
+                return;
+            }
+
+            //console.log('Rendering', stockEntries.length, 'stock entries');
+            stockGrid.innerHTML = stockEntries.map(entry => `
+                <div class="stock-item" data-id="${entry.id}">
+                    <div class="form-group">
+                        <label class="form-label required">Size</label>
+                        <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'size', this.value)" required>
+                            <option value="">Select Size</option>
+                            ${availableSizes.map(size =>
+                `<option value="${size}" ${entry.size === size ? 'selected' : ''}>${size}</option>`
+            ).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Color</label>
+                        <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'color', this.value)" required>
+                            <option value="">Select Color</option>
+                            ${availableColors.map(color =>
+                `<option value="${color}" ${entry.color === color ? 'selected' : ''}>${color}</option>`
+            ).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Quantity</label>
+                        <input type="number" class="form-input" min="0" value="${entry.quantity}" 
+                               onchange="updateStockEntry('${entry.id}', 'quantity', Math.max(0, parseInt(this.value) || 0))" 
+                               oninput="this.value = Math.max(0, parseInt(this.value) || 0)" 
+                               placeholder="0" required>
+                    </div>
+                    <button type="button" class="remove-stock" onclick="removeStockEntry('${entry.id}')" 
+                            ${stockEntries.length <= 1 ? 'style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function updateStockEntry(entryId, field, value) {
+            // Convert entryId to number for comparison
+            const id = parseFloat(entryId);
+            const entry = stockEntries.find(e => e.id === id);
+            if (entry) {
+                entry[field] = value;
+                // Auto-save when stock data changes
+                startAutoSave();
+                console.log('Updated stock entry:', entryId, field, value);
+            }
+        }
+        window.updateStockEntry = updateStockEntry;
+        function removeStockEntry(entryId) {
+            // Convert entryId to number for comparison
+            const id = parseFloat(entryId);
+
+            // FIXED: Always check minimum requirement and show alert
+            if (stockEntries.length <= 1) {
+                alert('You must have at least one stock variant.');
+                return;
+            }
+
+            // Remove from stockEntries array
+            const initialLength = stockEntries.length;
+            stockEntries = stockEntries.filter(entry => entry.id !== id);
+
+            // Verify removal was successful
+            if (stockEntries.length < initialLength) {
+                console.log('Removed stock entry. Remaining entries:', stockEntries.length);
+                renderStockGrid();
+                startAutoSave();
+            }
         }
 
         // Category-Subcategory dependency
@@ -1393,12 +1405,6 @@
             }
         }
 
-        function goToDashboard() {
-            if (confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
-                window.location.href = '#dashboard';
-            }
-        }
-
         // Image upload functionality
         function initializeImageUpload() {
             const uploadContainer = document.getElementById('imageUploadContainer');
@@ -1446,18 +1452,22 @@
             }
 
             Array.from(files).forEach(file => {
-                if (file.type.startsWith('image/')) {
+                if (file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024) { // 10MB limit
                     const reader = new FileReader();
                     reader.onload = (e) => {
+                        //console.log(file)
                         const imageData = {
                             file: file,
-                            url: e.target.result,
+                            url: `../images/${file.name}`,
                             id: Date.now() + Math.random()
                         };
                         productImages.push(imageData);
                         renderImagePreview();
+                        startAutoSave();
                     };
                     reader.readAsDataURL(file);
+                } else if (file.size > 10 * 1024 * 1024) {
+                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
                 }
             });
         }
@@ -1479,6 +1489,7 @@
         function removeImage(imageId) {
             productImages = productImages.filter(img => img.id != imageId);
             renderImagePreview();
+            startAutoSave();
         }
 
         // Tag input functionality
@@ -1498,11 +1509,12 @@
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && input.value.trim()) {
                     e.preventDefault();
-                    const value = input.value.trim();
-                    if (!dataArray.includes(value)) {
-                        dataArray.push(value);
+                    const value = input.value.trim().toLowerCase();
+                    if (!dataArray.map(t => t.toLowerCase()).includes(value)) {
+                        dataArray.push(input.value.trim());
                         renderTags(containerId, dataArray);
                         input.value = '';
+                        startAutoSave();
                     }
                 }
             });
@@ -1519,12 +1531,12 @@
             existingTags.forEach(tag => tag.remove());
 
             // Add new tags
-            dataArray.forEach(item => {
+            dataArray.forEach((item, index) => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag-item';
                 tagElement.innerHTML = `
                 ${item}
-                <button type="button" class="tag-remove" onclick="removeTag('${containerId}', '${item}')">
+                <button type="button" class="tag-remove" onclick="removeTag('${containerId}', ${index})">
                     <i class="fas fa-times"></i>
                 </button>
             `;
@@ -1536,7 +1548,7 @@
             });
         }
 
-        function removeTag(containerId, value) {
+        function removeTag(containerId, index) {
             let dataArray;
             switch (containerId) {
                 case 'tagsContainer':
@@ -1546,98 +1558,13 @@
                     return;
             }
 
-            const index = dataArray.indexOf(value);
-            if (index > -1) {
+            if (index >= 0 && index < dataArray.length) {
                 dataArray.splice(index, 1);
                 renderTags(containerId, dataArray);
+                startAutoSave();
             }
         }
 
-        // Stock management functionality
-        function initializeStockManagement() {
-            const addStockBtn = document.getElementById('addStockBtn');
-            if (addStockBtn) {
-                addStockBtn.addEventListener('click', addStockEntry);
-            }
-        }
-
-        function addStockEntry() {
-            const stockId = Date.now() + Math.random();
-            stockEntries.push({
-                id: stockId,
-                size: '',
-                color: '',
-                quantity: 0
-            });
-            renderStockGrid();
-        }
-
-        function renderStockGrid() {
-            const stockGrid = document.getElementById('stockItemsContainer');
-            if (!stockGrid) return;
-
-            if (stockEntries.length === 0) {
-                stockGrid.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">Add stock entries for your product.</p>';
-                return;
-            }
-
-            stockGrid.innerHTML = stockEntries.map(entry => `
-            <div class="stock-item" data-id="${entry.id}">
-                <div class="form-group">
-                    <label class="form-label required">Size</label>
-                    <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'size', this.value)" required>
-                        <option value="">Select Size</option>
-                        ${availableSizes.map(size =>
-                `<option value="${size}" ${entry.size === size ? 'selected' : ''}>${size}</option>`
-            ).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Color</label>
-                    <select class="form-input form-select" onchange="updateStockEntry('${entry.id}', 'color', this.value)" required>
-                        <option value="">Select Color</option>
-                        ${availableColors.map(color =>
-                `<option value="${color}" ${entry.color === color ? 'selected' : ''}>${color}</option>`
-            ).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Quantity</label>
-                    <input type="number" class="form-input" min="0" value="${entry.quantity}" 
-                           onchange="updateStockEntry('${entry.id}', 'quantity', Math.max(0, parseInt(this.value) || 0))" 
-                           oninput="this.value = Math.max(0, parseInt(this.value) || 0)" 
-                           placeholder="0" required>
-                </div>
-                <button type="button" class="remove-stock" onclick="removeStockEntry('${entry.id}')" ${stockEntries.length <= 1 ? 'disabled' : ''}>
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
-        }
-
-        function updateStockEntry(entryId, field, value) {
-            const entry = stockEntries.find(e => e.id == entryId);
-            if (entry) {
-                entry[field] = value;
-            }
-        }
-
-        function removeStockEntry(entryId) {
-            console.log(stockEntries)
-            if (stockEntries.length <= 1) {
-                alert('You must have at least one stock variant.');
-                return;
-            }
-
-            // Remove from stockEntries array
-            stockEntries = stockEntries.filter(entry => entry.id !== entryId);
-            renderStockGrid();
-            
-            // Clear auto-save data to prevent restoring deleted entry
-            clearAutoSaveData();
-        }
-        
-        
         // Form submission
         function setupFormSubmission() {
             const form = document.getElementById('productForm');
@@ -1700,6 +1627,20 @@
                 return;
             }
 
+            // Validate prices
+            const price = parseFloat(formData.get('price'));
+            const salePrice = formData.get('salePrice') ? parseFloat(formData.get('salePrice')) : null;
+
+            if (isNaN(price) || price < 0) {
+                alert('Please enter a valid base price.');
+                return;
+            }
+
+            if (salePrice !== null && (isNaN(salePrice) || salePrice < 0)) {
+                alert('Please enter a valid sale price.');
+                return;
+            }
+
             // Check if images are uploaded
             if (productImages.length === 0) {
                 const uploadContainer = document.getElementById('imageUploadContainer');
@@ -1722,22 +1663,31 @@
                 }
                 return;
             }
+            const stock = stockEntries.filter(entry => entry.size && entry.color && entry.quantity >= 0);
+            const colors = [];
+            const sizes = [];
+            stock.forEach(v => {
+                if (!colors.includes(v.color)) colors.push(v.color);
+                if (!sizes.includes(v.size)) sizes.push(v.size);
+            })
+
 
             // Collect all the data
             const productData = {
                 name: formData.get('name'),
                 description: formData.get('description'),
-                price: parseFloat(formData.get('price')),
+                price: price,
                 category: formData.get('category'),
                 subcategory: formData.get('subcategory'),
-                salePrice: formData.get('salePrice') ? parseFloat(formData.get('salePrice')) : null,
-                visibility: formData.get('visibility') === 'on',
-                images: productImages.map(img => img.url),
+                availableColors: colors,
+                availableSizes: sizes,
+                salePrice: salePrice,
+                image: productImages.map(img => img.url)[0],
                 tags: productTags,
                 stock: stockEntries.filter(entry => entry.size && entry.color && entry.quantity >= 0),
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
             };
+
+
 
             // Show loading state
             const submitBtn = document.querySelector('button[type="submit"]');
@@ -1745,17 +1695,20 @@
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding Product...';
                 submitBtn.disabled = true;
+                const res = currentUser.addProduct(productData);
 
                 // Simulate API call
                 setTimeout(() => {
-                    console.log('Product data:', productData);
-
-                    alert('Product added successfully!');
+                    if (res.success) {
+                        console.log(res.message)
+                    } else {
+                        alert(res.message)
+                    }
 
                     if (confirm('Product added! Would you like to add another product?')) {
                         resetForm();
                     } else {
-                        goToDashboard();
+                        gotodashboard();
                     }
 
                     submitBtn.innerHTML = originalText;
@@ -1771,10 +1724,12 @@
                 form.reset();
             }
 
+            // Clear all arrays
             productImages = [];
             productTags = [];
             stockEntries = [];
 
+            // Re-render displays
             renderImagePreview();
             renderTags('tagsContainer', productTags);
 
@@ -1783,32 +1738,12 @@
 
             // Add only one default stock entry
             addDefaultStockEntry();
+
+            // Clear auto-save
+            clearAutoSaveData();
         }
 
-        // Auto-save functionality
-        let autoSaveTimer;
-        function startAutoSave() {
-            const form = document.getElementById('productForm');
-            if (!form) return;
-
-            clearTimeout(autoSaveTimer);
-            autoSaveTimer = setTimeout(() => {
-                const formData = new FormData(form);
-                if (formData.get('name') || formData.get('description')) {
-                    // Save to localStorage as backup
-                    const autoSaveData = {
-                        formData: Object.fromEntries(formData),
-                        productImages: productImages,
-                        productTags: productTags,
-                        stockEntries: stockEntries,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('kajwelo_product_autosave', JSON.stringify(autoSaveData));
-                }
-            }, 30000);
-        }
-
-        // Load auto-saved data on page load
+        // FIXED: Load auto-saved data function
         function loadAutoSavedData() {
             const autoSaveData = localStorage.getItem('kajwelo_product_autosave');
             if (autoSaveData) {
@@ -1820,7 +1755,7 @@
                     if (timeDiff < 3600000) {
                         if (confirm('Found auto-saved data from your last session. Would you like to restore it?')) {
                             // Restore form data
-                            Object.entries(data.formData).forEach(([key, value]) => {
+                            Object.entries(data.formData || {}).forEach(([key, value]) => {
                                 const input = document.querySelector(`[name="${key}"]`);
                                 if (input) {
                                     if (input.type === 'checkbox') {
@@ -1831,10 +1766,17 @@
                                 }
                             });
 
-                            // Restore arrays
-                            productImages = data.productImages || [];
-                            productTags = data.productTags || [];
-                            stockEntries = data.stockEntries || [];
+                            // Restore arrays - FIXED: Properly validate restored data
+                            productImages = Array.isArray(data.productImages) ? data.productImages : [];
+                            productTags = Array.isArray(data.productTags) ? data.productTags : [];
+
+                            // FIXED: Ensure stockEntries has at least one entry
+                            if (Array.isArray(data.stockEntries) && data.stockEntries.length > 0) {
+                                stockEntries = data.stockEntries;
+                            } else {
+                                // Reset to default if invalid data
+                                stockEntries = [];
+                            }
 
                             // Re-render everything
                             renderImagePreview();
@@ -1846,17 +1788,50 @@
                             if (categorySelect) {
                                 updateSubcategoryOptions(categorySelect.value);
                             }
+
+                            console.log('Auto-saved data restored');
                         }
                     }
                 } catch (e) {
                     console.error('Error loading auto-saved data:', e);
                 }
             }
+
+            // Ensure we always have at least one stock entry
+            if (stockEntries.length === 0) {
+                addDefaultStockEntry();
+            }
+        }
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        function startAutoSave() {
+            const form = document.getElementById('productForm');
+            if (!form) return;
+
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                const formData = new FormData(form);
+                if (formData.get('name') || formData.get('description') ||
+                    productImages.length > 0 || productTags.length > 0) {
+                    // Save to localStorage as backup
+                    const autoSaveData = {
+                        formData: Object.fromEntries(formData),
+                        productImages: productImages,
+                        productTags: productTags,
+                        stockEntries: stockEntries,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('kajwelo_product_autosave', JSON.stringify(autoSaveData));
+                    console.log('Auto-saved data');
+                }
+            }, 5000); // Auto-save every 5 seconds
         }
 
         // Clear auto-save data when form is successfully submitted
         function clearAutoSaveData() {
             localStorage.removeItem('kajwelo_product_autosave');
+            console.log('Auto-save data cleared');
         }
 
         // Mobile behavior setup
@@ -1867,24 +1842,27 @@
                 sidebarLinks.forEach(link => {
                     link.addEventListener('click', function () {
                         if (window.innerWidth < 993) {
-                            toggleSidebar();
+                            setTimeout(() => toggleSidebar(), 100);
                         }
                     });
                 });
             }
 
+            // Handle window resize
+            window.addEventListener('resize', function () {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+
+                if (window.innerWidth >= 993) {
+                    if (sidebar) sidebar.classList.remove('open');
+                    if (overlay) overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
             // Prevent zoom on input focus in mobile
             document.addEventListener('touchstart', function () { }, { passive: true });
         }
-
-        // Add auto-save listeners
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('productForm');
-            if (form) {
-                form.addEventListener('input', startAutoSave);
-                form.addEventListener('change', startAutoSave);
-            }
-        });
     </script>
 </body>
 
