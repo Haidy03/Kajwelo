@@ -89,6 +89,19 @@ export const products = [
 
 //window.products = products;
 
+function getSellerNameById(sellerId) {
+  try {
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = users.find((u) => u.id === sellerId);
+    return user ? user.name : sellerId; // Return sellerId if user not found
+  } catch (error) {
+    console.error("Error getting seller name:", error);
+    return sellerId; // Fallback to sellerId on error
+  }
+}
+
+//window.products = products;
+
 export function renderProducts(
   products,
   sectionId = "productssection",
@@ -209,6 +222,12 @@ export function renderProducts(
     image.style.width = "100%";
     image.style.height = "100%";
 
+    // Add error handling for product images
+    // image.addEventListener("error", function () {
+    //   this.src =
+    //     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjJmMmYyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==";
+    // });
+
     imagecontainer.appendChild(image);
     imagecontainer.appendChild(overlay);
 
@@ -221,7 +240,15 @@ export function renderProducts(
 
     const proBrand = document.createElement("p");
     proBrand.classList.add("product-brand");
-    proBrand.textContent = product.brand || product.sellerId || "";
+
+    // Use brand if available, otherwise look up seller name
+    if (product.brand) {
+      proBrand.textContent = product.brand;
+    } else if (product.sellerId) {
+      proBrand.textContent = getSellerNameById(product.sellerId);
+    } else {
+      proBrand.textContent = "";
+    }
 
     const ProPrice = document.createElement("div");
     ProPrice.classList.add("product-price");
