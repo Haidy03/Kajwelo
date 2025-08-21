@@ -44,9 +44,14 @@
     <br />
     <br />
     <div class="container py-5">
-      <a href="/cardGeneratot/cardsss.html" class="btn btn-link mb-3"
-        ><i class="fa-solid fa-arrow-left"></i> Back to Products</a
+      <a
+        href="javascript:void(0);"
+        onclick="window.history.back();"
+        class="btn btn-link mb-3"
       >
+        <i class="fa-solid fa-arrow-left"></i> Back to Products
+      </a>
+
       <div id="product-details" class="row justify-content-center"></div>
     </div>
 
@@ -205,7 +210,7 @@
 
       <!-- Optional: related actions -->
       <div class="d-flex justify-content-between mt-3">
-        <button id="continueBtn" class="btn btn-outline-secondary">Continue Shopping</button>
+       
       </div>
     </div>
   `;
@@ -221,7 +226,6 @@
         const messageBtn = document.getElementById("messageBtn");
         const wishlistBtn = document.getElementById("wishlistBtn");
         const addCartBtn = document.getElementById("addCartBtn");
-        const continueBtn = document.getElementById("continueBtn");
 
         // message button checks sellerId on original (keeps original structure)
         messageBtn.addEventListener("click", function () {
@@ -309,7 +313,7 @@
           let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
           if (!loggedInUser) {
             alert("You need to log in to use the cart!");
-            window.location.href = "/login-register.html";
+            window.location.href = "/login.html";
             return;
           }
           if (!Array.isArray(loggedInUser.cart)) {
@@ -339,10 +343,6 @@
             users[userIndex] = loggedInUser;
             localStorage.setItem("users", JSON.stringify(users));
           }
-        });
-
-        continueBtn.addEventListener("click", function () {
-          window.location.href = "/cardGeneratot/cardsss.html";
         });
       })();
     </script>
