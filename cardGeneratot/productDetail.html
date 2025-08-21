@@ -22,6 +22,23 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <style>
+      .broken-image-placeholder {
+        width: 100%;
+        height: 300px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+        border: 1px dashed #dee2e6;
+        border-radius: 0.375rem;
+      }
+      .broken-image-placeholder i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+    </style>
   </head>
   <body class="bg-light">
     <br />
@@ -35,18 +52,43 @@
 
     <script>
       (function () {
-        //Read selected product
+        // Function to get user name by ID
+        function getUserNameById(userId) {
+          try {
+            const users = JSON.parse(localStorage.getItem("users") || "[]");
+            const user = users.find((u) => u.id === userId);
+            return user ? user.name : null;
+          } catch (error) {
+            console.error("Error getting user name:", error);
+            return null;
+          }
+        }
+
+        // Function to handle broken images
+        function handleBrokenImage(img) {
+          // Create a placeholder div
+          const placeholder = document.createElement("div");
+          placeholder.className = "broken-image-placeholder";
+          placeholder.innerHTML =
+            '<i class="fa-solid fa-image"></i><p>Image not available</p>';
+
+          // Replace the image with the placeholder
+          img.parentNode.replaceChild(placeholder, img);
+        }
+
+        // read selected product (original object)
         const raw = localStorage.getItem("selectedProduct");
-        let product = null;
+        let original = null;
         try {
-          product = raw ? JSON.parse(raw) : null;
+          original = raw ? JSON.parse(raw) : null;
         } catch {
-          product = null;
+          original = null;
         }
 
         const container = document.getElementById("product-details");
+        if (!container) return;
 
-        if (!product) {
+        if (!original) {
           container.innerHTML = `
       <div class="col-md-8">
         <div class="alert alert-warning shadow-sm">
@@ -57,18 +99,73 @@
           return;
         }
 
+        // Normalize the product into a stable shape for rendering while
+        // keeping the original object intact for storage/transfer.
+        function normalizeProduct(p) {
+          if (!p || typeof p !== "object") return null;
+
+          // Get brand name from user ID if available
+          let brandName = p.brand || p.sellerName || "";
+
+          // If we have a sellerId but no brand name, try to get it from users array
+          if ((!brandName || brandName === "") && p.sellerId) {
+            const userName = getUserNameById(p.sellerId);
+            if (userName) {
+              brandName = userName;
+            }
+          }
+
+          const currentprice =
+            p.currentprice ?? p.salePrice ?? p.sale_price ?? p.price ?? 0;
+          const oldprice =
+            p.oldprice ??
+            (p.salePrice && p.price ? p.price : p.old_price ?? null) ??
+            null;
+
+          return {
+            id: p.id,
+            title: p.title ?? p.name ?? "Unnamed product",
+            brand: brandName || p.sellerId || "",
+            image: p.image ?? p.img ?? null, // Set to null instead of external URL
+            description: p.description ?? "",
+            currentprice,
+            oldprice,
+            sellerId: p.sellerId ?? (p.seller && p.seller.id) ?? null,
+            raw: p, // keep a pointer to original if needed
+          };
+        }
+
+        const product = normalizeProduct(original);
+        if (!product) {
+          container.innerHTML = `
+      <div class="col-md-8">
+        <div class="alert alert-danger shadow-sm">
+          <strong>Error:</strong> Product data is invalid.
+        </div>
+      </div>`;
+          return;
+        }
+
+        // Render using the normalized product
         container.innerHTML = `
     <div class="col-md-10 col-lg-8">
       <div class="card shadow-sm">
         <div class="row g-0">
           <div class="col-md-5 p-3 d-flex align-items-center justify-content-center">
-            <img src="${product.image}" alt="${product.title}" class="img-fluid rounded" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Unavailable'">
+            ${
+              product.image
+                ? `<img src="${product.image}" alt="${product.title}" class="img-fluid rounded" id="product-image">`
+                : `<div class="broken-image-placeholder">
+                 <i class="fa-solid fa-image"></i>
+                 <p>Image not available</p>
+               </div>`
+            }
           </div>
           <div class="col-md-7">
             <div class="card-body">
               <h2 class="card-title h3">${product.title}</h2>
 <p class="text-muted mb-2 d-flex align-items-center gap-2">
-  <strong>Brand:</strong> ${product.brand}
+  <strong>Brand:</strong> ${product.brand || "—"}
 <button class="btn btn-outline-primary btn-sm rounded-circle ms-2" 
         id="messageBtn" title="Message">
   <i class="fa-solid fa-message"></i>
@@ -76,8 +173,16 @@
 
 </p>
               <p class="fs-4 mb-4">
-                <span class="text-success fw-bold">${product.currentprice} $</span>
-                <span class="old-price text-muted ms-2">${product.oldprice} $</span>
+                <span class="text-success fw-bold">${Number(
+                  product.currentprice
+                ).toLocaleString()} $</span>
+                ${
+                  product.oldprice
+                    ? `<span class="old-price text-muted ms-2">${Number(
+                        product.oldprice
+                      ).toLocaleString()} $</span>`
+                    : ""
+                }
               </p>
 
               <div class="d-flex gap-2">
@@ -105,30 +210,36 @@
     </div>
   `;
 
+        // Add error handler for the product image if it exists
+        const productImage = document.getElementById("product-image");
+        if (productImage) {
+          productImage.addEventListener("error", function () {
+            handleBrokenImage(this);
+          });
+        }
+
         const messageBtn = document.getElementById("messageBtn");
-        messageBtn.addEventListener("click", function () {
-          const raw = localStorage.getItem("selectedProduct");
-          if (!raw) {
-            alert("No selected product found. Please select a product first.");
-            return;
-          }
-          try {
-            const selected = JSON.parse(raw);
-            if (!selected?.sellerId) {
-              alert("Seller ID not found on this product.");
-              return;
-            }
-          } catch (e) {
-            alert("Selected product data corrupted.");
-            return;
-          }
-
-          window.location.href = "/Pages/chatWithSeller.html?showChat=true";
-        });
-
         const wishlistBtn = document.getElementById("wishlistBtn");
         const addCartBtn = document.getElementById("addCartBtn");
         const continueBtn = document.getElementById("continueBtn");
+
+        // message button checks sellerId on original (keeps original structure)
+        messageBtn.addEventListener("click", function () {
+          if (!original) {
+            alert("No selected product found. Please select a product first.");
+            return;
+          }
+          const sellerId =
+            original.sellerId ??
+            (original.seller && original.seller.id) ??
+            null;
+          if (!sellerId) {
+            alert("Seller ID not found on this product.");
+            return;
+          }
+          // keep previous behaviour: open chat page
+          window.location.href = "/Pages/chatWithSeller.html?showChat=true";
+        });
 
         // --- Initialize Wishlist State ---
         (function initWishlistState() {
@@ -137,7 +248,7 @@
           );
           if (!loggedInUser || !Array.isArray(loggedInUser.wishlist)) return;
           const isIn = loggedInUser.wishlist.some(
-            (item) => item.id === product.id
+            (item) => String(item.id) === String(product.id)
           );
           if (isIn) {
             wishlistBtn.textContent = "❤";
@@ -155,11 +266,13 @@
           if (!Array.isArray(loggedInUser.wishlist)) {
             loggedInUser.wishlist = [];
           }
+
+          // we store the original object so other pages that expect name/price are fine
           const idx = loggedInUser.wishlist.findIndex(
-            (item) => item.id === product.id
+            (item) => String(item.id) === String(product.id)
           );
           if (idx === -1) {
-            loggedInUser.wishlist.push(product);
+            loggedInUser.wishlist.push(original);
             wishlistBtn.textContent = "❤";
             wishlistBtn.classList.add("wishlist-active");
           } else {
@@ -183,7 +296,9 @@
             localStorage.getItem("loggedInUser") || "null"
           );
           if (!loggedInUser || !Array.isArray(loggedInUser.cart)) return;
-          const isIn = loggedInUser.cart.some((item) => item.id === product.id);
+          const isIn = loggedInUser.cart.some(
+            (item) => String(item.id) === String(product.id)
+          );
           if (isIn) {
             addCartBtn.textContent = "✔ Added to Cart";
             addCartBtn.classList.add("btn-success");
@@ -200,11 +315,13 @@
           if (!Array.isArray(loggedInUser.cart)) {
             loggedInUser.cart = [];
           }
+
           const idx = loggedInUser.cart.findIndex(
-            (item) => item.id === product.id
+            (item) => String(item.id) === String(product.id)
           );
           if (idx === -1) {
-            loggedInUser.cart.push(product);
+            // store original object in cart for compatibility
+            loggedInUser.cart.push(original);
             addCartBtn.textContent = "✔ Added to Cart";
             addCartBtn.classList.remove("btn-primary");
             addCartBtn.classList.add("btn-success");

@@ -33,9 +33,19 @@
 
   <body>
     <section id="productssection"></section>
-
+    <!--
+    
     <script src="../cardGeneratot/card.js"></script>
+
+
+-->
+
     <script src="wishlist.js"></script>
+
+    <script type="module">
+      import { renderProducts, products } from "/cardGeneratot/card.js";
+      renderProducts(products, "productssection", "Best Sellers");
+    </script>
 
     <script type="module" src="../utils/logout.js"></script>
   </body>
