@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     id: 1,
     title: "Summer Maxi Dress",
@@ -87,17 +87,23 @@ const products = [
   },
 ];
 
-window.products = products;
+//window.products = products;
 
-window.addEventListener("load", function () {
-  const section = document.getElementById("productssection");
+export function renderProducts(
+  products,
+  sectionId = "productssection",
+  title = "Products"
+) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  section.innerHTML = "";
   section.classList.add("best-sellers");
 
   const sectionheader = document.createElement("div");
   sectionheader.classList.add("section-header");
   const header = document.createElement("h2");
   header.classList.add("section-title");
-  header.textContent = "Women Section";
+  header.textContent = title;
   sectionheader.appendChild(header);
 
   const grid = document.createElement("div");
@@ -105,14 +111,12 @@ window.addEventListener("load", function () {
 
   function goToDetails(product) {
     localStorage.setItem("selectedProduct", JSON.stringify(product));
-
     window.location.href = "/cardGeneratot/productDetail.html";
   }
 
   products.forEach((product) => {
     const card = document.createElement("div");
     card.classList.add("product-card");
-
     card.addEventListener("click", () => goToDetails(product));
 
     const imagecontainer = document.createElement("div");
@@ -126,7 +130,7 @@ window.addEventListener("load", function () {
     whishListBtn.innerHTML = "♡";
     whishListBtn.dataset.productId = product.id;
 
-    // 🔥 Check if this product is already in wishlist (on page load)
+    // wishlist check
     let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && Array.isArray(loggedInUser.wishlist)) {
       const isInWishlist = loggedInUser.wishlist.some(
@@ -138,26 +142,19 @@ window.addEventListener("load", function () {
       }
     }
 
-    // Prevent card click when pressing wishlist
-    // --- Add-to-Wishlist functionality ---
     whishListBtn.addEventListener("click", function (event) {
       event.stopPropagation();
-
       let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
         alert("You need to log in to use wishlist!");
         window.location.href = "/login.html";
         return;
       }
-
-      if (!Array.isArray(loggedInUser.wishlist)) {
-        loggedInUser.wishlist = [];
-      }
+      if (!Array.isArray(loggedInUser.wishlist)) loggedInUser.wishlist = [];
 
       const existingIndex = loggedInUser.wishlist.findIndex(
         (item) => item.id === product.id
       );
-
       if (existingIndex === -1) {
         loggedInUser.wishlist.push(product);
         whishListBtn.innerHTML = "❤";
@@ -169,7 +166,6 @@ window.addEventListener("load", function () {
       }
 
       localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-
       let users = JSON.parse(localStorage.getItem("users")) || [];
       const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
       if (userIndex !== -1) {
@@ -177,31 +173,23 @@ window.addEventListener("load", function () {
         localStorage.setItem("users", JSON.stringify(users));
       }
     });
-    // --- End Add-to-Wishlist functionality ---
 
-    // --- Add-to-Cart functionality ---
     const quickViewBtn = document.createElement("button");
     quickViewBtn.className = "quick-view-btn";
     quickViewBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Add to Cart`;
 
     quickViewBtn.addEventListener("click", function (event) {
       event.stopPropagation();
-
       let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
         alert("You need to log in to add to cart!");
         window.location.href = "/login.html";
         return;
       }
-
-      if (!Array.isArray(loggedInUser.cart)) {
-        loggedInUser.cart = [];
-      }
-
+      if (!Array.isArray(loggedInUser.cart)) loggedInUser.cart = [];
       loggedInUser.cart.push(product);
 
       localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-
       let users = JSON.parse(localStorage.getItem("users")) || [];
       const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
       if (userIndex !== -1) {
@@ -209,47 +197,52 @@ window.addEventListener("load", function () {
         localStorage.setItem("users", JSON.stringify(users));
       }
 
-      alert(`${product.title} added to cart!`);
+      alert(`${product.name || product.title} added to cart!`);
     });
-    // --- End Add-to-Cart functionality ---
 
     overlay.appendChild(quickViewBtn);
     overlay.appendChild(whishListBtn);
 
     const image = document.createElement("img");
     image.src = product.image;
-    image.alt = product.title;
+    image.alt = product.name || product.title || "Product";
     image.style.width = "100%";
     image.style.height = "100%";
 
     imagecontainer.appendChild(image);
     imagecontainer.appendChild(overlay);
 
-    // Info
     const info = document.createElement("div");
     info.classList.add("product-info");
 
     const protitle = document.createElement("h4");
     protitle.classList.add("product-title");
-    protitle.textContent = product.title;
+    protitle.textContent = product.title || product.name;
 
     const proBrand = document.createElement("p");
     proBrand.classList.add("product-brand");
-    proBrand.textContent = product.brand;
+    proBrand.textContent = product.brand || product.sellerId || "";
 
     const ProPrice = document.createElement("div");
     ProPrice.classList.add("product-price");
 
+    const currentPriceVal =
+      product.currentprice ?? product.salePrice ?? product.price;
+    const oldPriceVal =
+      product.oldprice ?? (product.salePrice ? product.price : null);
+
     const ProCurrentPrice = document.createElement("span");
     ProCurrentPrice.classList.add("current-price");
-    ProCurrentPrice.textContent = product.currentprice + " $";
-
-    const ProOldPrice = document.createElement("span");
-    ProOldPrice.classList.add("old-price");
-    ProOldPrice.textContent = product.oldprice + " $";
+    ProCurrentPrice.textContent = currentPriceVal + " $";
 
     ProPrice.appendChild(ProCurrentPrice);
-    ProPrice.appendChild(ProOldPrice);
+
+    if (oldPriceVal) {
+      const ProOldPrice = document.createElement("span");
+      ProOldPrice.classList.add("old-price");
+      ProOldPrice.textContent = oldPriceVal + " $";
+      ProPrice.appendChild(ProOldPrice);
+    }
 
     info.appendChild(protitle);
     info.appendChild(proBrand);
@@ -257,10 +250,9 @@ window.addEventListener("load", function () {
 
     card.appendChild(imagecontainer);
     card.appendChild(info);
-
     grid.appendChild(card);
   });
 
   section.appendChild(sectionheader);
   section.appendChild(grid);
-});
+}
