@@ -264,7 +264,7 @@
           let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
           if (!loggedInUser) {
             alert("You need to log in to use wishlist!");
-            window.location.href = "/login-register.html";
+            window.location.href = "/login.html";
             return;
           }
           if (!Array.isArray(loggedInUser.wishlist)) {
