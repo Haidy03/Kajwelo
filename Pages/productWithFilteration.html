@@ -26,7 +26,7 @@
         position: sticky;
         top: 0;
         z-index: 100;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .nav {
@@ -193,7 +193,7 @@
         border-radius: 50%;
         background: #6366f1;
         cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
 
       .price-range-slider::-moz-range-thumb {
@@ -203,7 +203,7 @@
         background: #6366f1;
         cursor: pointer;
         border: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
 
       .clear-filters {
@@ -521,7 +521,8 @@
           padding: 0.5rem;
         }
 
-        .main-content, .sidebar {
+        .main-content,
+        .sidebar {
           padding: 1rem;
         }
 
@@ -563,14 +564,14 @@
         gap: 0.75rem;
         margin-bottom: 1rem;
       }
-      
+
       .subcategory-section-title {
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
       }
-      
+
       .subcategory-options {
         display: flex;
         flex-direction: row;
@@ -580,8 +581,12 @@
     </style>
   </head>
   <body>
-    <div class="filter-overlay" id="filterOverlay" onclick="toggleFilters()"></div>
- 
+    <div
+      class="filter-overlay"
+      id="filterOverlay"
+      onclick="toggleFilters()"
+    ></div>
+
     <div class="container" id="maincontainer">
       <aside class="sidebar" id="sidebar">
         <h3>Filters</h3>
@@ -614,23 +619,43 @@
                   <label for="subcategory-suits">Suits</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-shirts" value="shirts" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-shirts"
+                    value="shirts"
+                  />
                   <label for="subcategory-shirts">Shirts</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-trousers" value="trousers" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-trousers"
+                    value="trousers"
+                  />
                   <label for="subcategory-trousers">Trousers</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-polo-shirts" value="polo shirts" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-polo-shirts"
+                    value="polo shirts"
+                  />
                   <label for="subcategory-polo-shirts">Polo Shirts</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-tshirts" value="t-shirts" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-tshirts"
+                    value="t-shirts"
+                  />
                   <label for="subcategory-tshirts">T-shirts</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-shorts" value="shorts" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-shorts"
+                    value="shorts"
+                  />
                   <label for="subcategory-shorts">Shorts</label>
                 </div>
               </div>
@@ -641,19 +666,35 @@
               <div class="subcategory-section-title">Women</div>
               <div class="filter-options">
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-dresses" value="dresses" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-dresses"
+                    value="dresses"
+                  />
                   <label for="subcategory-dresses">Dresses</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-skirts" value="skirts" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-skirts"
+                    value="skirts"
+                  />
                   <label for="subcategory-skirts">Skirts</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-blouses" value="blouses" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-blouses"
+                    value="blouses"
+                  />
                   <label for="subcategory-blouses">Blouses</label>
                 </div>
                 <div class="filter-option">
-                  <input type="checkbox" id="subcategory-cardigans" value="cardigans" />
+                  <input
+                    type="checkbox"
+                    id="subcategory-cardigans"
+                    value="cardigans"
+                  />
                   <label for="subcategory-cardigans">Cardigans</label>
                 </div>
                 <div class="filter-option">
@@ -672,50 +713,53 @@
         <!-- Brands Filter -->
         <div class="filter-section">
           <div class="filter-title">Brand</div>
-          <div class="filter-options" style="display: flex;flex-direction: row; gap: 2em;">
+          <div
+            class="filter-options"
+            style="display: flex; flex-direction: row; gap: 2em"
+          >
             <div id="left">
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-nike" value="nike" />
-                    <label for="brand-nike">Nike</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-adidas" value="adidas" />
-                    <label for="brand-adidas">Adidas</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-zara" value="zara" />
-                    <label for="brand-zara">Zara</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-hm" value="h&m" />
-                    <label for="brand-hm">H&M</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-lc" value="lc" />
-                    <label for="brand-lc">Lc</label>
-                </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-nike" value="nike" />
+                <label for="brand-nike">Nike</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-adidas" value="adidas" />
+                <label for="brand-adidas">Adidas</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-zara" value="zara" />
+                <label for="brand-zara">Zara</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-hm" value="h&m" />
+                <label for="brand-hm">H&M</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-lc" value="lc" />
+                <label for="brand-lc">Lc</label>
+              </div>
             </div>
             <div id="right">
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-defacto" value="defacto" />
-                    <label for="brand-defacto">Defacto</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-max" value="max" />
-                    <label for="brand-max">Max</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-prada" value="prada" />
-                    <label for="brand-prada">Prada</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-versace" value="versace" />
-                    <label for="brand-versace">Versace</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="brand-puma" value="puma" />
-                    <label for="brand-puma">Puma</label>
-                </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-defacto" value="defacto" />
+                <label for="brand-defacto">Defacto</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-max" value="max" />
+                <label for="brand-max">Max</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-prada" value="prada" />
+                <label for="brand-prada">Prada</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-versace" value="versace" />
+                <label for="brand-versace">Versace</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="brand-puma" value="puma" />
+                <label for="brand-puma">Puma</label>
+              </div>
             </div>
           </div>
         </div>
@@ -723,38 +767,41 @@
         <!-- Filter for size -->
         <div class="filter-section">
           <div class="filter-title">Size</div>
-          <div class="filter-options" style="display: flex;flex-direction: row; gap: 2em;">
+          <div
+            class="filter-options"
+            style="display: flex; flex-direction: row; gap: 2em"
+          >
             <div id="sizeleft">
-                <div class="filter-option">
-                    <input type="checkbox" id="size-xs" value="xs" />
-                    <label for="size-xs">XS</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="size-s" value="s" />
-                    <label for="size-s">S</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="size-m" value="m" />
-                    <label for="size-m">M</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="size-l" value="l" />
-                    <label for="size-l">L</label>
-                </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-xs" value="xs" />
+                <label for="size-xs">XS</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-s" value="s" />
+                <label for="size-s">S</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-m" value="m" />
+                <label for="size-m">M</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-l" value="l" />
+                <label for="size-l">L</label>
+              </div>
             </div>
             <div id="sizeright">
-                <div class="filter-option">
-                    <input type="checkbox" id="size-xl" value="xl" />
-                    <label for="size-xl">XL</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="size-xxl" value="xxl" />
-                    <label for="size-xxl">XXL</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="size-xxxl" value="xxxl" />
-                    <label for="size-xxxl">XXXL</label>
-                </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-xl" value="xl" />
+                <label for="size-xl">XL</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-xxl" value="xxl" />
+                <label for="size-xxl">XXL</label>
+              </div>
+              <div class="filter-option">
+                <input type="checkbox" id="size-xxxl" value="xxxl" />
+                <label for="size-xxxl">XXXL</label>
+              </div>
             </div>
           </div>
         </div>
@@ -790,7 +837,10 @@
         <div class="content-header">
           <div>
             <h1 class="page-title">All Products</h1>
-            <div class="results-info">Showing <span id="showing-count">8</span> of <span id="total-count">8</span> products</div>
+            <div class="results-info">
+              Showing <span id="showing-count">8</span> of
+              <span id="total-count">8</span> products
+            </div>
           </div>
           <div class="sort-options">
             <label for="sort">Sort by:</label>
@@ -807,7 +857,7 @@
           <!-- Products will be populated by JavaScript -->
         </div>
 
-        <div class="no-products" id="no-products" style="display: none;">
+        <div class="no-products" id="no-products" style="display: none">
           <h3>No products found</h3>
           <p>Try adjusting your filters to see more results.</p>
         </div>
@@ -822,7 +872,12 @@
       </main>
     </div>
 
-    <script>
+    <script type="module">
+      import { Storage } from "../utils/localStorageHelper.js";
+      import { Seller } from "../models/Seller.js";
+      import { retrive } from "../models/Filteration.js";
+      import { renderProducts as displayall } from "/cardGeneratot/card.js";
+
       // Sample product data
       const allProducts = [
         {
@@ -835,7 +890,7 @@
           color: "blue",
           price: 89.99,
           originalPrice: 129.99,
-          image: "linear-gradient(135deg, #667eea, #764ba2)"
+          image: "linear-gradient(135deg, #667eea, #764ba2)",
         },
         {
           id: 2,
@@ -843,10 +898,10 @@
           category: "women",
           subcategory: "skirts",
           brand: "h&m",
-          size: ["xs", "s", "m","xxxl"],
+          size: ["xs", "s", "m", "xxxl"],
           color: "pink",
-          price: 75.50,
-          image: "linear-gradient(135deg, #ffa726, #fb8c00)"
+          price: 75.5,
+          image: "linear-gradient(135deg, #ffa726, #fb8c00)",
         },
         {
           id: 3,
@@ -854,11 +909,11 @@
           category: "women",
           subcategory: "blouses",
           brand: "nike",
-          size: ["s", "m", "l", "xl","xxl"],
+          size: ["s", "m", "l", "xl", "xxl"],
           color: "blue",
-          price: 120.00,
-          originalPrice: 160.00,
-          image: "linear-gradient(135deg, #42a5f5, #1976d2)"
+          price: 120.0,
+          originalPrice: 160.0,
+          image: "linear-gradient(135deg, #42a5f5, #1976d2)",
         },
         {
           id: 4,
@@ -866,10 +921,10 @@
           category: "men",
           subcategory: "shorts",
           brand: "zara",
-          size: ["m","xxxl"],
+          size: ["m", "xxxl"],
           color: "red",
           price: 299.99,
-          image: "linear-gradient(135deg, #ec407a, #c2185b)"
+          image: "linear-gradient(135deg, #ec407a, #c2185b)",
         },
         {
           id: 5,
@@ -881,7 +936,7 @@
           color: "white",
           price: 25.99,
           originalPrice: 35.99,
-          image: "linear-gradient(135deg, #26a69a, #00695c)"
+          image: "linear-gradient(135deg, #26a69a, #00695c)",
         },
         {
           id: 6,
@@ -892,7 +947,7 @@
           size: ["m", "l", "xl"],
           color: "black",
           price: 189.99,
-          image: "linear-gradient(135deg, #9575cd, #7e57c2)"
+          image: "linear-gradient(135deg, #9575cd, #7e57c2)",
         },
         {
           id: 7,
@@ -900,11 +955,11 @@
           category: "men",
           subcategory: "trousers",
           brand: "adidas",
-          size: ["s", "m", "l","xxl"],
+          size: ["s", "m", "l", "xxl"],
           color: "black",
           price: 159.99,
           originalPrice: 199.99,
-          image: "linear-gradient(135deg, #ff7043, #d84315)"
+          image: "linear-gradient(135deg, #ff7043, #d84315)",
         },
         {
           id: 8,
@@ -915,8 +970,8 @@
           size: ["s", "m", "l", "xl"],
           color: "blue",
           price: 39.99,
-          image: "linear-gradient(135deg, #66bb6a, #388e3c)"
-        }
+          image: "linear-gradient(135deg, #66bb6a, #388e3c)",
+        },
       ];
 
       // Filter state
@@ -925,7 +980,7 @@
         subcategory: [],
         brand: [],
         size: [],
-        maxPrice: 500
+        maxPrice: 500,
       };
 
       let filteredProducts = [...allProducts];
@@ -943,59 +998,73 @@
       // Setup event listeners
       function setupEventListeners() {
         // Filter checkboxes
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-          checkbox.addEventListener('change', handleFilterChange);
-        });
+        document
+          .querySelectorAll('input[type="checkbox"]')
+          .forEach((checkbox) => {
+            checkbox.addEventListener("change", handleFilterChange);
+          });
 
         // Price slider
-        document.getElementById('price-slider').addEventListener('input', handlePriceChange);
+        document
+          .getElementById("price-slider")
+          .addEventListener("input", handlePriceChange);
 
         // Sort dropdown
-        document.getElementById('sort').addEventListener('change', handleSortChange);
-        
+        document
+          .getElementById("sort")
+          .addEventListener("change", handleSortChange);
+
         // Category checkboxes specifically for updating subcategory visibility
-        document.getElementById('category-men').addEventListener('change', updateSubcategoryVisibility);
-        document.getElementById('category-women').addEventListener('change', updateSubcategoryVisibility);
+        document
+          .getElementById("category-men")
+          .addEventListener("change", updateSubcategoryVisibility);
+        document
+          .getElementById("category-women")
+          .addEventListener("change", updateSubcategoryVisibility);
       }
 
       // Update subcategory visibility based on selected categories
       function updateSubcategoryVisibility() {
-        const menChecked = document.getElementById('category-men').checked;
-        const womenChecked = document.getElementById('category-women').checked;
-        
-        const menSubcategories = document.getElementById('men-subcategories');
-        const womenSubcategories = document.getElementById('women-subcategories');
-        
+        const menChecked = document.getElementById("category-men").checked;
+        const womenChecked = document.getElementById("category-women").checked;
+
+        const menSubcategories = document.getElementById("men-subcategories");
+        const womenSubcategories = document.getElementById(
+          "women-subcategories"
+        );
+
         // Show/hide based on category selection
         if (menChecked && !womenChecked) {
-          menSubcategories.style.display = 'block';
-          womenSubcategories.style.display = 'none';
+          menSubcategories.style.display = "block";
+          womenSubcategories.style.display = "none";
         } else if (womenChecked && !menChecked) {
-          menSubcategories.style.display = 'none';
-          womenSubcategories.style.display = 'block';
+          menSubcategories.style.display = "none";
+          womenSubcategories.style.display = "block";
         } else {
           // Show both if both or none are selected
-          menSubcategories.style.display = 'block';
-          womenSubcategories.style.display = 'block';
+          menSubcategories.style.display = "block";
+          womenSubcategories.style.display = "block";
         }
       }
 
       // Handle filter changes
       function handleFilterChange(e) {
-        const [filterType, value] = e.target.id.split('-');
-        
+        const [filterType, value] = e.target.id.split("-");
+
         // Special handling for category changes
-        if (filterType === 'category') {
+        if (filterType === "category") {
           if (e.target.checked) {
             if (!filters[filterType].includes(value)) {
               filters[filterType].push(value);
             }
           } else {
-            filters[filterType] = filters[filterType].filter(item => item !== value);
+            filters[filterType] = filters[filterType].filter(
+              (item) => item !== value
+            );
           }
           // Update subcategory visibility when category changes
           updateSubcategoryVisibility();
-        } 
+        }
         // Standard handling for other filters
         else {
           if (e.target.checked) {
@@ -1003,7 +1072,9 @@
               filters[filterType].push(value);
             }
           } else {
-            filters[filterType] = filters[filterType].filter(item => item !== value);
+            filters[filterType] = filters[filterType].filter(
+              (item) => item !== value
+            );
           }
         }
 
@@ -1019,7 +1090,8 @@
 
       // Update price display
       function updatePriceDisplay() {
-        document.getElementById('max-price-display').textContent = filters.maxPrice;
+        document.getElementById("max-price-display").textContent =
+          filters.maxPrice;
       }
 
       // Handle sort change
@@ -1031,24 +1103,36 @@
 
       // Apply filters
       function applyFilters() {
-        filteredProducts = allProducts.filter(product => {
+        filteredProducts = allProducts.filter((product) => {
           // Category filter
-          if (filters.category.length > 0 && !filters.category.includes(product.category)) {
+          if (
+            filters.category.length > 0 &&
+            !filters.category.includes(product.category)
+          ) {
             return false;
           }
-          
+
           // SubCategory filter - only apply if subcategories are selected
-          if (filters.subcategory.length > 0 && !filters.subcategory.includes(product.subcategory)) {
+          if (
+            filters.subcategory.length > 0 &&
+            !filters.subcategory.includes(product.subcategory)
+          ) {
             return false;
           }
 
           // Brand filter
-          if (filters.brand.length > 0 && !filters.brand.includes(product.brand)) {
+          if (
+            filters.brand.length > 0 &&
+            !filters.brand.includes(product.brand)
+          ) {
             return false;
           }
 
           // Size filter
-          if (filters.size.length > 0 && !product.size.some(size => filters.size.includes(size))) {
+          if (
+            filters.size.length > 0 &&
+            !product.size.some((size) => filters.size.includes(size))
+          ) {
             return false;
           }
 
@@ -1068,13 +1152,13 @@
       // Sort products
       function sortProducts(sortValue) {
         switch (sortValue) {
-          case 'price-low':
+          case "price-low":
             filteredProducts.sort((a, b) => a.price - b.price);
             break;
-          case 'price-high':
+          case "price-high":
             filteredProducts.sort((a, b) => b.price - a.price);
             break;
-          case 'newest':
+          case "newest":
             filteredProducts.sort((a, b) => b.id - a.id);
             break;
           default:
@@ -1085,37 +1169,49 @@
 
       // Render products
       function renderProducts() {
-        const grid = document.getElementById('products-grid');
-        const noProducts = document.getElementById('no-products');
+        const grid = document.getElementById("products-grid");
+        const noProducts = document.getElementById("no-products");
 
         if (filteredProducts.length === 0) {
-          grid.style.display = 'none';
-          noProducts.style.display = 'block';
+          grid.style.display = "none";
+          noProducts.style.display = "block";
           return;
         }
 
-        grid.style.display = 'grid';
-        noProducts.style.display = 'none';
+        grid.style.display = "grid";
+        noProducts.style.display = "none";
 
         const startIndex = (currentPage - 1) * productsPerPage;
         const endIndex = startIndex + productsPerPage;
         const productsToShow = filteredProducts.slice(startIndex, endIndex);
 
-        grid.innerHTML = productsToShow.map(product => `
+        grid.innerHTML = productsToShow
+          .map(
+            (product) => `
           <div class="product-card">
             <div class="product-image" style="background: ${product.image}">
             </div>
             <div class="product-info">
               <div class="product-title">${product.title}</div>
-              <div class="product-category">${product.category} / ${product.subcategory}</div>
+              <div class="product-category">${product.category} / ${
+              product.subcategory
+            }</div>
               <div class="product-price">
                 <span class="current-price">$${product.price.toFixed(2)}</span>
-                ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                ${
+                  product.originalPrice
+                    ? `<span class="original-price">$${product.originalPrice.toFixed(
+                        2
+                      )}</span>`
+                    : ""
+                }
               </div>
              
             </div>
           </div>
-        `).join('');
+        `
+          )
+          .join("");
       }
 
       // Update results info
@@ -1123,75 +1219,98 @@
         const totalCount = filteredProducts.length;
         const startIndex = (currentPage - 1) * productsPerPage + 1;
         const endIndex = Math.min(currentPage * productsPerPage, totalCount);
-        
-        document.getElementById('showing-count').textContent = totalCount === 0 ? 0 : `${startIndex}-${endIndex}`;
-        document.getElementById('total-count').textContent = totalCount;
-        
+
+        document.getElementById("showing-count").textContent =
+          totalCount === 0 ? 0 : `${startIndex}-${endIndex}`;
+        document.getElementById("total-count").textContent = totalCount;
+
         updatePagination();
       }
 
       // Update pagination
       function updatePagination() {
-        const pagination = document.getElementById('pagination');
+        const pagination = document.getElementById("pagination");
         const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-        
+
         // Always show pagination, even for single page
-        pagination.style.display = totalPages > 1 ? 'flex' : 'none';
-        
-        let paginationHTML = `<button onclick="changePage('prev')" ${currentPage === 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>← Previous</button>`;
-        
+        pagination.style.display = totalPages > 1 ? "flex" : "none";
+
+        let paginationHTML = `<button onclick="changePage('prev')" ${
+          currentPage === 1
+            ? 'disabled style="opacity: 0.5; cursor: not-allowed;"'
+            : ""
+        }>← Previous</button>`;
+
         // Show page numbers with smart pagination
         if (totalPages <= 7) {
           // Show all pages if 7 or fewer
           for (let i = 1; i <= totalPages; i++) {
-            paginationHTML += `<button onclick="changePage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+            paginationHTML += `<button onclick="changePage(${i})" ${
+              i === currentPage ? 'class="active"' : ""
+            }>${i}</button>`;
           }
         } else {
           // Smart pagination for more than 7 pages
-          paginationHTML += `<button onclick="changePage(1)" ${1 === currentPage ? 'class="active"' : ''}>1</button>`;
-          
+          paginationHTML += `<button onclick="changePage(1)" ${
+            1 === currentPage ? 'class="active"' : ""
+          }>1</button>`;
+
           if (currentPage > 3) {
             paginationHTML += `<button disabled style="opacity: 0.5; cursor: not-allowed;">...</button>`;
           }
-          
+
           const startPage = Math.max(2, currentPage - 1);
           const endPage = Math.min(totalPages - 1, currentPage + 1);
-          
+
           for (let i = startPage; i <= endPage; i++) {
-            paginationHTML += `<button onclick="changePage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+            paginationHTML += `<button onclick="changePage(${i})" ${
+              i === currentPage ? 'class="active"' : ""
+            }>${i}</button>`;
           }
-          
+
           if (currentPage < totalPages - 2) {
             paginationHTML += `<button disabled style="opacity: 0.5; cursor: not-allowed;">...</button>`;
           }
-          
+
           if (totalPages > 1) {
-            paginationHTML += `<button onclick="changePage(${totalPages})" ${totalPages === currentPage ? 'class="active"' : ''}>${totalPages}</button>`;
+            paginationHTML += `<button onclick="changePage(${totalPages})" ${
+              totalPages === currentPage ? 'class="active"' : ""
+            }>${totalPages}</button>`;
           }
         }
-        
-        paginationHTML += `<button onclick="changePage('next')" ${currentPage === totalPages ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>Next →</button>`;
-        
+
+        paginationHTML += `<button onclick="changePage('next')" ${
+          currentPage === totalPages
+            ? 'disabled style="opacity: 0.5; cursor: not-allowed;"'
+            : ""
+        }>Next →</button>`;
+
         pagination.innerHTML = paginationHTML;
       }
 
       // Change page
       function changePage(page) {
         const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-        
-        if (page === 'prev' && currentPage > 1) {
+
+        if (page === "prev" && currentPage > 1) {
           currentPage--;
-        } else if (page === 'next' && currentPage < totalPages) {
+        } else if (page === "next" && currentPage < totalPages) {
           currentPage++;
-        } else if (typeof page === 'number' && page >= 1 && page <= totalPages) {
+        } else if (
+          typeof page === "number" &&
+          page >= 1 &&
+          page <= totalPages
+        ) {
           currentPage = page;
         }
-        
+
         renderProducts();
         updateResultsInfo();
-        
+
         // Scroll to top of products
-        document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+        document
+          .querySelector(".main-content")
+          .scrollIntoView({ behavior: "smooth" });
       }
 
       // Clear all filters
@@ -1204,14 +1323,16 @@
         filters.maxPrice = 500;
 
         // Uncheck all checkboxes
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document
+          .querySelectorAll('input[type="checkbox"]')
+          .forEach((cb) => (cb.checked = false));
 
         // Reset price slider
-        document.getElementById('price-slider').value = 500;
+        document.getElementById("price-slider").value = 500;
         updatePriceDisplay();
 
         // Reset sort
-        document.getElementById('sort').value = 'featured';
+        document.getElementById("sort").value = "featured";
 
         // Update subcategory visibility
         updateSubcategoryVisibility();
@@ -1222,24 +1343,28 @@
 
       // Mobile filter toggle
       function toggleFilters() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('filterOverlay');
-        
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("filterOverlay");
+
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+
         // Prevent body scroll when filters are open on mobile
-        if (sidebar.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
+        if (sidebar.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
         } else {
-          document.body.style.overflow = 'auto';
+          document.body.style.overflow = "auto";
         }
       }
 
       // Initialize everything when DOM is loaded
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         init();
       });
+
+      // const test = retrive.allProducts().products;
+      // console.log(test);
+      // displayall(test, "products-grid", "All products");
     </script>
   </body>
 </html>

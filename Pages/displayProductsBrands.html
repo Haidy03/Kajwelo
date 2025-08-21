@@ -24,32 +24,34 @@ import { Seller } from "../models/Seller.js";
 import { retrive } from "../models/Filteration.js";
 import { renderProducts } from "/cardGeneratot/card.js";
 
-
-const test=retrive.allProductsByBrand("FreshLooks");
-console.log(test);
-
-
 document.addEventListener("DOMContentLoaded", function () {
-    // Extract category from URL
+    // Extract brand from URL
     const urlParams = new URLSearchParams(window.location.search);
-let brandName = decodeURIComponent(urlParams.get('brand'));
-
+    let brandName = decodeURIComponent(urlParams.get('brand'));
 
     let productsArray = [];
-    let pageTitle = "brand's products";
+    let pageTitle = `${brandName}'s Products`;
 
-productsArray = retrive.allProductsByBrand(brandName).products;
-            pageTitle = "Products";
-            console.log(productsArray);
+    // Retrieve products for the given brand
+    const result = retrive.allProductsByBrand(brandName);
+    productsArray = result.products || []; 
 
-                renderProducts(productsArray, "productssection", pageTitle);
+    const productsSection = document.getElementById("productssection");
 
-
+    if (productsArray.length === 0) {
+        // Show message if no products found
+        productsSection.innerHTML = `
+            <div class="text-center my-5">
+              <br/> <br/>
+                <h3>No products found for <strong>${brandName}</strong>.</h3>
+                <p>Please check back later or explore other brands.</p>
+            </div>
+        `;
+    } else {
+        // Render products if available
+        renderProducts(productsArray, "productssection", pageTitle);
+    }
 });
-
-
-
-
 </script>
 
 

@@ -15,104 +15,55 @@
     <script type="module" src="../utils/logout.js"></script>
   </head>
   <body class="bg-light">
-    <div class="main-content d-flex">
-      <!-- Sidebar (unchanged) -->
-      <div class="sidebar-col min-vh-100">
-        <div class="sidebar-container bg-white border rounded">
-          <div class="sidebar-content">
-            <div class="list-group list-group-flush">
-              <a
-                onclick="location.href='/Pages/userProfile.html'"
-                class="list-group-item list-group-item-action d-flex align-items-center"
-              >
-                <i class="fa fa-user me-2"></i> My Kajwelo profile
-              </a>
-              <a
-                onclick="location.href='/Pages/ordersHistory.html'"
-                class="list-group-item list-group-item-action d-flex align-items-center"
-              >
-                <i class="fa fa-box me-3"></i> Orders
-              </a>
-              <div
-                class="d-flex align-items-center px-3 py-3 bg-secondary bg-opacity-25 fw-bold"
-              >
-                <i class="fa fa-envelope me-3"></i><span>Inbox</span>
-              </div>
-              <a
-                onclick="location.href='/cardGeneratot/wishlist.html'"
-                class="list-group-item list-group-item-action d-flex align-items-center"
-              >
-                <i class="fa fa-heart me-3"></i> Wishlist
-              </a>
-              <hr class="my-2" />
-              <a
-                href="/Pages/accountManage.html"
-                class="list-group-item list-group-item-action d-flex align-items-center"
-              >
-                Account Management
-              </a>
-              <br />
-              <a
-                href="/Pages/closeAccount.html"
-                class="list-group-item list-group-item-action d-flex align-items-center"
-              >
-                Close Account
-              </a>
-            </div>
+    <!-- Main content -->
+    <div class="content-col flex-grow-1">
+      <div class="account-section bg-white p-4 rounded min-vh-100">
+        <div class="container-fluid py-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Contact Us</h4>
           </div>
-        </div>
-      </div>
 
-      <!-- Main content -->
-      <div class="content-col flex-grow-1">
-        <div class="account-section bg-white p-4 rounded min-vh-100">
-          <div class="container-fluid py-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h4 class="mb-0">Inbox</h4>
+          <div class="row">
+            <!-- Admin list -->
+            <div class="col-3">
+              <div
+                class="list-group"
+                id="admin-list"
+                style="max-height: 60vh; overflow: auto"
+              >
+                <!-- Admin items injected here -->
+              </div>
             </div>
 
-            <div class="row">
-              <!-- Admin list -->
-              <div class="col-3">
-                <div
-                  class="list-group"
-                  id="admin-list"
-                  style="max-height: 60vh; overflow: auto"
-                >
-                  <!-- Admin items injected here -->
+            <!-- Chat area -->
+            <div class="col-9">
+              <div
+                class="chat-container d-flex flex-column border rounded p-3 bg-light"
+                style="height: 70vh"
+              >
+                <div id="chat-header" class="mb-2">
+                  <h5 id="chat-with" class="mb-0">
+                    Select an admin to open chat
+                  </h5>
                 </div>
-              </div>
 
-              <!-- Chat area -->
-              <div class="col-9">
                 <div
-                  class="chat-container d-flex flex-column border rounded p-3 bg-light"
-                  style="height: 70vh"
+                  id="chat-messages"
+                  class="flex-grow-1 overflow-auto mb-3 p-2 bg-white rounded border d-flex flex-column"
                 >
-                  <div id="chat-header" class="mb-2">
-                    <h5 id="chat-with" class="mb-0">
-                      Select an admin to open chat
-                    </h5>
-                  </div>
+                  <!-- messages injected here -->
+                </div>
 
-                  <div
-                    id="chat-messages"
-                    class="flex-grow-1 overflow-auto mb-3 p-2 bg-white rounded border d-flex flex-column"
-                  >
-                    <!-- messages injected here -->
-                  </div>
-
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      id="chat-input"
-                      class="form-control"
-                      placeholder="Type a message..."
-                    />
-                    <button class="btn btn-primary" id="send-btn">
-                      <i class="fa fa-paper-plane"></i>
-                    </button>
-                  </div>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    id="chat-input"
+                    class="form-control"
+                    placeholder="Type a message..."
+                  />
+                  <button class="btn btn-primary" id="send-btn">
+                    <i class="fa fa-paper-plane"></i>
+                  </button>
                 </div>
               </div>
             </div>
