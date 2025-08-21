@@ -6,6 +6,7 @@
     <title>Kajwelo - Orders</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="../JS/sellerOnly.js"></script>
     <style>
         * {
             margin: 0;
@@ -857,7 +858,7 @@
 
         
         <div>
-            <button class="sidebar-link">
+            <button class="sidebar-link" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
@@ -883,9 +884,9 @@
                 </button>
                 
                 <div class="user-profile">
-                    <div class="user-avatar">JS</div>
-                    <span>John Seller</span>
-                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-avatar"></div>
+                    <span></span>
+                   
                 </div>
             </div>
         </header>
@@ -1033,6 +1034,9 @@
         function gotoproducts(){
             window.location.href="SelleraAddProduct.html";
         }
+        function gotoOrders(){
+            window.location.href="sellerOrders.html";
+        }
         function gotoanalytics(){
             window.location.href="SellerAnalytics.html";
         }
@@ -1045,6 +1049,7 @@
         function gotoPending(){
             window.location.href="sellerPending.html";
         }
+        
         function gotoSettings(){
             window.location.href="SellerSettings.html";
         }
