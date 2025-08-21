@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products - Kajwelo</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: white;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #e9ecef;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #333;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #666;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #333;
+      }
+
+      .nav-icons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .nav-icons span {
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background 0.2s;
+      }
+
+      .nav-icons span:hover {
+        background: #f8f9fa;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+        min-height: calc(100vh - 120px);
+      }
+
+      .sidebar {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: fit-content;
+        position: sticky;
+        top: 120px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar h3 {
+        margin-bottom: 1.5rem;
+        color: #333;
+        font-size: 1.25rem;
+        text-align: center;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #6366f1;
+      }
+
+      .filter-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .filter-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .filter-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+        font-size: 1rem;
+      }
+
+      .filter-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .filter-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        padding: 0.25rem;
+        border-radius: 4px;
+      }
+
+      .filter-option:hover {
+        background: #f8f9fa;
+      }
+
+      .filter-option input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #6366f1;
+      }
+
+      .filter-option label {
+        cursor: pointer;
+        color: #666;
+        font-size: 0.95rem;
+        flex: 1;
+      }
+
+      .price-range {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .price-display {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .price-range-slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ecef;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .price-range-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #6366f1;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+
+      .price-range-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #6366f1;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+
+      .clear-filters {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.2s;
+        font-weight: 500;
+      }
+
+      .clear-filters:hover {
+        background: #e9ecef;
+        transform: translateY(-1px);
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-height: fit-content;
+      }
+
+      .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .page-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .results-info {
+        color: #666;
+        font-size: 0.95rem;
+        margin-top: 0.25rem;
+        display: none;
+      }
+
+      .sort-options {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .sort-select {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .product-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 1;
+      }
+
+      .badge-bestseller {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      }
+      .badge-new {
+        background: linear-gradient(135deg, #00d2d3, #01a3a4);
+      }
+      .badge-trending {
+        background: linear-gradient(135deg, #ffa726, #f57c00);
+      }
+      .badge-limited {
+        background: linear-gradient(135deg, #9c88ff, #8c7ae6);
+      }
+      .badge-sale {
+        background: linear-gradient(135deg, #ff9ff3, #f368e0);
+      }
+
+      .product-info {
+        padding: 1.5rem;
+      }
+
+      .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-category {
+        font-size: 0.9rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+      }
+
+      .product-price {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .current-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #e74c3c;
+      }
+
+      .original-price {
+        font-size: 1rem;
+        color: #999;
+        text-decoration: line-through;
+      }
+
+      .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .stars {
+        color: #ffc107;
+        font-size: 0.9rem;
+      }
+
+      .rating-count {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .mobile-filter-toggle {
+        display: none;
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        font-weight: 500;
+        width: 100%;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+        flex-wrap: wrap;
+      }
+
+      .pagination button {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        background: white;
+        color: #666;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 40px;
+      }
+
+      .pagination button:hover:not(.active) {
+        background: #f8f9fa;
+        transform: translateY(-1px);
+      }
+
+      .pagination button.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+      }
+
+      .pagination button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f8f9fa;
+        color: #999;
+      }
+
+      .pagination button[disabled]:hover {
+        background: #f8f9fa;
+        transform: none;
+      }
+
+      .no-products {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+      }
+
+      .no-products h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1200px) {
+        .container {
+          grid-template-columns: 260px 1fr;
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .container {
+          grid-template-columns: 240px 1fr;
+          padding: 1rem;
+        }
+
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+          padding: 1rem;
+        }
+
+        .sidebar {
+          position: fixed;
+          top: 0;
+          left: -100%;
+          height: 100vh;
+          z-index: 1000;
+          transition: left 0.3s ease;
+          overflow-y: auto;
+          width: 300px;
+          max-width: 80vw;
+        }
+
+        .sidebar.active {
+          left: 0;
+        }
+
+        .mobile-filter-toggle {
+          display: block;
+        }
+
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .content-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .sort-options {
+          width: 100%;
+          justify-content: space-between;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 0.5rem;
+        }
+
+        .main-content, .sidebar {
+          padding: 1rem;
+        }
+
+        .products-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .product-image {
+          height: 250px;
+        }
+
+        .pagination button {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Filter overlay for mobile */
+      .filter-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      .filter-overlay.active {
+        display: block;
+      }
+
+      /* Subcategory sections */
+      .subcategory-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .subcategory-section-title {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .subcategory-options {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="filter-overlay" id="filterOverlay" onclick="toggleFilters()"></div>
+ 
+    <div class="container" id="maincontainer">
+      <aside class="sidebar" id="sidebar">
+        <h3>Filters</h3>
+
+        <!-- Categories -->
+        <div class="filter-section">
+          <div class="filter-title">Category</div>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="category-men" value="men" />
+              <label for="category-men">Men</label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="category-women" value="women" />
+              <label for="category-women">Women</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub category filteration -->
+        <div class="filter-section">
+          <div class="filter-title">SubCategory</div>
+          <div class="subcategory-options">
+            <!-- Men's subcategories -->
+            <div id="men-subcategories" class="subcategory-section">
+              <div class="subcategory-section-title">Men</div>
+              <div class="filter-options">
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-suits" value="suits" />
+                  <label for="subcategory-suits">Suits</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-shirts" value="shirts" />
+                  <label for="subcategory-shirts">Shirts</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-trousers" value="trousers" />
+                  <label for="subcategory-trousers">Trousers</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-polo-shirts" value="polo shirts" />
+                  <label for="subcategory-polo-shirts">Polo Shirts</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-tshirts" value="t-shirts" />
+                  <label for="subcategory-tshirts">T-shirts</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-shorts" value="shorts" />
+                  <label for="subcategory-shorts">Shorts</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Women's subcategories -->
+            <div id="women-subcategories" class="subcategory-section">
+              <div class="subcategory-section-title">Women</div>
+              <div class="filter-options">
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-dresses" value="dresses" />
+                  <label for="subcategory-dresses">Dresses</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-skirts" value="skirts" />
+                  <label for="subcategory-skirts">Skirts</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-blouses" value="blouses" />
+                  <label for="subcategory-blouses">Blouses</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-cardigans" value="cardigans" />
+                  <label for="subcategory-cardigans">Cardigans</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-pants" value="pants" />
+                  <label for="subcategory-pants">Pants</label>
+                </div>
+                <div class="filter-option">
+                  <input type="checkbox" id="subcategory-sets" value="sets" />
+                  <label for="subcategory-sets">Sets</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brands Filter -->
+        <div class="filter-section">
+          <div class="filter-title">Brand</div>
+          <div class="filter-options" style="display: flex;flex-direction: row; gap: 2em;">
+            <div id="left">
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-nike" value="nike" />
+                    <label for="brand-nike">Nike</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-adidas" value="adidas" />
+                    <label for="brand-adidas">Adidas</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-zara" value="zara" />
+                    <label for="brand-zara">Zara</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-hm" value="h&m" />
+                    <label for="brand-hm">H&M</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-lc" value="lc" />
+                    <label for="brand-lc">Lc</label>
+                </div>
+            </div>
+            <div id="right">
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-defacto" value="defacto" />
+                    <label for="brand-defacto">Defacto</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-max" value="max" />
+                    <label for="brand-max">Max</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-prada" value="prada" />
+                    <label for="brand-prada">Prada</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-versace" value="versace" />
+                    <label for="brand-versace">Versace</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="brand-puma" value="puma" />
+                    <label for="brand-puma">Puma</label>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter for size -->
+        <div class="filter-section">
+          <div class="filter-title">Size</div>
+          <div class="filter-options" style="display: flex;flex-direction: row; gap: 2em;">
+            <div id="sizeleft">
+                <div class="filter-option">
+                    <input type="checkbox" id="size-xs" value="xs" />
+                    <label for="size-xs">XS</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="size-s" value="s" />
+                    <label for="size-s">S</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="size-m" value="m" />
+                    <label for="size-m">M</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="size-l" value="l" />
+                    <label for="size-l">L</label>
+                </div>
+            </div>
+            <div id="sizeright">
+                <div class="filter-option">
+                    <input type="checkbox" id="size-xl" value="xl" />
+                    <label for="size-xl">XL</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="size-xxl" value="xxl" />
+                    <label for="size-xxl">XXL</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="size-xxxl" value="xxxl" />
+                    <label for="size-xxxl">XXXL</label>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Price Range</div>
+          <div class="price-range">
+            <div class="price-display">
+              <span>$<span id="min-price-display">0</span></span>
+              <span>$<span id="max-price-display">500</span></span>
+            </div>
+            <input
+              type="range"
+              class="price-range-slider"
+              id="price-slider"
+              min="0"
+              max="500"
+              value="500"
+            />
+          </div>
+        </div>
+
+        <div class="clear-filters" onclick="clearAllFilters()">
+          Clear All Filters
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <button class="mobile-filter-toggle" onclick="toggleFilters()">
+          🔍 Show Filters
+        </button>
+
+        <div class="content-header">
+          <div>
+            <h1 class="page-title">All Products</h1>
+            <div class="results-info">Showing <span id="showing-count">8</span> of <span id="total-count">8</span> products</div>
+          </div>
+          <div class="sort-options">
+            <label for="sort">Sort by:</label>
+            <select class="sort-select" id="sort">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+          <!-- Products will be populated by JavaScript -->
+        </div>
+
+        <div class="no-products" id="no-products" style="display: none;">
+          <h3>No products found</h3>
+          <p>Try adjusting your filters to see more results.</p>
+        </div>
+
+        <div class="pagination" id="pagination">
+          <button onclick="changePage('prev')">← Previous</button>
+          <button class="active" onclick="changePage(1)">1</button>
+          <button onclick="changePage(2)">2</button>
+          <button onclick="changePage(3)">3</button>
+          <button onclick="changePage('next')">Next →</button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Sample product data
+      const allProducts = [
+        {
+          id: 1,
+          title: "Classic Denim Jacket",
+          category: "men",
+          subcategory: "suits",
+          brand: "prada",
+          size: ["s", "m", "l"],
+          color: "blue",
+          price: 89.99,
+          originalPrice: 129.99,
+          image: "linear-gradient(135deg, #667eea, #764ba2)"
+        },
+        {
+          id: 2,
+          title: "Elegant Summer Dress",
+          category: "women",
+          subcategory: "skirts",
+          brand: "h&m",
+          size: ["xs", "s", "m","xxxl"],
+          color: "pink",
+          price: 75.50,
+          image: "linear-gradient(135deg, #ffa726, #fb8c00)"
+        },
+        {
+          id: 3,
+          title: "Athletic Sneakers",
+          category: "women",
+          subcategory: "blouses",
+          brand: "nike",
+          size: ["s", "m", "l", "xl","xxl"],
+          color: "blue",
+          price: 120.00,
+          originalPrice: 160.00,
+          image: "linear-gradient(135deg, #42a5f5, #1976d2)"
+        },
+        {
+          id: 4,
+          title: "Designer Handbag",
+          category: "men",
+          subcategory: "shorts",
+          brand: "zara",
+          size: ["m","xxxl"],
+          color: "red",
+          price: 299.99,
+          image: "linear-gradient(135deg, #ec407a, #c2185b)"
+        },
+        {
+          id: 5,
+          title: "Casual T-Shirt",
+          category: "men",
+          subcategory: "shirts",
+          brand: "max",
+          size: ["xs", "s", "m", "l", "xl"],
+          color: "white",
+          price: 25.99,
+          originalPrice: 35.99,
+          image: "linear-gradient(135deg, #26a69a, #00695c)"
+        },
+        {
+          id: 6,
+          title: "Leather Boots",
+          category: "women",
+          subcategory: "pants",
+          brand: "nike",
+          size: ["m", "l", "xl"],
+          color: "black",
+          price: 189.99,
+          image: "linear-gradient(135deg, #9575cd, #7e57c2)"
+        },
+        {
+          id: 7,
+          title: "Winter Coat",
+          category: "men",
+          subcategory: "trousers",
+          brand: "adidas",
+          size: ["s", "m", "l","xxl"],
+          color: "black",
+          price: 159.99,
+          originalPrice: 199.99,
+          image: "linear-gradient(135deg, #ff7043, #d84315)"
+        },
+        {
+          id: 8,
+          title: "Running Shorts",
+          category: "women",
+          subcategory: "cardigans",
+          brand: "versace",
+          size: ["s", "m", "l", "xl"],
+          color: "blue",
+          price: 39.99,
+          image: "linear-gradient(135deg, #66bb6a, #388e3c)"
+        }
+      ];
+
+      // Filter state
+      const filters = {
+        category: [],
+        subcategory: [],
+        brand: [],
+        size: [],
+        maxPrice: 500
+      };
+
+      let filteredProducts = [...allProducts];
+      let currentPage = 1;
+      const productsPerPage = 4; // Reduced to show more pages
+
+      // Initialize the page
+      function init() {
+        renderProducts();
+        setupEventListeners();
+        updatePriceDisplay();
+        updateSubcategoryVisibility();
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Filter checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          checkbox.addEventListener('change', handleFilterChange);
+        });
+
+        // Price slider
+        document.getElementById('price-slider').addEventListener('input', handlePriceChange);
+
+        // Sort dropdown
+        document.getElementById('sort').addEventListener('change', handleSortChange);
+        
+        // Category checkboxes specifically for updating subcategory visibility
+        document.getElementById('category-men').addEventListener('change', updateSubcategoryVisibility);
+        document.getElementById('category-women').addEventListener('change', updateSubcategoryVisibility);
+      }
+
+      // Update subcategory visibility based on selected categories
+      function updateSubcategoryVisibility() {
+        const menChecked = document.getElementById('category-men').checked;
+        const womenChecked = document.getElementById('category-women').checked;
+        
+        const menSubcategories = document.getElementById('men-subcategories');
+        const womenSubcategories = document.getElementById('women-subcategories');
+        
+        // Show/hide based on category selection
+        if (menChecked && !womenChecked) {
+          menSubcategories.style.display = 'block';
+          womenSubcategories.style.display = 'none';
+        } else if (womenChecked && !menChecked) {
+          menSubcategories.style.display = 'none';
+          womenSubcategories.style.display = 'block';
+        } else {
+          // Show both if both or none are selected
+          menSubcategories.style.display = 'block';
+          womenSubcategories.style.display = 'block';
+        }
+      }
+
+      // Handle filter changes
+      function handleFilterChange(e) {
+        const [filterType, value] = e.target.id.split('-');
+        
+        // Special handling for category changes
+        if (filterType === 'category') {
+          if (e.target.checked) {
+            if (!filters[filterType].includes(value)) {
+              filters[filterType].push(value);
+            }
+          } else {
+            filters[filterType] = filters[filterType].filter(item => item !== value);
+          }
+          // Update subcategory visibility when category changes
+          updateSubcategoryVisibility();
+        } 
+        // Standard handling for other filters
+        else {
+          if (e.target.checked) {
+            if (!filters[filterType].includes(value)) {
+              filters[filterType].push(value);
+            }
+          } else {
+            filters[filterType] = filters[filterType].filter(item => item !== value);
+          }
+        }
+
+        applyFilters();
+      }
+
+      // Handle price change
+      function handlePriceChange(e) {
+        filters.maxPrice = parseInt(e.target.value);
+        updatePriceDisplay();
+        applyFilters();
+      }
+
+      // Update price display
+      function updatePriceDisplay() {
+        document.getElementById('max-price-display').textContent = filters.maxPrice;
+      }
+
+      // Handle sort change
+      function handleSortChange(e) {
+        const sortValue = e.target.value;
+        sortProducts(sortValue);
+        renderProducts();
+      }
+
+      // Apply filters
+      function applyFilters() {
+        filteredProducts = allProducts.filter(product => {
+          // Category filter
+          if (filters.category.length > 0 && !filters.category.includes(product.category)) {
+            return false;
+          }
+          
+          // SubCategory filter - only apply if subcategories are selected
+          if (filters.subcategory.length > 0 && !filters.subcategory.includes(product.subcategory)) {
+            return false;
+          }
+
+          // Brand filter
+          if (filters.brand.length > 0 && !filters.brand.includes(product.brand)) {
+            return false;
+          }
+
+          // Size filter
+          if (filters.size.length > 0 && !product.size.some(size => filters.size.includes(size))) {
+            return false;
+          }
+
+          // Price filter
+          if (product.price > filters.maxPrice) {
+            return false;
+          }
+
+          return true;
+        });
+
+        currentPage = 1;
+        renderProducts();
+        updateResultsInfo();
+      }
+
+      // Sort products
+      function sortProducts(sortValue) {
+        switch (sortValue) {
+          case 'price-low':
+            filteredProducts.sort((a, b) => a.price - b.price);
+            break;
+          case 'price-high':
+            filteredProducts.sort((a, b) => b.price - a.price);
+            break;
+          case 'newest':
+            filteredProducts.sort((a, b) => b.id - a.id);
+            break;
+          default:
+            // Featured - restore original order
+            filteredProducts = filteredProducts.sort((a, b) => a.id - b.id);
+        }
+      }
+
+      // Render products
+      function renderProducts() {
+        const grid = document.getElementById('products-grid');
+        const noProducts = document.getElementById('no-products');
+
+        if (filteredProducts.length === 0) {
+          grid.style.display = 'none';
+          noProducts.style.display = 'block';
+          return;
+        }
+
+        grid.style.display = 'grid';
+        noProducts.style.display = 'none';
+
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+        const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+        grid.innerHTML = productsToShow.map(product => `
+          <div class="product-card">
+            <div class="product-image" style="background: ${product.image}">
+            </div>
+            <div class="product-info">
+              <div class="product-title">${product.title}</div>
+              <div class="product-category">${product.category} / ${product.subcategory}</div>
+              <div class="product-price">
+                <span class="current-price">$${product.price.toFixed(2)}</span>
+                ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
+              </div>
+             
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Update results info
+      function updateResultsInfo() {
+        const totalCount = filteredProducts.length;
+        const startIndex = (currentPage - 1) * productsPerPage + 1;
+        const endIndex = Math.min(currentPage * productsPerPage, totalCount);
+        
+        document.getElementById('showing-count').textContent = totalCount === 0 ? 0 : `${startIndex}-${endIndex}`;
+        document.getElementById('total-count').textContent = totalCount;
+        
+        updatePagination();
+      }
+
+      // Update pagination
+      function updatePagination() {
+        const pagination = document.getElementById('pagination');
+        const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+        
+        // Always show pagination, even for single page
+        pagination.style.display = totalPages > 1 ? 'flex' : 'none';
+        
+        let paginationHTML = `<button onclick="changePage('prev')" ${currentPage === 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>← Previous</button>`;
+        
+        // Show page numbers with smart pagination
+        if (totalPages <= 7) {
+          // Show all pages if 7 or fewer
+          for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `<button onclick="changePage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+          }
+        } else {
+          // Smart pagination for more than 7 pages
+          paginationHTML += `<button onclick="changePage(1)" ${1 === currentPage ? 'class="active"' : ''}>1</button>`;
+          
+          if (currentPage > 3) {
+            paginationHTML += `<button disabled style="opacity: 0.5; cursor: not-allowed;">...</button>`;
+          }
+          
+          const startPage = Math.max(2, currentPage - 1);
+          const endPage = Math.min(totalPages - 1, currentPage + 1);
+          
+          for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `<button onclick="changePage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+          }
+          
+          if (currentPage < totalPages - 2) {
+            paginationHTML += `<button disabled style="opacity: 0.5; cursor: not-allowed;">...</button>`;
+          }
+          
+          if (totalPages > 1) {
+            paginationHTML += `<button onclick="changePage(${totalPages})" ${totalPages === currentPage ? 'class="active"' : ''}>${totalPages}</button>`;
+          }
+        }
+        
+        paginationHTML += `<button onclick="changePage('next')" ${currentPage === totalPages ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>Next →</button>`;
+        
+        pagination.innerHTML = paginationHTML;
+      }
+
+      // Change page
+      function changePage(page) {
+        const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+        
+        if (page === 'prev' && currentPage > 1) {
+          currentPage--;
+        } else if (page === 'next' && currentPage < totalPages) {
+          currentPage++;
+        } else if (typeof page === 'number' && page >= 1 && page <= totalPages) {
+          currentPage = page;
+        }
+        
+        renderProducts();
+        updateResultsInfo();
+        
+        // Scroll to top of products
+        document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Clear all filters
+      function clearAllFilters() {
+        // Reset filter object
+        filters.category = [];
+        filters.subcategory = [];
+        filters.brand = [];
+        filters.size = [];
+        filters.maxPrice = 500;
+
+        // Uncheck all checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+        // Reset price slider
+        document.getElementById('price-slider').value = 500;
+        updatePriceDisplay();
+
+        // Reset sort
+        document.getElementById('sort').value = 'featured';
+
+        // Update subcategory visibility
+        updateSubcategoryVisibility();
+
+        // Apply filters
+        applyFilters();
+      }
+
+      // Mobile filter toggle
+      function toggleFilters() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('filterOverlay');
+        
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        
+        // Prevent body scroll when filters are open on mobile
+        if (sidebar.classList.contains('active')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = 'auto';
+        }
+      }
+
+      // Initialize everything when DOM is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        init();
+      });
+    </script>
+  </body>
+</html>
