@@ -65,7 +65,8 @@ export class Seeder {
         users = Storage.get("users", []);
         sellers = users.filter(u => u instanceof Seller);
         const categories = ["Men", "Women"];
-        const subcategories = ["Shirt", "Pants", "Hoodie", "Skirt", "Jacket", "Shoes"];
+        const menSubcategories = ["Suits", "Shirts", "Trousers", "Polo Shirts", "T-Shirts", "Shorts"];
+        const womenSubcategories = ["Dresses", "Skirts", "Blouses", "Cardigans", "Pants", "Sets"];
         const colors = ["black", "white", "blue", "red", "green", "gray"];
         const sizes = ["S", "M", "L", "XL"];
 
@@ -75,8 +76,11 @@ export class Seeder {
             Auth.login(seller.email, "Seller@123");
 
             for (let i = 0; i < 15; i++) {
-                const sub = subcategories[Math.floor(Math.random() * subcategories.length)];
+
                 const cat = categories[Math.floor(Math.random() * categories.length)];
+                let sub = "";
+                if (cat === "Men") sub = menSubcategories[Math.floor(Math.random() * menSubcategories.length)];
+                if (cat === "Women") sub = womenSubcategories[Math.floor(Math.random() * womenSubcategories.length)];
                 const name = `${cat} ${sub} #${productCount + 1}`;
                 const image = `https://source.unsplash.com/200x200/?clothes,${sub.toLowerCase()}`;
 

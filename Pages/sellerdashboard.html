@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="../css/sellerdashboard.css"> -->
+
     <script src="../js/sellerdashboard.js"></script>
     <script src="../js/sellerNavigation.js"></script>
     <style>
-         
         * {
             margin: 0;
             padding: 0;
@@ -47,7 +48,7 @@
             z-index: 1000;
             transition: left 0.3s ease-in-out;
             overflow-y: auto;
-            overflow-x:hidden;
+            overflow-x: hidden;
         }
 
         .sidebar.open {
@@ -74,7 +75,7 @@
 
         .sidebar-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-logo {
@@ -85,7 +86,7 @@
         }
 
         .sidebar-subtitle {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.875rem;
         }
 
@@ -98,7 +99,7 @@
             display: flex;
             align-items: center;
             padding: 0.875rem 1.5rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: all 0.2s ease;
             border: none;
@@ -109,7 +110,7 @@
 
         .sidebar-link:hover,
         .sidebar-link.active {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
             transform: translateX(5px);
         }
@@ -129,7 +130,7 @@
         /* Top Bar */
         .topbar {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -250,7 +251,7 @@
 
         .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             color: var(--primary-color);
             border-color: var(--primary-color);
         }
@@ -279,7 +280,7 @@
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
         }
 
@@ -304,10 +305,21 @@
             color: white;
         }
 
-        .stat-icon.sales { background: linear-gradient(135deg, #10b981, #059669); }
-        .stat-icon.orders { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .stat-icon.products { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .stat-icon.revenue { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .stat-icon.sales {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .stat-icon.orders {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .stat-icon.products {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-icon.revenue {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
 
         .stat-change {
             font-size: 0.875rem;
@@ -350,7 +362,7 @@
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .chart-title {
@@ -377,7 +389,7 @@
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .orders-header {
@@ -468,72 +480,72 @@
             .topbar {
                 padding: 0.75rem;
             }
-            
+
             .page-title {
                 font-size: 1.1rem;
             }
-            
+
             .dashboard-content {
                 padding: 1rem;
             }
-            
+
             .quick-actions {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
             }
-            
+
             .action-btn {
                 padding: 0.75rem 0.5rem;
                 font-size: 0.875rem;
                 flex-direction: column;
                 gap: 0.25rem;
             }
-            
+
             .action-btn i {
                 font-size: 1.2rem;
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
             }
-            
+
             .stat-card {
                 padding: 1rem;
             }
-            
+
             .stat-value {
                 font-size: 1.5rem;
             }
-            
+
             .stat-icon {
                 width: 40px;
                 height: 40px;
             }
-            
+
             .charts-section {
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
-            
+
             .chart-placeholder {
                 height: 150px;
             }
-            
+
             .orders-table th,
             .orders-table td {
                 padding: 0.5rem 0.25rem;
                 font-size: 0.875rem;
             }
-            
+
             .orders-table {
                 min-width: 500px;
             }
-            
+
             .user-profile span {
                 display: none;
             }
-            
+
             .notification-btn {
                 margin-right: 0.5rem;
             }
@@ -544,11 +556,11 @@
             .quick-actions {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .charts-section {
                 grid-template-columns: 1fr;
             }
@@ -559,11 +571,11 @@
             .quick-actions {
                 grid-template-columns: repeat(4, 1fr);
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .charts-section {
                 grid-template-columns: 2fr 1fr;
             }
@@ -575,19 +587,19 @@
                 left: 0;
                 position: fixed;
             }
-            
+
             .main-content {
                 margin-left: var(--sidebar-width);
             }
-            
+
             .menu-toggle {
                 display: none;
             }
-            
+
             .quick-actions {
                 grid-template-columns: repeat(4, 1fr);
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
@@ -598,15 +610,15 @@
             .dashboard-content {
                 padding: 2rem;
             }
-            
+
             .quick-actions {
                 margin-bottom: 2.5rem;
             }
-            
+
             .stats-grid {
                 margin-bottom: 2.5rem;
             }
-            
+
             .charts-section {
                 margin-bottom: 2.5rem;
             }
@@ -620,17 +632,37 @@
         }
 
         /* Utility Classes */
-        .text-center { text-align: center; }
-        .d-flex { display: flex; }
-        .align-items-center { align-items: center; }
-        .justify-content-between { justify-content: space-between; }
-        .gap-1 { gap: 1rem; }
-        .mb-1 { margin-bottom: 1rem; }
-        .mt-1 { margin-top: 1rem; }
+        .text-center {
+            text-align: center;
+        }
 
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .gap-1 {
+            gap: 1rem;
+        }
+
+        .mb-1 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-1 {
+            margin-top: 1rem;
+        }
     </style>
-  
+
 </head>
+
 <body>
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -641,7 +673,7 @@
             <div class="sidebar-logo">Kajwelo</div>
             <div class="sidebar-subtitle">Seller Portal</div>
         </div>
-        
+
         <ul class="sidebar-menu">
             <li>
                 <button class="sidebar-link active" id="DashBtn" onclick="gotodashboard()">
@@ -700,7 +732,7 @@
         </ul>
 
         <div>
-            <button class="sidebar-link">
+            <button class="sidebar-link" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
@@ -717,17 +749,17 @@
                 </button>
                 <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
             </div>
-            
+
             <div class="topbar-right">
                 <button class="notification-btn">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">5</span>
                 </button>
-                
+
                 <div class="user-profile">
-                    <div class="user-avatar">JS</div>
-                    <span>John Seller</span>
-                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-avatar"></div>
+                    <span></span>
+
                 </div>
             </div>
         </header>
@@ -818,7 +850,8 @@
 
                     <div class="chart-card">
                         <h3 class="chart-title">Top Categories</h3>
-                        <div class="chart-placeholder" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                        <div class="chart-placeholder"
+                            style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
                             <i class="fas fa-chart-pie" style="font-size: 3rem; opacity: 0.7;"></i>
                             <div class="mt-1">
                                 <div>Category Performance</div>
@@ -834,7 +867,7 @@
                         <h3 class="orders-title">Recent Orders</h3>
                         <button class="action-btn" onclick="gotoOrders()">View All</button>
                     </div>
-                    
+
                     <div class="table-container">
                         <table class="orders-table">
                             <thead>
@@ -909,87 +942,94 @@
 
             <!-- Other Sections -->
             <div id="products-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Products Management</h2>
                     <p style="color: #6b7280;">Product management interface would go here...</p>
                 </div>
             </div>
 
             <div id="orders-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Orders Management</h2>
                     <p style="color: #6b7280;">Orders management interface would go here...</p>
                 </div>
             </div>
 
             <div id="analytics-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Sales Analytics</h2>
                     <p style="color: #6b7280;">Analytics interface would go here...</p>
                 </div>
             </div>
 
             <div id="customers-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Customer Management</h2>
                     <p style="color: #6b7280;">Customer management interface would go here...</p>
                 </div>
             </div>
 
             <div id="inventory-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Inventory Management</h2>
                     <p style="color: #6b7280;">Inventory management interface would go here...</p>
                 </div>
             </div>
 
             <div id="reviews-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Reviews & Ratings</h2>
                     <p style="color: #6b7280;">Reviews management interface would go here...</p>
                 </div>
             </div>
 
             <div id="settings-section" class="content-section">
-                <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div
+                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Account Settings</h2>
                     <p style="color: #6b7280;">Settings interface would go here...</p>
                 </div>
             </div>
         </div>
     </main>
-
+    <script type="module" src="../JS/sellerOnly.js"></script>
     <script>
-         function gotodashboard(){
-            window.location.href="sellerdashboard.html";
+        function gotodashboard() {
+            window.location.href = "sellerdashboard.html";
         }
-        function gotoproducts(){
-            window.location.href="SelleraAddProduct.html";
+        function gotoproducts() {
+            window.location.href = "SelleraAddProduct.html";
         }
-        function gotoOrders(){
-            window.location.href="sellerOrders.html";
+        function gotoOrders() {
+            window.location.href = "sellerOrders.html";
         }
-        function gotoanalytics(){
-            window.location.href="SellerAnalytics.html";
+        function gotoanalytics() {
+            window.location.href = "SellerAnalytics.html";
         }
-        function gotoCustomers(){
-            window.location.href="sellerCustomers.html";
+        function gotoCustomers() {
+            window.location.href = "sellerCustomers.html";
         }
-        function gotoInventory(){
-            window.location.href="SellerInventory.html";
+        function gotoInventory() {
+            window.location.href = "SellerInventory.html";
         }
-        function gotoPending(){
-            window.location.href="sellerPending.html";
+        function gotoPending() {
+            window.location.href = "sellerPending.html";
         }
-        
-        function gotoSettings(){
-            window.location.href="SellerSettings.html";
+
+        function gotoSettings() {
+            window.location.href = "SellerSettings.html";
         }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
+
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
         }
@@ -999,19 +1039,19 @@
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
-            
+
             // Show selected section
             const targetSection = document.getElementById(sectionName + '-section');
             if (targetSection) {
                 targetSection.classList.add('active');
             }
-            
+
             // Update active link
             document.querySelectorAll('.sidebar-link').forEach(link => {
                 link.classList.remove('active');
             });
             event.target.classList.add('active');
-            
+
             // Update page title
             const titles = {
                 'dashboard': 'Dashboard Overview',
@@ -1023,9 +1063,9 @@
                 'reviews': 'Reviews & Ratings',
                 'settings': 'Account Settings'
             };
-            
+
             document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
-            
+
             // Close mobile sidebar
             if (window.innerWidth < 993) {
                 document.getElementById('sidebar').classList.remove('open');
@@ -1039,12 +1079,12 @@
             statValues.forEach(stat => {
                 const finalValue = stat.textContent;
                 stat.textContent = '0';
-                
+
                 let current = 0;
                 const target = parseInt(finalValue.replace(/[^0-9]/g, ''));
                 const increment = target / 50;
                 const prefix = finalValue.replace(/[0-9,]/g, '');
-                
+
                 const timer = setInterval(() => {
                     current += increment;
                     if (current >= target) {
@@ -1058,21 +1098,21 @@
         }
 
         // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             setTimeout(animateStats, 500);
-            
+
             // Set initial active section
             document.getElementById('dashboard-section').classList.add('active');
         });
 
         // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const sidebar = document.getElementById('sidebar');
             const menuToggle = document.querySelector('.menu-toggle');
             const overlay = document.getElementById('sidebarOverlay');
-            
-            if (window.innerWidth < 993 && 
-                !sidebar.contains(e.target) && 
+
+            if (window.innerWidth < 993 &&
+                !sidebar.contains(e.target) &&
                 !menuToggle.contains(e.target) &&
                 sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
@@ -1081,10 +1121,10 @@
         });
 
         // Handle window resize
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
+
             if (window.innerWidth >= 993) {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('active');
@@ -1093,7 +1133,7 @@
 
         // Add smooth scrolling for mobile navigation
         document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 if (window.innerWidth < 993) {
                     setTimeout(() => {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1104,13 +1144,13 @@
 
         // Add loading states for action buttons
         document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 if (!this.classList.contains('loading')) {
                     const originalContent = this.innerHTML;
                     this.classList.add('loading');
                     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Loading...</span>';
                     this.disabled = true;
-                    
+
                     setTimeout(() => {
                         this.innerHTML = originalContent;
                         this.disabled = false;
@@ -1122,12 +1162,12 @@
 
         // Add hover effects for stat cards
         document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function () {
                 this.style.transform = 'translateY(-4px)';
                 this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
             });
-            
-            card.addEventListener('mouseleave', function() {
+
+            card.addEventListener('mouseleave', function () {
                 this.style.transform = 'translateY(0)';
                 this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
             });
@@ -1137,11 +1177,11 @@
         let touchStartY = 0;
         let touchEndY = 0;
 
-        document.addEventListener('touchstart', function(e) {
+        document.addEventListener('touchstart', function (e) {
             touchStartY = e.changedTouches[0].screenY;
         });
 
-        document.addEventListener('touchend', function(e) {
+        document.addEventListener('touchend', function (e) {
             touchEndY = e.changedTouches[0].screenY;
             handleSwipe();
         });
@@ -1149,7 +1189,7 @@
         function handleSwipe() {
             const swipeThreshold = 50;
             const sidebar = document.getElementById('sidebar');
-            
+
             if (window.innerWidth < 993) {
                 // Swipe right to open sidebar
                 if (touchEndY - touchStartY > swipeThreshold && touchStartY < 100) {
@@ -1166,7 +1206,7 @@
 
         // Prevent zoom on double tap for better mobile experience
         let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
+        document.addEventListener('touchend', function (event) {
             const now = (new Date()).getTime();
             if (now - lastTouchEnd <= 300) {
                 event.preventDefault();
@@ -1175,4 +1215,5 @@
         }, false);
     </script>
 </body>
+
 </html>

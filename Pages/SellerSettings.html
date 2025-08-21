@@ -96,7 +96,7 @@
             <li><button class="sidebar-link" onclick="gotoInbox()"><i class="fa-solid fa-inbox"></i><span>Inbox</span></button></li>
         </ul>
         <div>
-            <button class="sidebar-link" onclick="handleLogout()">
+            <button class="sidebar-link" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
@@ -115,9 +115,8 @@
                     <span class="notification-badge" style="position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;">3</span>
                 </button>
                 <div class="user-profile">
-                    <div class="user-avatar" id="userAvatar">S</div>
-                    <span id="userNameTop">Seller</span>
-                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span id="userNameTop"></span>
                 </div>
             </div>
         </header>
@@ -230,8 +229,9 @@
     </main>
 
     <div id="toast" class="notification info"></div>
-
+    <script type="module" src="../JS/sellerOnly.js"></script>
     <script>
+
         function gotodashboard(){ window.location.href = "sellerdashboard.html"; }
         function gotoproducts(){ window.location.href = "SelleraAddProduct.html"; }
         function gotoOrders(){ window.location.href = "sellerOrders.html"; }
