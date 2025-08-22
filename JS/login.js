@@ -146,8 +146,20 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
         alert('Please fill in all required fields');
         return;
     }
+    
     const result = Auth.login(email, password);
-    if(!result.success) alert(result.message);
+    
+    if (!result.success) {
+        if (result.message === 'account_not_confirmed') {
+            // Show modal for unconfirmed account
+            showUnconfirmedModal(result.email, result.confirmCode);
+        } else {
+            // Show other error messages as alerts
+            alert(result.message);
+        }
+        return;
+    }
+    
     if (result.success) {
         const currentUser = Auth.getCurrentUser();
         if (currentUser instanceof Customer) {
@@ -163,7 +175,6 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
             alert(result.message)
             //window.location.href = "accessDeniedPage.html"
         }
-
     }
 });
 

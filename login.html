@@ -7,6 +7,116 @@
     <title>Kajwelo - Login & Signup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="./CSS/login.css">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .modal-message {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirm-code {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-btn-secondary {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .email-highlight {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
@@ -229,6 +339,29 @@
         </div>
     </div>
 
+    <!-- Unconfirmed Account Modal -->
+    <div class="modal-overlay" id="unconfirmedModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h3 class="modal-title">Account Not Confirmed</h3>
+            <p class="modal-message">
+                Your account for <span class="email-highlight" id="modalEmail"></span> has not been confirmed yet. 
+                Please check your email and enter the confirmation code below.
+            </p>
+            <div class="confirm-code" id="modalConfirmCode"></div>
+            <div class="modal-buttons">
+                <a href="confirm.html" class="modal-btn modal-btn-primary">
+                    <i class="fas fa-check me-2"></i>Confirm Account
+                </a>
+                <button class="modal-btn modal-btn-secondary" onclick="closeUnconfirmedModal()">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="./JS/login.js" type="module"> </script>
     <script>
         // Password toggle function
@@ -247,6 +380,27 @@
             }
         }
 
+        // Modal functions
+        function showUnconfirmedModal(email, confirmCode) {
+            document.getElementById('modalEmail').textContent = email;
+            document.getElementById('modalConfirmCode').textContent = confirmCode;
+            document.getElementById('unconfirmedModal').style.display = 'flex';
+        }
+
+        function closeUnconfirmedModal() {
+            document.getElementById('unconfirmedModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('unconfirmedModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUnconfirmedModal();
+            }
+        });
+
+        // Make functions globally available
+        window.showUnconfirmedModal = showUnconfirmedModal;
+        window.closeUnconfirmedModal = closeUnconfirmedModal;
     </script>
 </body>
 

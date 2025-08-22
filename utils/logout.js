@@ -36,39 +36,32 @@ document.addEventListener("DOMContentLoaded", () => {
     cartCount.style.display = "none";
     wishlistCount.style.display = "none";
     cartBtn.addEventListener("click", () => {
-      
+
       //alert("you must login/register to access cart..!")
     });
   } else {
+
     loginBtn.style.display = "none";
     logoutBtn.addEventListener("click", () => {
       Auth.logout()
     });
-    if (currentUser.cart.length == 0) {
-      cartCount.style.display = "none";
-    } else {
-      setInterval(() => {
-        currentUser = Auth.getCurrentUser();
-        if (currentUser.cart.length !== 0) {
-          cartCount.textContent = currentUser.cart.length;
-        }else{
-          cartCount.style.display = "none";
-        }
 
-      }, 100)
-    }
-    if (currentUser.wishlist.length == 0) {
-      wishlistCount.style.display = "none";
-    } else {
-      setInterval(() => {
-        currentUser = Auth.getCurrentUser();
-        if (currentUser.wishlist.length !== 0) {
-          wishlistCount.textContent = currentUser.wishlist.length;
-        }else{
-          wishlistCount.style.display = "none";
-        }
+    setInterval(() => {
+      currentUser = Auth.getCurrentUser();
+      if (currentUser.cart.length !== 0) {
+        cartCount.style.display = "block";
+        cartCount.textContent = currentUser.cart.length;
+      } else {
+        cartCount.style.display = "none";
+      }
+      if (currentUser.wishlist.length !== 0) {
+        wishlistCount.style.display = "block";
+        wishlistCount.textContent = currentUser.wishlist.length;
+      } else {
+        wishlistCount.style.display = "none";
+      }
 
-      }, 100)
-    }
+    }, 100)
+
   }
 });

@@ -55,6 +55,33 @@ export class retrive {
     };
   }
 
+  // Returns only products that are verified and visible to customers
+  static allVerifiedAndVisibleProducts() {
+    const users = Storage.get("users");
+    const sellers = users.filter((user) => user instanceof Seller);
+    let allProducts = [];
+
+    sellers.forEach((seller) => {
+      (seller.products || []).forEach((product) => {
+        allProducts.push(product);
+      });
+    });
+
+    // Keep product when isVerified is not explicitly false AND visibility is not explicitly false
+    allProducts = allProducts.filter(
+      (product) => product?.isVerified !== false && product?.visibility !== false
+    );
+
+    if (allProducts.length === 0)
+      return { success: false, message: "No Products Found", products: [] };
+
+    return {
+      success: true,
+      message: "Retrieved verified and visible products successfully",
+      products: allProducts,
+    };
+  }
+
   // false => customer || seller  show verified only --- true => admin show all
   static allProductsByCategory(cat, access = false) {
     const users = Storage.get("users");

@@ -1,525 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kajwelo - Fashion & Style</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="./css/Finalhomepage.css" />
 
-    <style></style>
-  </head>
-  <body>
-    <!-- Navigation
-    <nav class="custom-navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">Kajwelo</a>
-            
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#" class="nav-link">Home</a></li>
-                <li><a href="#" class="nav-link">Contact</a></li>
-                <li><a href="#" class="nav-link">Brands</a></li>
-            </ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kajwelo - Fashion & Style</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="./css/Finalhomepage.css" />
 
-             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search products...">
-                <button class="search-btn"><i class="fas fa-search"></i></button>
-            </div> 
-            
-            <div class="nav-icons">
-                <button class="icon-btn" title="Login" id="loginBtn"><i class="fas fa-user"></i></button>
-                <button class="icon-btn" title="Logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
-                <button class="icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>
-                <button class="icon-btn" title="Cart" id="cartBtn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cartCount">3</span>
-                </button>
-                <button class="mobile-menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-            </div>
+  <style>
+    .hero {
+      position: relative;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(1px);
+    }
+
+    .hero-content h2 {
+      font-weight: 700;
+      line-height: 1.4;
+      font-size: clamp(1.25rem, 2.5vw + 1rem, 2rem);
+      margin-bottom: 1rem;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+    }
+
+    @media (max-width: 576px) {
+      .hero {
+        min-height: 60vh;
+      }
+      .hero-content {
+        padding: 1.25rem 1rem;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+ 
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <!-- <h1>Your Window to Style</h1> -->
+      <h2>
+        Discover and compare fashion from the Egyptian top local
+        brands—effortlessly. Find your perfect style with Kajwelo.
+      </h2>
+
+      <button class="cta-btn">Explore Collection</button>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="section-header">
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">
+        All the latest fashion trends and must-have products for every style
+        preference.
+      </p>
+    </div>
+
+    <!-- Category Grid -->
+    <div class="category-grid">
+      <div class="category-card women">
+        <div class="category-content">
+          <h3 class="category-title">Women's Fashion</h3>
+          <p class="category-subtitle">
+            All the latest fashion trends and must-have products.
+          </p>
+          <button class="category-btn" onclick="location.href='/Pages/womenCollection.html'">
+            Shop Women
+          </button>
         </div>
-    </nav> -->
-
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-content">
-        <!-- <h1>Your Window to Style</h1> -->
-        <h2>
-          Discover and compare fashion from the Egyptian top local
-          brands—effortlessly. Find your perfect style with Kajwelo.
-        </h2>
-
-       
-
-        <!-- <div class="hero-search">
-          <div class="hero-search-container">
-            <input
-              type="text"
-              class="hero-search-input"
-              placeholder="Search for products, brands, styles..."
-            />
-            <button class="hero-search-btn">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div> -->
-
-        <button class="cta-btn">Explore Collection</button>
       </div>
-    </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
+      <div class="category-card men">
+        <div class="category-content">
+          <h3 class="category-title">Men's Fashion</h3>
+          <p class="category-subtitle">
+            Find the perfect t-shirt, your new go-to sneakers and more right
+            here.
+          </p>
+          <button class="category-btn" onclick="location.href='/Pages/MenCollection.html'">
+            Shop Men
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Best Sellers Section -->
+    <section class="best-sellers">
       <div class="section-header">
-        <h2 class="section-title">Shop by Category</h2>
+        <h2 class="section-title">Recent Products</h2>
         <p class="section-subtitle">
-          All the latest fashion trends and must-have products for every style
-          preference.
+          Discover our most popular items loved by fashion enthusiasts
+          worldwide.
         </p>
       </div>
 
-      <!-- Category Grid -->
-      <div class="category-grid">
-        <div class="category-card women">
-          <div class="category-content">
-            <h3 class="category-title">Women's Fashion</h3>
-            <p class="category-subtitle">
-              All the latest fashion trends and must-have products.
-            </p>
-            <button
-              class="category-btn"
-              onclick="location.href='/Pages/womenCollection.html'"
-            >
-              Shop Women
-            </button>
-          </div>
-        </div>
+      <!-- Change this line in your HTML -->
+      <div class="products-grid" id="productsGrid"></div>
+      
 
-        <div class="category-card men">
-          <div class="category-content">
-            <h3 class="category-title">Men's Fashion</h3>
-            <p class="category-subtitle">
-              Find the perfect t-shirt, your new go-to sneakers and more right
-              here.
-            </p>
-            <button
-              class="category-btn"
-              onclick="location.href='/Pages/MenCollection.html'"
-            >
-              Shop Men
-            </button>
-          </div>
-        </div>
+      <div class="section-cta">
+        <button class="view-all-btn" onclick="location.href='/Pages/viewAllProducts.html'">View All Products</button>
+      </div>
+    </section>
+    </div>
+    <!-- Featured Brands Section -->
+    <section class="featured-brands">
+      <div class="section-header">
+        <h2 class="section-title">Featured Brands</h2>
+        <p class="section-subtitle">
+          Shop from the world's most trusted fashion brands.
+        </p>
       </div>
 
-      <!-- Best Sellers Section -->
-      <section class="best-sellers">
-        <div class="section-header">
-          <h2 class="section-title">Recent Products</h2>
-          <p class="section-subtitle">
-            Discover our most popular items loved by fashion enthusiasts
-            worldwide.
-          </p>
-        </div>
-
-<!-- Change this line in your HTML -->
-<div class="products-grid" id="productsGrid"></div>
-        <!-- <div class="product-card">
-            <div class="product-image">
-              <div class="product-badge">Best Seller</div>
-              <div class="product-overlay">
-                <button class="quick-view-btn">Quick View</button>
-                <button class="wishlist-btn">♡</button>
-              </div>
-            </div>
-            <div class="product-info">
-              <h4 class="product-title">Classic Denim Jacket</h4>
-              <p class="product-brand">Premium Collection</p>
-              <div class="product-price">
-                <span class="current-price">$89.99</span>
-                <span class="old-price">$129.99</span>
-              </div>
-              <div class="product-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating-count">(128)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-image women-product">
-              <div class="product-badge new">New</div>
-              <div class="product-overlay">
-                <button class="quick-view-btn">Quick View</button>
-                <button class="wishlist-btn">♡</button>
-              </div>
-            </div>
-            <div class="product-info">
-              <h4 class="product-title">Elegant Summer Dress</h4>
-              <p class="product-brand">Fashion Forward</p>
-              <div class="product-price">
-                <span class="current-price">$75.50</span>
-              </div>
-              <div class="product-rating">
-                <span class="stars">★★★★☆</span>
-                <span class="rating-count">(96)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-image men-product">
-              <div class="product-badge trending">Trending</div>
-              <div class="product-overlay">
-                <button class="quick-view-btn">Quick View</button>
-                <button class="wishlist-btn">♡</button>
-              </div>
-            </div>
-            <div class="product-info">
-              <h4 class="product-title">Athletic Sneakers</h4>
-              <p class="product-brand">SportStyle</p>
-              <div class="product-price">
-                <span class="current-price">$120.00</span>
-                <span class="old-price">$160.00</span>
-              </div>
-              <div class="product-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating-count">(204)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-image women-product">
-              <div class="product-badge limited">Limited</div>
-              <div class="product-overlay">
-                <button class="quick-view-btn">Quick View</button>
-                <button class="wishlist-btn">♡</button>
-              </div>
-            </div>
-            <div class="product-info">
-              <h4 class="product-title">Designer Handbag</h4>
-              <p class="product-brand">Luxury Line</p>
-              <div class="product-price">
-                <span class="current-price">$299.99</span>
-              </div>
-              <div class="product-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating-count">(67)</span>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <div class="section-cta">
-          <button class="view-all-btn" onclick="location.href='/Pages/viewAllProducts.html'"
- >View All Products</button>
-        </div>
-      </section>
-</div>
-      <!-- Featured Brands Section -->
-      <section class="featured-brands">
-        <div class="section-header">
-          <h2 class="section-title">Featured Brands</h2>
-          <p class="section-subtitle">
-            Shop from the world's most trusted fashion brands.
-          </p>
-        </div>
-
-        <div class="brands-carousel">
-          <div class="brands-track">
-            <div class="brand-logo nike">NIKE</div>
-            <div class="brand-logo adidas">ADIDAS</div>
-            <div class="brand-logo zara">ZARA</div>
-            <div class="brand-logo hnm">H&M</div>
-            <div class="brand-logo gucci">GUCCI</div>
-            <div class="brand-logo prada">PRADA</div>
-            <div class="brand-logo versace">VERSACE</div>
-            <div class="brand-logo calvin">CALVIN<br />KLEIN</div>
-            <!-- Duplicate for seamless loop -->
-            <div class="brand-logo nike">NIKE</div>
-            <div class="brand-logo adidas">ADIDAS</div>
-            <div class="brand-logo zara">ZARA</div>
-            <div class="brand-logo hnm">H&M</div>
-            <div class="brand-logo gucci">GUCCI</div>
-            <div class="brand-logo prada">PRADA</div>
-            <div class="brand-logo versace">VERSACE</div>
-            <div class="brand-logo calvin">CALVIN<br />KLEIN</div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Features Section -->
-    <section class="features">
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🚚</div>
-          <h4 class="feature-title">Free Shipping</h4>
-          <p class="feature-desc">
-            Free shipping on orders over $50. Fast and reliable delivery
-            worldwide.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🔄</div>
-          <h4 class="feature-title">Easy Returns</h4>
-          <p class="feature-desc">
-            30-day return policy. Shop with confidence and return if not
-            satisfied.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">💎</div>
-          <h4 class="feature-title">Premium Quality</h4>
-          <p class="feature-desc">
-            Curated selection of high-quality products from trusted brands.
-          </p>
+      <div class="brands-carousel">
+        <div class="brands-track">
+          <div class="brand-logo nike">NIKE</div>
+          <div class="brand-logo adidas">ADIDAS</div>
+          <div class="brand-logo zara">ZARA</div>
+          <div class="brand-logo hnm">H&M</div>
+          <div class="brand-logo gucci">GUCCI</div>
+          <div class="brand-logo prada">PRADA</div>
+          <div class="brand-logo versace">VERSACE</div>
+          <div class="brand-logo calvin">CALVIN<br />KLEIN</div>
+          <!-- Duplicate for seamless loop -->
+          <div class="brand-logo nike">NIKE</div>
+          <div class="brand-logo adidas">ADIDAS</div>
+          <div class="brand-logo zara">ZARA</div>
+          <div class="brand-logo hnm">H&M</div>
+          <div class="brand-logo gucci">GUCCI</div>
+          <div class="brand-logo prada">PRADA</div>
+          <div class="brand-logo versace">VERSACE</div>
+          <div class="brand-logo calvin">CALVIN<br />KLEIN</div>
         </div>
       </div>
     </section>
+  </main>
 
-    <!-- Newsletter -->
-    <!-- <section class="newsletter">
-        <div class="newsletter-content">
-            <h3>Stay Updated</h3>
-            <p>Subscribe to receive updates about new products and exclusive deals.</p>
-            <div class="newsletter-form">
-                <input type="email" class="newsletter-input" placeholder="Enter your email">
-                <button class="newsletter-btn">Subscribe</button>
-            </div>
-        </div>
-    </section> -->
+  <!-- Features Section -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h4 class="feature-title">Free Shipping</h4>
+        <p class="feature-desc">
+          Free shipping on orders over $50. Fast and reliable delivery
+          worldwide.
+        </p>
+      </div>
 
-    <!-- Footer -->
-    <!-- <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#" class="footer-link">About Kajwelo</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact Us</a>
-            </div>
-            <div class="footer-copyright">
-                <p>&copy; 2025 Kajwelo. All rights reserved.</p>
-            </div>
-        </div>
-    </footer> -->
-    <script src="/utils/slider.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./utils/logout.js" type="module"></script>
-    <script type="module">
-      import { Auth } from "../utils/auth.js";
-      import { Storage } from "../utils/localStorageHelper.js";
-      import { Seller } from "../models/Seller.js";
-      import { retrive } from "../models/Filteration.js";
-      import { renderProducts as displayall } from "../cardGeneratot/card.js";
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h4 class="feature-title">Easy Returns</h4>
+        <p class="feature-desc">
+          30-day return policy. Shop with confidence and return if not
+          satisfied.
+        </p>
+      </div>
 
-      Auth.apply_Autherization();
-      function toggleMenu() {
-        const navMenu = document.getElementById("navMenu");
-        navMenu.classList.toggle("active");
+      <div class="feature-card">
+        <div class="feature-icon">💎</div>
+        <h4 class="feature-title">Premium Quality</h4>
+        <p class="feature-desc">
+          Curated selection of high-quality products from trusted brands.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script src="/utils/slider.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="module">
+    import { Auth } from "../utils/auth.js";
+    import { Storage } from "../utils/localStorageHelper.js";
+    import { Seller } from "../models/Seller.js";
+    import { retrive } from "../models/Filteration.js";
+    import { renderProducts as displayall } from "../cardGeneratot/card.js";
+
+    Auth.apply_Autherization();
+    function toggleMenu() {
+      const navMenu = document.getElementById("navMenu");
+      navMenu.classList.toggle("active");
+    }
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        document.getElementById("navMenu").classList.remove("active");
+      });
+    });
+
+    //////////////////////////////////////new
+
+    const recentproducts = retrive.allProducts().products.slice(0, 4);
+
+
+    displayall(recentproducts, "productsGrid", "");
+
+    ///////////////////////////
+
+    // Dynamically render brands carousel from sellers' brandName
+    (function renderBrandLogos() {
+      try {
+        const brandsTrack = document.querySelector('.brands-track');
+        if (!brandsTrack) return;
+
+        const users = Storage.get('users', []);
+        const sellers = users.filter(u => u instanceof Seller);
+        const uniqueBrandNames = Array.from(new Set(
+          sellers
+            .map(s => s?.brandName)
+            .filter(name => typeof name === 'string' && name.trim().length > 0)
+        ));
+
+        const brandItems = uniqueBrandNames.length > 0 ? uniqueBrandNames : ['Your Brand'];
+
+        // Randomly assign a class from existing theme classes for color/style
+        const styleClasses = ['nike','adidas','zara','hnm','gucci','prada','versace','calvin'];
+        const entries = brandItems.map(name => ({
+          name,
+          cls: styleClasses[Math.floor(Math.random() * styleClasses.length)]
+        }));
+
+        const escapeHtml = (s) => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const renderEntries = (arr) => arr
+          .map(({name, cls}) => `<div class="brand-logo ${cls}">${escapeHtml(name)}</div>`) 
+          .join('');
+
+        // Duplicate for seamless loop, preserving classes
+        brandsTrack.innerHTML = renderEntries(entries) + renderEntries(entries);
+      } catch (err) {
+        console.error('Failed to render brands carousel:', err);
       }
+    })();
 
-      // Close mobile menu when clicking on a link
-      document.querySelectorAll(".nav-link").forEach((link) => {
-        link.addEventListener("click", () => {
-          document.getElementById("navMenu").classList.remove("active");
-        });
+    // Close mobile menu when clicking outside
+    document.addEventListener("click", (e) => {
+      const navMenu = document.getElementById("navMenu");
+      const mobileBtn = document.querySelector(".mobile-menu-btn");
+
+      if (!navMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
+        navMenu.classList.remove("active");
+      }
+    });
+
+    // Add smooth scrolling for CTA button
+    document.querySelector(".cta-btn").addEventListener("click", () => {
+      document.querySelector(".main-content").scrollIntoView({
+        behavior: "smooth",
+      });
+    });
+
+    // Add cart animation
+    document
+      .querySelector('.icon-btn[title="Cart"]')
+      .addEventListener("click", function () {
+        this.style.transform = "scale(1.2)";
+        setTimeout(() => {
+          this.style.transform = "scale(1)";
+        }, 200);
       });
 
-      //////////////////////////////////////new
-      const recentproducts = [
-        {
-          id: "8088a5dc-22cc-4db5-9420-63d7e43ebe85",
-          sellerId: "cc258bf5-b48f-4649-b99e-efc4d9c05f2e",
-          name: "Women Cardigans #101",
-          description: "High quality cardigans for Women.",
-          price: 650,
-          image: "https://source.unsplash.com/200x200/?clothes,cardigans",
-          category: "Women",
-          subcategory: "Cardigans",
-          availableColors: ["black", "white", "blue"],
-          availableSizes: ["S", "M", "L"],
-          stock: [
-            { size: "M", color: "black", quantity: 10 },
-            { size: "L", color: "blue", quantity: 5 },
-          ],
-          tags: [],
-          isVerified: true,
-          visibility: false,
-          salePrice: null,
-          createdAt: "2025-08-21T15:52:25.921Z",
-          updatedAt: "2025-08-21T15:52:26.067Z",
-          class: "product",
-        },
 
-        {
-          id: "a8c3faa0-dfd4-4f25-9fcf-6129e7fb8ac7",
-          sellerId: "cc258bf5-b48f-4649-b99e-efc4d9c05f2e",
-          name: "Women Pants #102",
-          description: "High quality pants for Women.",
-          price: 590,
-          image: "https://source.unsplash.com/200x200/?clothes,pants",
-          category: "Women",
-          subcategory: "Pants",
-          availableColors: ["black", "white", "blue"],
-          availableSizes: ["S", "M", "L"],
-          stock: [
-            { size: "M", color: "black", quantity: 10 },
-            { size: "L", color: "blue", quantity: 5 },
-          ],
-          tags: [],
-          isVerified: true,
-          visibility: false,
-          salePrice: null,
-          createdAt: "2025-08-21T15:52:25.923Z",
-          updatedAt: "2025-08-21T15:52:26.069Z",
-          class: "product",
-        },
+  </script>
+  <script src="./utils/logout.js" type="module"></script>
+</body>
 
-        {
-          id: "5e28542a-4ac0-4dde-8cef-5bcedeb245d6",
-          sellerId: "cc258bf5-b48f-4649-b99e-efc4d9c05f2e",
-          name: "Men T-Shirts #104",
-          description: "High quality t-shirts for Men.",
-          price: 320,
-          image: "https://source.unsplash.com/200x200/?clothes,t-shirts",
-          category: "Men",
-          subcategory: "T-Shirts",
-          availableColors: ["black", "white", "blue"],
-          availableSizes: ["S", "M", "L"],
-          stock: [
-            { size: "M", color: "black", quantity: 10 },
-            { size: "L", color: "blue", quantity: 5 },
-          ],
-          tags: [],
-          isVerified: false,
-          visibility: false,
-          salePrice: null,
-          createdAt: "2025-08-21T15:52:25.926Z",
-          updatedAt: "2025-08-21T15:52:25.926Z",
-          class: "product",
-        },
-
-        {
-          id: "676aee67-d89a-49c1-8adf-0248ace6d274",
-          sellerId: "cc258bf5-b48f-4649-b99e-efc4d9c05f2e",
-          name: "Men Polo Shirts #105",
-          description: "High quality polo shirts for Men.",
-          price: 410,
-          image: "https://source.unsplash.com/200x200/?clothes,polo shirts",
-          category: "Men",
-          subcategory: "Polo Shirts",
-          availableColors: ["black", "white", "blue"],
-          availableSizes: ["S", "M", "L"],
-          stock: [
-            { size: "M", color: "black", quantity: 10 },
-            { size: "L", color: "blue", quantity: 5 },
-          ],
-          tags: [],
-          isVerified: false,
-          visibility: false,
-          salePrice: null,
-          createdAt: "2025-08-21T15:52:25.928Z",
-          updatedAt: "2025-08-21T15:52:25.928Z",
-          class: "product",
-        },
-      ];
-
-      displayall(recentproducts, "productsGrid", "");
-
-      ///////////////////////////
-
-      // Close mobile menu when clicking outside
-      document.addEventListener("click", (e) => {
-        const navMenu = document.getElementById("navMenu");
-        const mobileBtn = document.querySelector(".mobile-menu-btn");
-
-        if (!navMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
-          navMenu.classList.remove("active");
-        }
-      });
-
-      // Add smooth scrolling for CTA button
-      document.querySelector(".cta-btn").addEventListener("click", () => {
-        document.querySelector(".main-content").scrollIntoView({
-          behavior: "smooth",
-        });
-      });
-
-      // Add cart animation
-      document
-        .querySelector('.icon-btn[title="Cart"]')
-        .addEventListener("click", function () {
-          this.style.transform = "scale(1.2)";
-          setTimeout(() => {
-            this.style.transform = "scale(1)";
-          }, 200);
-        });
-
-      // Hero search functionality
-      document
-        .querySelector(".hero-search-btn")
-        .addEventListener("click", function () {
-          const searchTerm = document.querySelector(".hero-search-input").value;
-          if (searchTerm.trim()) {
-            alert(`Searching for: ${searchTerm}`);
-            // In real implementation, this would trigger actual search
-          }
-        });
-
-      document
-        .querySelector(".hero-search-input")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            const searchTerm = this.value;
-            if (searchTerm.trim()) {
-              alert(`Searching for: ${searchTerm}`);
-              // In real implementation, this would trigger actual search
-            }
-          }
-        });
-
-      // Search functionality
-      // document.querySelector('.search-btn').addEventListener('click', function() {
-      //     const searchTerm = document.querySelector('.search-input').value;
-      //     if (searchTerm.trim()) {
-      //         alert(`Searching for: ${searchTerm}`);
-      //         // In real implementation, this would trigger actual search
-      //     }
-      // });
-
-      // document.querySelector('.search-input').addEventListener('keypress', function(e) {
-      //     if (e.key === 'Enter') {
-      //         const searchTerm = this.value;
-      //         if (searchTerm.trim()) {
-      //             alert(`Searching for: ${searchTerm}`);
-      //             // In real implementation, this would trigger actual search
-      //         }
-      //     }
-      // });
-
-      // Newsletter form submission
-      document
-        .querySelector(".newsletter-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const email = this.querySelector(".newsletter-input").value;
-          if (email) {
-            alert("Thank you for subscribing!");
-            this.querySelector(".newsletter-input").value = "";
-          }
-        });
-    
-    </script>
-  </body>
 </html>

@@ -5,6 +5,14 @@ import { showModal } from "../utils/modalHelper.js"; // ✅ أضف الاستي�
 
 const form = document.getElementById("confirmForm");
 const codeInput = form.code;
+const email = Auth.getCurrentUser().email;
+const pendingConfirmUser = Storage.get("pendingConfirmUser", []);
+if (!pendingConfirmUser.includes(email)) {
+  showModal("No pending confirmation found", "warning", "Wait a minute!");
+  setTimeout(() => {
+    window.location.href = "FinalHomePage.html";
+  }, 1500);
+}
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -12,24 +20,19 @@ form.addEventListener("submit", function (e) {
   form.classList.add("was-validated");
 
   const code = codeInput.value.trim();
-  const email = Storage.get("pendingConfirmUser");
 
-  if (!email) {
-    showModal("No pending confirmation found", "warning", "Wait a minute!");
-    return;
-  }
 
   if (!form.checkValidity()) return;
 
   const result = Auth.confirmEmail(email, code);
-
+  console.log(result);
   if (result.success) {
     showModal("Email confirmed successfully!", "success", "Done");
-    let users=Storage.get("users", []);
+    let users = Storage.get("users", []);
     let password;
     users.forEach(user => {
       if (user.email === email) {
-         password = atob(user.password);
+        password = atob(user.password);
       }
     });
     Auth.login({ email, password });
@@ -38,8 +41,6 @@ form.addEventListener("submit", function (e) {
       window.location.href = "FinalHomePage.html";
     }, 1500); // وقت كافي لقراءة الرسالة
   } else {
-    codeInput.classList.remove("is-valid");
-    codeInput.classList.add("is-invalid");
-    codeInput.nextElementSibling.textContent = "Wrong confirmation code.";
+    document.querySelector(".invalid-feedback").textContent = "Wrong confirmation code.";
   }
 });

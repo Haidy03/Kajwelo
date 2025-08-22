@@ -1492,7 +1492,7 @@
                 showNotification('Please fill all required fields.', 'error');
                 return;
             }
-
+            
             if (editingProductId !== null) {
                 // Edit existing product
                 const index = pendingData.findIndex(p => p.id === editingProductId);
@@ -1718,7 +1718,7 @@
                 filteredData = filteredData.filter(p => p.id !== productId);
                 currentUser.removeProduct(productId)
                 renderPendingTable();
-                updateStats();
+                        updateStats();
                 showNotification('Product deleted successfully!', 'success');
             }
         }
