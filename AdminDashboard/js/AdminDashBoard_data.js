@@ -1,77 +1,271 @@
-// Sample data for different sections
-const dataStore = {
-    products: [
-        { id: 1, name: "Wireless Headphones", category: "Electronics", price: 99.99, stock: 45, status: "active", description: "High-quality wireless headphones with noise cancellation." },
-        { id: 2, name: "Smart Watch", category: "Electronics", price: 199.99, stock: 12, status: "active", description: "Latest smart watch with fitness tracking and notifications." },
-        { id: 3, name: "Cotton T-Shirt", category: "Clothing", price: 24.99, stock: 78, status: "active", description: "Comfortable 100% cotton t-shirt available in multiple colors." },
-        { id: 4, name: "Coffee Maker", category: "Home & Kitchen", price: 49.99, stock: 5, status: "low-stock", description: "Automatic drip coffee maker with programmable timer." },
-        { id: 5, name: "Bluetooth Speaker", category: "Electronics", price: 79.99, stock: 0, status: "inactive", description: "Portable Bluetooth speaker with 20-hour battery life." },
-        { id: 6, name: "Leather Wallet", category: "Accessories", price: 34.99, stock: 23, status: "active", description: "Genuine leather wallet with multiple card slots." },
-        { id: 7, name: "Yoga Mat", category: "Fitness", price: 29.99, stock: 34, status: "active", description: "Non-slip yoga mat with carrying strap." },
-        { id: 8, name: "Cookbook", category: "Books", price: 19.99, stock: 7, status: "low-stock", description: "Best-selling cookbook with 100+ recipes." },
-        { id: 9, name: "Desk Lamp", category: "Home & Kitchen", price: 39.99, stock: 15, status: "active", description: "Adjustable LED desk lamp with touch controls." },
-        { id: 10, name: "Backpack", category: "Accessories", price: 59.99, stock: 20, status: "active", description: "Durable backpack with laptop compartment." },
-        { id: 11, name: "Wireless Mouse", category: "Electronics", price: 29.99, stock: 42, status: "active", description: "Ergonomic wireless mouse with silent clicks." },
-        { id: 12, name: "Water Bottle", category: "Fitness", price: 14.99, stock: 3, status: "low-stock", description: "Insulated stainless steel water bottle." }
-    ],
-    categories: [
-        { id: 1, name: "Electronics", description: "Electronic devices and accessories", productCount: 45, status: "active" },
-        { id: 2, name: "Clothing", description: "Apparel and fashion items", productCount: 128, status: "active" },
-        { id: 3, name: "Home & Kitchen", description: "Home appliances and kitchenware", productCount: 76, status: "active" },
-        { id: 4, name: "Books", description: "Books and educational materials", productCount: 32, status: "active" },
-        { id: 5, name: "Toys", description: "Toys and games", productCount: 18, status: "inactive" }
-    ],
-    customers: [
-        { id: 1, name: "John Smith", email: "john@example.com", phone: "555-1234", orders: 5, totalSpent: 1245.99, status: "active" },
-        { id: 2, name: "Sarah Johnson", email: "sarah@example.com", phone: "555-5678", orders: 12, totalSpent: 3245.50, status: "active" },
-        { id: 3, name: "Michael Brown", email: "michael@example.com", phone: "555-9012", orders: 2, totalSpent: 199.99, status: "inactive" },
-        { id: 4, name: "Emily Davis", email: "emily@example.com", phone: "555-3456", orders: 8, totalSpent: 876.75, status: "active" }
-    ],
-    sales: [
-        { id: 1001, date: "2023-05-15", customer: "John Smith", amount: 199.99, status: "completed", items: 2 },
-        { id: 1002, date: "2023-05-16", customer: "Sarah Johnson", amount: 345.50, status: "completed", items: 3 },
-        { id: 1003, date: "2023-05-17", customer: "Michael Brown", amount: 99.99, status: "pending", items: 1 },
-        { id: 1004, date: "2023-05-18", customer: "Emily Davis", amount: 176.75, status: "completed", items: 4 }
-    ],
-    notifications: [
-        { id: 1, title: "New Order Received", message: "Order #1005 from David Wilson", date: "2023-05-20 09:30", status: "unread", type: "order" },
-        { id: 2, title: "Low Stock Alert", message: "Only 3 Water Bottles left in stock", date: "2023-05-20 08:15", status: "unread", type: "inventory" },
-        { id: 3, title: "System Update Available", message: "New version v2.3.1 is ready to install", date: "2023-05-19 16:45", status: "read", type: "system" },
-        { id: 4, title: "Payment Received", message: "Payment of $199.99 for Order #1001", date: "2023-05-19 14:20", status: "read", type: "payment" },
-        { id: 5, title: "Urgent: Server Maintenance", message: "Scheduled maintenance tonight at 2 AM", date: "2023-05-18 11:10", status: "unread", type: "urgent" }
-    ],
-    sellers: [
-        {
-            id: 1,
-            name: "Tech Gadgets Inc.",
-            email: "contact@techgadgets.com",
-            password: "tech123",
-            products: ["Wireless Headphones", "Smart Watch", "Bluetooth Speaker"],
-            categories: ["Electronics", "Accessories"],
-            status: "active"
-        },
-        {
-            id: 2,
-            name: "Fashion World",
-            email: "info@fashionworld.com",
-            password: "fashion456",
-            products: ["Cotton T-Shirt", "Leather Wallet"],
-            categories: ["Clothing", "Accessories"],
-            status: "active"
-        }
-    ]
-};
+// AdminDashBoard_data.js
+// LocalStorage-backed data layer for Admin Dashboard
+// Builds dataStore from project localStorage and preserves existing API surface used by other scripts.
 
-// Current state of the application
-const appState = {
-    currentSection: 'products',
+(function () {
+  // Helpers to safely read/write localStorage without external imports
+  function lsGet(key, def = null) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : def;
+    } catch (e) {
+      return def;
+    }
+  }
+  function lsSet(key, val) {
+    localStorage.setItem(key, JSON.stringify(val));
+  }
+
+  // Map Admin.adminLevel -> role label
+  function adminLevelToLabel(lvl) {
+    switch (lvl) {
+      case 3: return "master";
+      case 2: return "super";
+      case 1: return "product";
+      default: return "admin";
+    }
+  }
+
+  // Compute stock count from various shapes
+  function computeStockCount(p) {
+    // In project, Seller.products[].stock can be an array of { size, color, quantity }
+    // or a number. Support both.
+    if (Array.isArray(p?.stock)) {
+      return p.stock.reduce((sum, s) => sum + (Number(s.quantity) || 0), 0);
+    }
+    const n = Number(p?.stock);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function buildFromLocalStorage() {
+    const users = lsGet("users", []);
+    const currentUser = lsGet("loggedInUser", null);
+
+    // Partition users
+    const sellers = users.filter(u => (u.role || "").toLowerCase() === "seller");
+    const customers = users.filter(u => (u.role || "").toLowerCase() === "customer");
+    const admins = users.filter(u => (u.role || "").toLowerCase() === "admin" || (u.role || "") === "Admin");
+
+    // Flatten products from sellers
+    const products = [];
+
+    sellers.forEach(s => {
+      (s.products || []).forEach(p => {
+        const stock = computeStockCount(p);
+        let status = "active";
+        if (stock === 0) status = "inactive";
+        else if (stock > 0 && stock < 10) status = "low-stock";
+
+        products.push({
+          id: p.id,
+          name: p.name || "Unnamed Product",
+          category: p.category || "General",
+          subcategory: p.subcategory || "",
+          price: Number(p.price) || 0,
+          stock,
+          status, // UI stock/status
+          description: p.description || "",
+          sellerId: s.id,
+          isVerified: !!p.isVerified,
+        });
+      });
+    });
+
+    // Derive categories from products
+    const categoryMap = new Map();
+    products.forEach(p => {
+      const key = p.category || "General";
+      const prev = categoryMap.get(key) || 0;
+      categoryMap.set(key, prev + 1);
+    });
+    const categories = Array.from(categoryMap.entries()).map(([name, count], i) => ({
+      id: i + 1,
+      name,
+      productCount: count,
+      status: count > 0 ? "active" : "inactive",
+      description: `${name} category`,
+    }));
+
+    // Derive subcategories from products
+    const subcategoryMap = new Map();
+    products.forEach(p => {
+      const key = p.subcategory || "";
+      if (!key) return;
+      const prev = subcategoryMap.get(key) || 0;
+      subcategoryMap.set(key, prev + 1);
+    });
+    const subcategories = Array.from(subcategoryMap.entries()).map(([name, count], i) => ({
+      id: i + 1,
+      name,
+      productCount: count,
+      status: count > 0 ? "active" : "inactive",
+      description: `${name} subcategory`,
+    }));
+
+    // Sellers table light projection
+    const sellersTable = sellers.map(s => ({
+      id: s.id,
+      name: s.name || s.brandName || "Seller",
+      email: s.email,
+      phone: s.phone || "",
+      address: s.businessAddress || s.address || "",
+      status: s.isVerified ? "active" : "inactive",
+      joinDate: (s.createdAt ? new Date(s.createdAt).toISOString().slice(0, 10) : ""),
+      rating: Number(s.rating) || 4.5,
+    }));
+
+    // Customers table light projection
+    const customersTable = customers.map(c => ({
+      id: c.id,
+      name: c.name || "Customer",
+      email: c.email,
+      phone: c.phone || "",
+      orders: Array.isArray(c.orders) ? c.orders.length : (Number(c.orders) || 0),
+      totalSpent: Number(c.totalSpent) || 0,
+      status: c.isConfirmed ? "active" : "inactive",
+      joinDate: (c.createdAt ? new Date(c.createdAt).toISOString().slice(0, 10) : ""),
+    }));
+
+    // Admins table light projection
+    const adminsTable = admins.map(a => ({
+      id: a.id,
+      name: a.name || "Admin",
+      email: a.email,
+      role: adminLevelToLabel(Number(a.adminLevel) || 1),
+      password: "********", // hide actual stored value (may be encoded)
+      status: a.isConfirmed === false ? "inactive" : "active",
+      lastLogin: a.lastLogin || new Date().toISOString().slice(0, 10),
+    }));
+
+    // Verification requests derived from unverified sellers/products
+    let vrId = 1;
+    const verificationRequests = [];
+
+    sellers.forEach(s => {
+      if (!s.isVerified) {
+        verificationRequests.push({
+          id: vrId++,
+          title: "Seller Verification",
+          message: `Seller ${s.name || s.brandName || s.email} requests verification`,
+          date: new Date().toISOString().slice(0, 10),
+          status: "unverified",
+          type: "seller",
+          entityId: s.id,
+        });
+      }
+    });
+
+    products.forEach(p => {
+      if (!p.isVerified) {
+        verificationRequests.push({
+          id: vrId++,
+          title: "Product Verification",
+          message: `Product ${p.name} needs verification`,
+          date: new Date().toISOString().slice(0, 10),
+          status: "unverified",
+          type: "product",
+          entityId: p.id,
+          sellerId: p.sellerId,
+        });
+      }
+    });
+
+    // Inbox placeholder: try to read per-admin inbox if exists
+    const inboxKey = currentUser ? `adminInbox_${currentUser.id}` : null;
+    const inbox = inboxKey ? lsGet(inboxKey, []) : [];
+
+    // Sales placeholder (not integrated with models here)
+    const sales = lsGet("sales", []);
+
+    const currentAdmin = currentUser && ((currentUser.role || "").toLowerCase() === "admin" || currentUser.role === "Admin")
+      ? {
+          id: currentUser.id,
+          name: currentUser.name,
+          email: currentUser.email,
+          password: "********",
+          adminLevel: Number(currentUser.adminLevel) || 1,
+        }
+      : null;
+
+    return {
+      products,
+      categories,
+      subcategories,
+      customers: customersTable,
+      sales,
+      verificationRequests,
+      inbox,
+      sellers: sellersTable,
+      admins: adminsTable,
+      currentAdmin,
+      dashboardStats: {},
+    };
+  }
+
+  // Initialize dataStore from LS; if empty users, fallback to previous static demo dataset
+  let dataStoreLS = buildFromLocalStorage();
+
+  // Keep compatibility with existing code
+  window.dataStore = dataStoreLS;
+
+  // Generate unique IDs for new items (within current section data)
+  window.generateId = function generateId(section) {
+    const arr = Array.isArray(window.dataStore?.[section]) ? window.dataStore[section] : [];
+    const existing = arr.map(it => Number(it.id) || 0);
+    const max = existing.length ? Math.max(...existing) : 0;
+    return max + 1;
+  };
+
+  // Helper function to get seller name by ID
+  window.getSellerNameById = function getSellerNameById(sellerId) {
+    const s = (window.dataStore?.sellers || []).find(s => s.id === sellerId);
+    return s ? (s.name || "Seller") : "Unknown Seller";
+  };
+
+  // Helper function to get seller by ID
+  window.getSellerById = function getSellerById(sellerId) {
+    return (window.dataStore?.sellers || []).find(s => s.id === sellerId) || null;
+  };
+
+  // Helper function to get products by seller ID
+  window.getProductsBySeller = function getProductsBySeller(sellerId) {
+    return (window.dataStore?.products || []).filter(p => p.sellerId === sellerId);
+  };
+
+  // Helper function to get categories by seller ID
+  window.getCategoriesBySeller = function getCategoriesBySeller(sellerId) {
+    const prods = window.getProductsBySeller(sellerId);
+    const set = new Set(prods.map(p => p.category || "General"));
+    return (window.dataStore?.categories || []).filter(c => set.has(c.name));
+  };
+
+  // Compute dashboard stats
+  window.calculateDashboardStats = function calculateDashboardStats() {
+    const ds = window.dataStore;
+    ds.dashboardStats = {
+      totalSellers: (ds.sellers || []).length,
+      totalCustomers: (ds.customers || []).length,
+      totalProducts: (ds.products || []).length,
+      totalCategories: (ds.categories || []).length,
+      recentOrders: (ds.sales || []).slice(0, 5),
+    };
+  };
+
+  // Initialize appState (unchanged API)
+  window.appState = {
+    currentSection: 'dashboard',
     currentFilter: 'all',
     currentSort: { field: 'name', direction: 'asc' },
     searchQuery: '',
     editingItem: null,
     currentPage: 1,
     itemsPerPage: 5,
-    unreadNotifications: 3,
+    unreadVerifications: (window.dataStore.verificationRequests || []).filter(r => r.status === 'unverified').length,
+    unreadMessages: (window.dataStore.inbox || []).filter(m => m.status === 'unread').length,
     selectedItems: new Set(),
-    selectAll: false
-};
+    selectAll: false,
+    isPasswordConfirmed: false,
+    filterBySeller: null,
+    currentMessageSeller: null,
+  };
+})();
