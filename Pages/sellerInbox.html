@@ -746,6 +746,7 @@
         let currentFilter = 'all';
         let activeChatId = null;
         let refreshTimer = null;
+        let initialMessageCount = 0; // Track initial message count when chat is opened
 
         // Initialize the page
         function initializePage() {
@@ -762,11 +763,15 @@
             initializeSearch();
             renderChats();
 
-            // periodic refresh for chats/messages
+            // periodic refresh for chats/messages (less frequent to avoid interrupting typing)
             if (refreshTimer) clearInterval(refreshTimer);
             refreshTimer = setInterval(() => {
-                refreshChats();
-            }, 3000);
+                // Only refresh if user is not actively typing
+                const messageInput = document.getElementById('messageInput');
+                if (!messageInput || !messageInput.matches(':focus')) {
+                    refreshChats();
+                }
+            }, 5000); // Increased to 5 seconds to be less intrusive
         }
 
         // Load chats data from current user
@@ -797,15 +802,52 @@
                 loadChatsData();
                 updateNotificationBadge();
                 renderChats();
-                // if an active chat is open, re-render its messages
+                
+                // if an active chat is open, only add new messages instead of re-rendering everything
                 if (activeChatId) {
                     const chat = getChatByParticipant(activeChatId);
                     if (chat) {
-                        renderChatView(chat);
+                        addNewMessagesToChat(chat);
                     }
                 }
             } catch (e) {
                 console.error('Refresh error:', e);
+            }
+        }
+
+        // Add only new messages to the chat view without re-rendering everything
+        function addNewMessagesToChat(chat) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            if (!messagesContainer) return;
+
+            const totalMessages = chat.messages.length;
+
+            // Only add messages that haven't been displayed yet
+            if (totalMessages > initialMessageCount) {
+                const newMessages = chat.messages.slice(initialMessageCount);
+                
+                newMessages.forEach(message => {
+                    const messageTime = formatMessageTime(message.sentAt);
+                    const messageClass = message.sender === currentUser.id ? 'sent' : 'received';
+                    
+                    const messageHTML = `
+                        <div class="message ${messageClass}">
+                            <div>${message.content}</div>
+                            <div class="message-time">${messageTime}</div>
+                        </div>
+                    `;
+                    messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+                });
+
+                // Update the initial message count
+                initialMessageCount = totalMessages;
+
+                // Scroll to bottom only if user is near the bottom
+                const container = messagesContainer;
+                const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
+                if (isNearBottom) {
+                    scrollToBottom();
+                }
             }
         }
 
@@ -1056,6 +1098,9 @@
             const messageInput = document.getElementById('messageInput');
             messageInput.addEventListener('input', autoResizeTextarea);
             
+            // Set initial message count for tracking new messages
+            initialMessageCount = chat.messages.length;
+            
             // Scroll to bottom
             scrollToBottom();
         }
@@ -1108,21 +1153,21 @@
                     renderChats();
 
                     // If this chat is currently open, add the message to the view without re-rendering everything
-                    // if (activeChatId === customerId) {
-                    //     const messagesContainer = document.getElementById('messagesContainer');
-                    //     console.log(messagesContainer);
-                    //     if (messagesContainer) {
-                    //         const messageTime = formatMessageTime(newMessage.sentAt);
-                    //         const messageHTML = `
-                    //             <div class="message sent">
-                    //                 <div>${newMessage.content}</div>
-                    //                 <div class="message-time">${messageTime}</div>
-                    //             </div>
-                    //         `;
-                    //         messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
-                    //         scrollToBottom();
-                    //     }
-                    // }
+                    if (activeChatId === customerId) {
+                        const messagesContainer = document.getElementById('messagesContainer');
+                        if (messagesContainer) {
+                            const messageTime = formatMessageTime(newMessage.sentAt);
+                            const messageHTML = `
+                                <div class="message sent">
+                                    <div>${newMessage.content}</div>
+                                    <div class="message-time">${messageTime}</div>
+                                </div>
+                            `;
+                            messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+                            initialMessageCount++; // Update the message count
+                            scrollToBottom();
+                        }
+                    }
                 }
 
                 updateNotificationBadge();

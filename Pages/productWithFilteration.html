@@ -395,7 +395,132 @@
         color: #333;
       }
 
-      /* Responsive Design */
+      /* Pagination Styles */
+      .pagination-container {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      .pagination {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .pagination-btn {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .pagination-btn:hover:not(:disabled) {
+        background: #4f46e5;
+        transform: translateY(-1px);
+      }
+
+      .pagination-btn:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .page-numbers {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .page-number {
+        background: white;
+        color: #6366f1;
+        border: 2px solid #6366f1;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        min-width: 40px;
+        text-align: center;
+      }
+
+      .page-number:hover {
+        background: #6366f1;
+        color: white;
+      }
+
+      .page-number.active {
+        background: #6366f1;
+        color: white;
+      }
+
+      .page-number.dots {
+        border: none;
+        cursor: default;
+        background: transparent;
+        color: #666;
+      }
+
+              .page-number.dots:hover {
+          background: transparent;
+          color: #666;
+        }
+
+        /* Responsive pagination */
+        @media (max-width: 768px) {
+          .pagination {
+            padding: 0.75rem 1rem;
+            gap: 0.25rem;
+          }
+
+          .pagination-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+          }
+
+          .page-number {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            min-width: 35px;
+          }
+
+          .page-numbers {
+            gap: 0.15rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .pagination {
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem;
+          }
+
+          .page-numbers {
+            order: 2;
+          }
+
+          .pagination-btn {
+            order: 1;
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        /* Responsive Design */
       @media (max-width: 1200px) {
         .container {
           grid-template-columns: 260px 1fr;
@@ -543,6 +668,7 @@
     </style>
   </head>
   <body>
+    
     <div
       class="filter-overlay"
       id="filterOverlay"
@@ -810,7 +936,6 @@
               <option value="featured">Featured</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest</option>
             </select>
           </div>
         </div>
@@ -824,6 +949,21 @@
           <p>Try adjusting your filters to see more results.</p>
         </div>
 
+        <!-- Pagination -->
+        <div class="pagination-container" id="pagination-container" style="display: none;">
+          <div class="pagination">
+            <button class="pagination-btn" id="prev-page" disabled>
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="page-numbers" id="page-numbers">
+              <!-- Page numbers will be generated here -->
+            </div>
+            <button class="pagination-btn" id="next-page">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
         
       </main>
     </div>
@@ -832,6 +972,7 @@
       import { Storage } from "../utils/localStorageHelper.js";
       import { Seller } from "../models/Seller.js";
       import { retrive } from "../models/Filteration.js";
+      import { Auth } from "../utils/auth.js";
       import { renderProducts as displayall } from "/cardGeneratot/card.js";
 
       // Load verified and visible products from storage
@@ -850,7 +991,7 @@
 
       let filteredProducts = [];
       let currentPage = 1;
-      const productsPerPage = null; // pagination disabled
+      const productsPerPage = 12; // Show 12 products per page
 
       // Initialize the page
       function init() {
@@ -1038,6 +1179,20 @@
         document
           .getElementById("category-women")
           .addEventListener("change", updateSubcategoryVisibility);
+
+        // Pagination buttons
+        document.getElementById("prev-page").addEventListener("click", () => {
+          if (currentPage > 1) {
+            changePage(currentPage - 1);
+          }
+        });
+
+        document.getElementById("next-page").addEventListener("click", () => {
+          const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+          if (currentPage < totalPages) {
+            changePage(currentPage + 1);
+          }
+        });
       }
 
       // Update subcategory visibility based on selected categories
@@ -1176,23 +1331,29 @@
       function renderProducts() {
         const grid = document.getElementById("products-grid");
         const noProducts = document.getElementById("no-products");
+        const paginationContainer = document.getElementById("pagination-container");
 
         if (filteredProducts.length === 0) {
           grid.style.display = "none";
           noProducts.style.display = "block";
+          paginationContainer.style.display = "none";
           return;
         }
 
         grid.style.display = "grid";
         noProducts.style.display = "none";
 
-        const productsToShow = filteredProducts;
+        // Calculate pagination
+        const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+        const productsToShow = filteredProducts.slice(startIndex, endIndex);
 
         grid.innerHTML = productsToShow
           .map(
             (product) => `
           <div class="product-card">
-            <div class="product-image" style="background: ${product.image}">
+            <div class="product-image" style="background: url(${product.image}) no-repeat center center; background-size: cover;">
               <div class="product-overlay">
                 <button class="quick-view-btn" data-product-id="${product.id}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
                 <button class="Addwishlist-btn wishlist-btn" data-product-id="${product.id}">♡</button>
@@ -1213,19 +1374,20 @@
         // Wire up Add to Cart buttons
         document.querySelectorAll('.quick-view-btn').forEach(btn => {
           btn.addEventListener('click', function (event) {
+            console.log("clicked");
             event.stopPropagation();
-            const productId = parseInt(this.dataset.productId, 10);
-            const product = productsToShow.find(p => p.id === productId);
+            const productId = this.dataset.productId
+            const product = allProducts.find(p => p.id === productId);
             if (!product) return;
 
-            let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            let loggedInUser = Auth.getCurrentUser();
             if (!loggedInUser) {
               alert('You need to log in to add to cart!');
               window.location.href = '/login.html';
               return;
             }
             if (!Array.isArray(loggedInUser.cart)) loggedInUser.cart = [];
-            loggedInUser.cart.push(product);
+            loggedInUser.addToCart(product);
             localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
 
             let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -1235,14 +1397,14 @@
               localStorage.setItem('users', JSON.stringify(users));
             }
 
-            alert(`${product.title} added to cart!`);
+            alert(`${product.name} added to cart!`);
           });
         });
 
         // Initialize wishlist buttons state and handlers
         document.querySelectorAll('.Addwishlist-btn').forEach(btn => {
-          const productId = parseInt(btn.dataset.productId, 10);
-          let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+          const productId =btn.dataset.productId
+          let loggedInUser = Auth.getCurrentUser();
           if (loggedInUser && Array.isArray(loggedInUser.wishlist)) {
             const isInWishlist = loggedInUser.wishlist.some(item => item.id === productId);
             if (isInWishlist) {
@@ -1253,10 +1415,10 @@
 
           btn.addEventListener('click', function (event) {
             event.stopPropagation();
-            const product = productsToShow.find(p => p.id === productId);
+            const product = allProducts.find(p => p.id === productId);
             if (!product) return;
 
-            let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            let loggedInUser = Auth.getCurrentUser();
             if (!loggedInUser) {
               alert('You need to log in to use wishlist!');
               window.location.href = '/login.html';
@@ -1266,7 +1428,7 @@
 
             const existingIndex = loggedInUser.wishlist.findIndex(item => item.id === productId);
             if (existingIndex === -1) {
-              loggedInUser.wishlist.push(product);
+              loggedInUser.addToWishlist(product);
               this.innerHTML = '❤';
               this.classList.add('active');
             } else {
@@ -1284,20 +1446,101 @@
             }
           });
         });
+
+        // Render pagination
+        renderPagination(totalPages);
       }
 
       // Update results info
       function updateResultsInfo() {
         const totalCount = filteredProducts.length;
-        document.getElementById("showing-count").textContent = totalCount;
+        const startIndex = (currentPage - 1) * productsPerPage + 1;
+        const endIndex = Math.min(currentPage * productsPerPage, totalCount);
+        
+        document.getElementById("showing-count").textContent = totalCount > 0 ? `${startIndex}-${endIndex}` : 0;
         document.getElementById("total-count").textContent = totalCount;
       }
 
-      // Update pagination
-      // Pagination removed
+      // Render pagination
+      function renderPagination(totalPages) {
+        const paginationContainer = document.getElementById("pagination-container");
+        const pageNumbersContainer = document.getElementById("page-numbers");
+        const prevBtn = document.getElementById("prev-page");
+        const nextBtn = document.getElementById("next-page");
+
+        if (totalPages <= 1) {
+          paginationContainer.style.display = "none";
+          return;
+        }
+
+        paginationContainer.style.display = "flex";
+
+        // Update prev/next buttons
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+
+        // Generate page numbers
+        let pageNumbersHTML = "";
+        const maxVisiblePages = 5;
+        
+        if (totalPages <= maxVisiblePages) {
+          // Show all pages if total is small
+          for (let i = 1; i <= totalPages; i++) {
+            pageNumbersHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+          }
+        } else {
+          // Show smart pagination with dots
+          if (currentPage <= 3) {
+            // Show first 3 pages + dots + last page
+            for (let i = 1; i <= 3; i++) {
+              pageNumbersHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+            pageNumbersHTML += `<span class="page-number dots">...</span>`;
+            pageNumbersHTML += `<button class="page-number" data-page="${totalPages}">${totalPages}</button>`;
+          } else if (currentPage >= totalPages - 2) {
+            // Show first page + dots + last 3 pages
+            pageNumbersHTML += `<button class="page-number" data-page="1">1</button>`;
+            pageNumbersHTML += `<span class="page-number dots">...</span>`;
+            for (let i = totalPages - 2; i <= totalPages; i++) {
+              pageNumbersHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+          } else {
+            // Show first page + dots + current page + dots + last page
+            pageNumbersHTML += `<button class="page-number" data-page="1">1</button>`;
+            pageNumbersHTML += `<span class="page-number dots">...</span>`;
+            for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+              pageNumbersHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+            pageNumbersHTML += `<span class="page-number dots">...</span>`;
+            pageNumbersHTML += `<button class="page-number" data-page="${totalPages}">${totalPages}</button>`;
+          }
+        }
+
+        pageNumbersContainer.innerHTML = pageNumbersHTML;
+
+        // Add event listeners to page numbers
+        pageNumbersContainer.querySelectorAll('.page-number:not(.dots)').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page);
+            changePage(page);
+          });
+        });
+      }
 
       // Change page
-      // changePage removed
+      function changePage(page) {
+        currentPage = page;
+        renderProducts();
+        updateResultsInfo();
+        
+        // Scroll to top of products section
+        document.getElementById("products-grid").scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+
+
 
       // Clear all filters
       function clearAllFilters() {
