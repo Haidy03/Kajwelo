@@ -300,6 +300,7 @@ class ProfessionalSlider {
     }
 }
 
+
 // Initialize the professional slider
 document.addEventListener('DOMContentLoaded', function() {
     const images = [
@@ -309,6 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "/images/slider4.jpg",
         "/images/slider5.jpg"
     ];
+
     
     const hero = document.querySelector(".hero");
     
