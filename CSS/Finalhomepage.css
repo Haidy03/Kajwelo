@@ -124,12 +124,30 @@ body {
 
 /* Hero Section */
 .hero {
-  margin-top: 70px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 80px 20px;
-  text-align: center;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: black;
+
+  background-size: cover;   /* or cover */
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 1s ease-in-out;
 }
+
+
+ /* Background slider container */
+  /* .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: no-repeat center/cover var(--bg-image);
+  z-index: -1;
+  transition: background-image 1s ease-in-out;
+  } */
 
 .hero-content {
   max-width: 800px;
