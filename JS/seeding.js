@@ -7,7 +7,9 @@ import { Customer } from "../models/Customer.js";
 import { Conversation } from "../models/Conversation.js";
 import { Message } from "../models/Message.js";
 import { User } from "../models/User.js";
-
+function encodeUnicode(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
 export class Seeder {
     static async run() {
         console.log("🚀 Starting Kajwelo Seeding Process...");
@@ -16,11 +18,11 @@ export class Seeder {
         // ---------- 1. CREATE 5 ADMINS ----------
         console.log("\n📋 Step 1: Creating 5 Admins...");
         const adminData = [
-            { name: "Abdullah Ragab", email: "abdullah@kajwelo.org", pass: "Admin@123", adminLevel: 3 },
-            { name: "Haidy Mohammed", email: "haidy@kajwelo.org", pass: "Admin@124", adminLevel: 1 },
-            { name: "Mohammed Mekkawi", email: "mekkawi@kajwelo.org", pass: "Admin@125", adminLevel: 1 },
-            { name: "Rahma Salah", email: "rahma@kajwelo.org", pass: "Admin@126", adminLevel: 2 },
-            { name: "Sohila Mohammed", email: "sohila@kajwelo.org", pass: "Admin@127", adminLevel: 2 },
+            { name: "Abdullah Ragab", email: "abdullah@kajwelo.org", pass: encodeUnicode("Admin@123"), adminLevel: 3 },
+            { name: "Haidy Mohammed", email: "haidy@kajwelo.org", pass: encodeUnicode("Admin@123"), adminLevel: 1 },
+            { name: "Mohammed Mekkawi", email: "mekkawi@kajwelo.org", pass: encodeUnicode("Admin@123"), adminLevel: 1 },
+            { name: "Rahma Salah", email: "rahma@kajwelo.org", pass: encodeUnicode("Admin@123"), adminLevel: 2 },
+            { name: "Sohila Mohammed", email: "sohila@kajwelo.org", pass: encodeUnicode("Admin@123"), adminLevel: 2 },
         ];
 
         const users = [];
@@ -33,7 +35,7 @@ export class Seeder {
         // ---------- 2. CREATE 10 SELLERS WITH MODERN BRAND NAMES ----------
         console.log("\n🏪 Step 2: Creating 10 Sellers with Modern Brand Names...");
         const modernBrandNames = [
-            "Nova", "Zenith", "Pulse", "Echo", "Vibe", 
+            "Nova", "Zenith", "Pulse", "Echo", "Vibe",
             "Flux", "Nexus", "Prism", "Orbit", "Spark"
         ];
 
@@ -41,9 +43,9 @@ export class Seeder {
             const seller = new Seller(
                 `${brand} Fashion`,
                 `${brand.toLowerCase()}@fashion.com`,
-                "Seller@123",
+                encodeUnicode("Seller@123"),
                 {
-                brandName: brand,
+                    brandName: brand,
                     address: `Cairo Fashion District ${i + 1}`,
                     phone: `0100${i}223344`,
                     targetAudience: i % 2 === 0 ? "Men" : "Women"
@@ -78,25 +80,25 @@ export class Seeder {
         ];
 
         const verifiedSellers = users.filter(u => u instanceof Seller && u.isVerified);
-        
+
         verifiedSellers.forEach((seller, sellerIndex) => {
             console.log(`Adding products for ${seller.brandName}...`);
-            
+
             for (let i = 0; i < 20; i++) {
                 const category = categories[Math.floor(Math.random() * categories.length)];
-                const subcategory = category === "Men" 
+                const subcategory = category === "Men"
                     ? menSubcategories[Math.floor(Math.random() * menSubcategories.length)]
                     : womenSubcategories[Math.floor(Math.random() * womenSubcategories.length)];
-                
+
                 const productName = `${seller.brandName} ${subcategory} ${i + 1}`;
                 const basePrice = Math.floor(Math.random() * 300) + 100;
                 const salePrice = Math.random() > 0.7 ? Math.floor(basePrice * 0.8) : null;
-                
+
                 // Generate stock variants
                 const availableColors = colors.slice(0, Math.floor(Math.random() * 4) + 2);
                 const availableSizes = sizes.slice(0, Math.floor(Math.random() * 3) + 2);
                 const stock = [];
-                
+
                 availableColors.forEach(color => {
                     availableSizes.forEach(size => {
                         stock.push({
@@ -165,11 +167,11 @@ export class Seeder {
             const customer = new Customer(
                 `Customer ${i + 1}`,
                 `customer${i + 1}@mail.com`,
-                "Cust@123",
+                encodeUnicode("Cust@123"),
                 {
-                gender: i % 2 === 0 ? "Male" : "Female",
-                address: `Customer Address ${i + 1}`,
-                phone: `0111${i}778899`
+                    gender: i % 2 === 0 ? "Male" : "Female",
+                    address: `Customer Address ${i + 1}`,
+                    phone: `0111${i}778899`
                 }
             );
             customer.isConfirmed = i < 7; // Confirm first 7 customers
@@ -179,7 +181,7 @@ export class Seeder {
         // ---------- 8. ADD PRODUCTS TO CUSTOMER CART/WISHLIST ----------
         console.log("\n🛒 Step 8: Adding Products to Customer Cart/Wishlist...");
         const customers = users.filter(u => u instanceof Customer);
-        
+
         // Get all visible products
         const allVisibleProducts = [];
         verifiedSellers.forEach(seller => {
@@ -193,7 +195,7 @@ export class Seeder {
         customers.forEach(customer => {
             const numProducts = Math.floor(Math.random() * 6); // 0-5 products
             const randomProducts = allVisibleProducts.sort(() => 0.5 - Math.random()).slice(0, numProducts);
-            
+
             randomProducts.forEach(product => {
                 // Randomly add to cart or wishlist
                 if (Math.random() > 0.5) {
@@ -234,7 +236,7 @@ export class Seeder {
                 updatedAt: new Date(),
                 class: "conversation"
             };
-            
+
             customer.chats.push(conversation);
             superAdmin.chats.push(conversation);
         });
@@ -263,7 +265,7 @@ export class Seeder {
                 updatedAt: new Date(),
                 class: "conversation"
             };
-            
+
             seller.chats.push(conversation);
             superAdmin.chats.push(conversation);
         });
@@ -274,28 +276,28 @@ export class Seeder {
 
         // ---------- 11. CREATE ORDERS THROUGH PROPER CHECKOUT PROCESS ----------
         console.log("\n📦 Step 11: Creating Orders Through Proper Checkout Process...");
-        
+
         // Get confirmed customers only
         const confirmedCustomers = customers.filter(c => c.isConfirmed);
-        
+
         // Pre-cache all valid products for faster access
         const validProductsCache = allVisibleProducts.map(product => ({
             ...product,
             availableVariants: product.stock.filter(variant => variant.quantity > 0)
         })).filter(product => product.availableVariants.length > 0);
-        
+
         console.log(`📊 Found ${validProductsCache.length} products with available stock`);
-        
+
         let totalOrdersCreated = 0;
         let totalEarningsGenerated = 0;
-        
+
         // Batch process orders for better performance
         const allOrders = [];
-        
+
         confirmedCustomers.forEach((customer, customerIndex) => {
             // Create 3-5 orders per customer
             const numOrders = Math.floor(Math.random() * 3) + 3; // 3-5 orders
-            
+
             for (let orderIndex = 0; orderIndex < numOrders; orderIndex++) {
                 // Create a new order using the Order class
                 const order = {
@@ -308,17 +310,17 @@ export class Seeder {
                     shippingFee: 0,
                     class: "order"
                 };
-                
+
                 // Add 1-3 products to the order
                 const numProducts = Math.floor(Math.random() * 3) + 1; // 1-3 products
                 const randomProducts = validProductsCache.sort(() => 0.5 - Math.random()).slice(0, numProducts);
-                
+
                 let productsAdded = 0;
                 randomProducts.forEach(product => {
                     if (product.availableVariants.length > 0) {
                         const randomVariant = product.availableVariants[Math.floor(Math.random() * product.availableVariants.length)];
                         const quantity = Math.floor(Math.random() * Math.min(3, randomVariant.quantity)) + 1;
-                        
+
                         // Directly add product to order (bypassing slow addProduct method)
                         order.products.push({
                             productId: product.id,
@@ -326,45 +328,45 @@ export class Seeder {
                             color: randomVariant.color,
                             quantity: quantity
                         });
-                        
+
                         // Update order total price
                         order.totalPrice += (product.price * quantity);
-                        
+
                         productsAdded++;
                     }
                 });
-                
+
                 // Only proceed with checkout if products were added successfully
                 if (productsAdded > 0) {
                     // Add order to customer's order history
                     customer.orderHistory.push(order);
-                    
+
                     // Store order for batch processing
                     allOrders.push({
                         order: order,
                         customer: customer
                     });
-                    
+
                     totalOrdersCreated++;
                     totalEarningsGenerated += order.totalPrice;
                 }
             }
-            
+
             // Show progress every 2 customers
             if ((customerIndex + 1) % 2 === 0 || customerIndex === confirmedCustomers.length - 1) {
                 console.log(`✅ Processed ${customerIndex + 1}/${confirmedCustomers.length} customers (${totalOrdersCreated} orders created)`);
             }
         });
-        
+
         // Batch process seller earnings and inventory updates
         console.log(`\n🔄 Processing seller earnings and inventory updates...`);
-        
+
         // Create a map for faster seller lookups
         const sellerMap = new Map();
         verifiedSellers.forEach(seller => {
             sellerMap.set(seller.id, seller);
         });
-        
+
         // Process all orders in batch
         allOrders.forEach(({ order, customer }) => {
             order.products.forEach(orderedProduct => {
@@ -375,7 +377,7 @@ export class Seeder {
                     if (seller) {
                         // Update seller earnings
                         seller.earnings += product.price * orderedProduct.quantity;
-                        
+
                         // Create seller order copy
                         const sellerOrder = {
                             orderId: order.orderId,
@@ -387,27 +389,27 @@ export class Seeder {
                             shippingFee: order.shippingFee,
                             class: "order"
                         };
-                        
+
                         // Add to seller's orders
                         seller.orders.push(sellerOrder);
-                        
+
                         // Update product inventory
                         const sellerProduct = seller.products.find(p => p.id === product.id);
                         if (sellerProduct) {
                             sellerProduct.stock.forEach(variant => {
                                 if (variant.size === orderedProduct.size && variant.color === orderedProduct.color) {
                                     variant.quantity -= orderedProduct.quantity;
-                                    
+
                                     // Remove variant if out of stock
                                     if (variant.quantity <= 0) {
-                                        sellerProduct.stock = sellerProduct.stock.filter(v => 
+                                        sellerProduct.stock = sellerProduct.stock.filter(v =>
                                             !(v.size === variant.size && v.color === variant.color)
                                         );
-                                        
+
                                         // Update available colors and sizes
                                         const remainingColors = [...new Set(sellerProduct.stock.map(v => v.color))];
                                         const remainingSizes = [...new Set(sellerProduct.stock.map(v => v.size))];
-                                        
+
                                         sellerProduct.availableColors = remainingColors;
                                         sellerProduct.availableSizes = remainingSizes;
                                     }
@@ -418,7 +420,7 @@ export class Seeder {
                 }
             });
         });
-        
+
         console.log(`\n🎉 Order Creation Complete!`);
         console.log(`📦 Total Orders: ${totalOrdersCreated}`);
         console.log(`💰 Total Revenue: EGP ${totalEarningsGenerated.toFixed(2)}`);
@@ -452,11 +454,11 @@ export class Seeder {
         console.log(`👨‍💼 Admins: ${users.filter(u => u instanceof Admin).length}`);
         console.log(`🏪 Sellers: ${users.filter(u => u instanceof Seller).length}`);
         console.log(`👥 Customers: ${users.filter(u => u instanceof Customer).length}`);
-        
+
         // Calculate total orders and earnings
         const totalOrders = customers.reduce((sum, c) => sum + (c.orderHistory?.length || 0), 0);
         const totalEarnings = sellers.reduce((sum, s) => sum + (s.earnings || 0), 0);
-        
+
         console.log(`📦 Total Orders Created: ${totalOrders}`);
         console.log(`💰 Total Seller Earnings: EGP ${totalEarnings.toFixed(2)}`);
 
