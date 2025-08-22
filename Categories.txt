@@ -22,3 +22,6 @@ Up-Fuse
 hushy wear
 astkegypt
 thegoodritual
+
+
+button sets this object to local storage => Storage.set("initialFilter",{"by":"brand","value":"Flux"}) => productWithFilter.html => runs filtered by brand name Flux
