@@ -2,7 +2,12 @@ export const navbar = `
 
     <nav class="custom-navbar">
         <div class="nav-container">
-            <a href="#" class="logo">Kajwelo</a>
+            <a href="/FinalHomePage.html" class="logo">
+                <div class="logo-fashion-forward">
+                    <div class="brand-name">KAJWELO</div>
+                    <div class="tagline">Fashion & Style</div>
+                </div>
+            </a>
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="/FinalHomePage.html" class="nav-link">Home</a></li>

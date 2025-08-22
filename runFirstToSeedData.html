@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kajwelo - Database Seeding</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <style>
+    /* Logo Styles */
+    .logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Fashion Forward Logo */
+    .logo .logo-fashion-forward {
+      text-align: center;
+    }
+
+    .logo .logo-fashion-forward .brand-name {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2, #ffa726, #ec407a);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 4s ease-in-out infinite;
+      letter-spacing: -0.03em;
+      margin-bottom: 2px;
+      line-height: 1;
+    }
+
+    .logo .logo-fashion-forward .tagline {
+      font-size: 0.6rem;
+      color: #666;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { 
+        background-position: 0% 50%; 
+      }
+      50% { 
+        background-position: 100% 50%; 
+      }
+    }
+
+    /* Responsive Logo */
+    @media (max-width: 768px) {
+      .logo .logo-fashion-forward .brand-name {
+        font-size: 1.5rem;
+      }
+      
+      .logo .logo-fashion-forward .tagline {
+        font-size: 0.5rem;
+        letter-spacing: 0.8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo .logo-fashion-forward .brand-name {
+        font-size: 1.3rem;
+      }
+      
+      .logo .logo-fashion-forward .tagline {
+        font-size: 0.45rem;
+        letter-spacing: 0.6px;
+      }
+    }
+
+    .hero {
+      position: relative;
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(1px);
+    }
+
+    .hero-content h2 {
+      font-weight: 700;
+      line-height: 1.4;
+      font-size: clamp(1.25rem, 2.5vw + 1rem, 2rem);
+      margin-bottom: 1rem;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+    }
+
+    .cta-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .progress-section {
+      background: #f8f9fa;
+      padding: 3rem 0;
+    }
+
+    .progress-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .progress-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .progress-icon.pending {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+
+    .progress-icon.running {
+      background: #007bff;
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+
+    .progress-icon.completed {
+      background: #28a745;
+      color: white;
+    }
+
+    .progress-icon.error {
+      background: #dc3545;
+      color: white;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .progress-title {
+      font-weight: 600;
+      margin: 0;
+      color: #333;
+    }
+
+    .progress-description {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e9ecef;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .console-output {
+      background: #1e1e1e;
+      color: #f8f8f2;
+      border-radius: 8px;
+      padding: 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+
+    .console-line {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .console-line.info { color: #61dafb; }
+    .console-line.success { color: #50fa7b; }
+    .console-line.warning { color: #ffb86c; }
+    .console-line.error { color: #ff5555; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-overlay .modal {
+      background: white !important;
+      border-radius: 12px !important;
+      padding: 2rem !important;
+      max-width: 500px !important;
+      width: 90% !important;
+      text-align: center !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+      animation: modalSlideIn 0.3s ease-out !important;
+      position: relative !important;
+      z-index: 10000 !important;
+      display: block !important;
+      border: none !important;
+      outline: none !important;
+      overflow: visible !important;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-overlay .modal-icon {
+      font-size: 3rem;
+      color: #28a745;
+      margin-bottom: 1rem;
+    }
+
+    .modal-overlay .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .modal-overlay .modal-message {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-overlay .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-overlay .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    .modal-overlay .modal-btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .modal-overlay .modal-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      color: white;
+    }
+
+    .modal-overlay .modal-btn-secondary {
+      background: #28a745;
+      color: white;
+    }
+
+    .modal-overlay .modal-btn-secondary:hover {
+      background: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      color: white;
+    }
+
+    @media (max-width: 576px) {
+      .hero {
+        min-height: 60vh;
+      }
+      .hero-content {
+        padding: 1.25rem 1rem;
+        border-radius: 12px;
+      }
+      .progress-card {
+        padding: 1.5rem;
+      }
+      .modal-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Kajwelo Database Seeding</h2>
+      <p class="mb-4" style="opacity:0.9;">
+        Initialize the e-commerce platform with sample data including admins, sellers, customers, products, and orders.
+      </p>
+      <button id="seedBtn" class="cta-btn">
+        <i class="fas fa-database me-2"></i>
+        Start Seeding Process
+      </button>
+    </div>
+  </section>
+
+  <!-- Progress Section -->
+  <section class="progress-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="progress-card">
+            <div class="progress-header">
+              <div class="progress-icon pending" id="progressIcon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h5 class="progress-title" id="progressTitle">Ready to Seed</h5>
+                <p class="progress-description" id="progressDescription">
+                  Click the button above to start the seeding process
+                </p>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <!-- Console Output -->
+          <div class="console-output" id="consoleOutput">
+            <div class="console-line info">🚀 Kajwelo Seeding Console</div>
+            <div class="console-line info">Ready to initialize database...</div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid" id="statsGrid" style="display: none;">
+            <div class="stat-card">
+              <div class="stat-number" id="totalUsers">0</div>
+              <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalAdmins">0</div>
+              <div class="stat-label">Admins</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalSellers">0</div>
+              <div class="stat-label">Sellers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalCustomers">0</div>
+              <div class="stat-label">Customers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalProducts">0</div>
+              <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalOrders">0</div>
+              <div class="stat-label">Orders</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Completion Modal -->
+  <div class="modal-overlay" id="completionModal">
+    <div class="modal">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3 class="modal-title">Seeding Completed Successfully!</h3>
+      <p class="modal-message">
+        Your Kajwelo e-commerce platform has been initialized with sample data. 
+        You can now log in with the created accounts or start shopping as a guest.
+      </p>
+      <div class="modal-buttons">
+        <a href="login.html" class="modal-btn modal-btn-primary">
+          <i class="fas fa-sign-in-alt me-2"></i>Login
+        </a>
+        <a href="FinalHomePage.html" class="modal-btn modal-btn-secondary">
+          <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="module">
+    import { Seeder } from "./JS/seeding.js";
+
+    class SeedingUI {
+      constructor() {
+        this.seedBtn = document.getElementById('seedBtn');
+        this.progressIcon = document.getElementById('progressIcon');
+        this.progressTitle = document.getElementById('progressTitle');
+        this.progressDescription = document.getElementById('progressDescription');
+        this.progressFill = document.getElementById('progressFill');
+        this.consoleOutput = document.getElementById('consoleOutput');
+        this.statsGrid = document.getElementById('statsGrid');
+        this.completionModal = document.getElementById('completionModal');
+        
+        this.steps = [
+          { title: "Creating Admins", description: "Setting up 5 admin accounts" },
+          { title: "Creating Sellers", description: "Setting up 10 seller accounts with modern brands" },
+          { title: "Verifying Brands", description: "Super admin verifying 8 brands" },
+          { title: "Adding Products", description: "Adding 20 products per verified brand" },
+          { title: "Verifying Products", description: "Verifying 15 products per seller" },
+          { title: "Managing Visibility", description: "Showing 12 products, hiding 3 per seller" },
+          { title: "Creating Customers", description: "Setting up 10 customer accounts" },
+          { title: "Confirming Accounts", description: "Confirming seller and customer accounts" },
+          { title: "Adding to Cart/Wishlist", description: "Adding random products to customer carts" },
+          { title: "Creating Orders", description: "Creating 5 orders per customer" },
+          { title: "Initiating Messages", description: "Setting up conversations between users" },
+          { title: "Finalizing", description: "Completing seeding process" }
+        ];
+        
+        this.currentStep = 0;
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.seedBtn.addEventListener('click', () => this.startSeeding());
+      }
+
+      async startSeeding() {
+        this.seedBtn.disabled = true;
+        this.seedBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Seeding...';
+        
+        // Override console.log to capture output
+        const originalLog = console.log;
+        const originalTable = console.table;
+        
+        console.log = (...args) => {
+          originalLog.apply(console, args);
+          this.addConsoleLine(args.join(' '), 'info');
+        };
+
+        console.table = (data) => {
+          originalTable.apply(console, [data]);
+          this.addConsoleLine('📊 Users table displayed in console', 'success');
+        };
+
+        try {
+          // Simulate loading with progress updates
+          await this.simulateSeedingProcess();
+          await Seeder.run();
+          this.completeSeeding();
+        } catch (error) {
+          this.handleError(error);
+        } finally {
+          // Restore console methods
+          console.log = originalLog;
+          console.table = originalTable;
+        }
+      }
+
+      async simulateSeedingProcess() {
+        // Simulate the seeding process with progress updates
+        for (let i = 0; i < this.steps.length; i++) {
+          this.updateProgress(i, true);
+          
+          // Simulate different step durations
+          const stepDuration = Math.random() * 1000 + 500; // 500-1500ms
+          await this.delay(stepDuration);
+          
+          this.updateProgress(i, false);
+          await this.delay(200); // Brief pause between steps
+        }
+      }
+
+      delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      updateProgress(stepIndex, isRunning = false) {
+        this.currentStep = stepIndex;
+        const progress = ((stepIndex + 1) / this.steps.length) * 100;
+        
+        this.progressFill.style.width = `${progress}%`;
+        
+        if (stepIndex < this.steps.length) {
+          const step = this.steps[stepIndex];
+          this.progressTitle.textContent = step.title;
+          this.progressDescription.textContent = step.description;
+          
+          if (isRunning) {
+            this.progressIcon.className = 'progress-icon running';
+            this.progressIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          } else {
+            this.progressIcon.className = 'progress-icon completed';
+            this.progressIcon.innerHTML = '<i class="fas fa-check"></i>';
+          }
+        }
+      }
+
+      addConsoleLine(message, type = 'info') {
+        const line = document.createElement('div');
+        line.className = `console-line ${type}`;
+        line.textContent = message;
+        this.consoleOutput.appendChild(line);
+        this.consoleOutput.scrollTop = this.consoleOutput.scrollHeight;
+      }
+
+      completeSeeding() {
+        this.updateProgress(this.steps.length - 1, false);
+        this.progressTitle.textContent = 'Seeding Completed!';
+        this.progressDescription.textContent = 'Database has been successfully seeded with sample data';
+        
+        this.seedBtn.innerHTML = '<i class="fas fa-check me-2"></i>Seeding Complete';
+        this.seedBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+        
+        this.addConsoleLine('🎉 Seeding completed successfully!', 'success');
+        this.showStats();
+        
+        // Show completion modal after a brief delay
+        setTimeout(() => {
+          this.showCompletionModal();
+        }, 1000);
+      }
+
+      showCompletionModal() {
+        if (this.completionModal) {
+          this.completionModal.style.display = 'flex';
+        }
+      }
+
+      handleError(error) {
+        this.progressIcon.className = 'progress-icon error';
+        this.progressIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        this.progressTitle.textContent = 'Seeding Failed';
+        this.progressDescription.textContent = 'An error occurred during the seeding process';
+        
+        this.seedBtn.innerHTML = '<i class="fas fa-redo me-2"></i>Try Again';
+        this.seedBtn.disabled = false;
+        
+        this.addConsoleLine(`❌ Error: ${error.message}`, 'error');
+      }
+
+      showStats() {
+        // Get stats from localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const admins = users.filter(u => u.role === 'Admin').length;
+        const sellers = users.filter(u => u.role === 'seller').length;
+        const customers = users.filter(u => u.role === 'customer').length;
+        
+        let totalProducts = 0;
+        let totalOrders = 0;
+        
+        users.forEach(user => {
+          if (user.role === 'seller' && user.products) {
+            totalProducts += user.products.length;
+          }
+          if (user.role === 'customer' && user.orderHistory) {
+            totalOrders += user.orderHistory.length;
+          }
+        });
+
+        document.getElementById('totalUsers').textContent = users.length;
+        document.getElementById('totalAdmins').textContent = admins;
+        document.getElementById('totalSellers').textContent = sellers;
+        document.getElementById('totalCustomers').textContent = customers;
+        document.getElementById('totalProducts').textContent = totalProducts;
+        document.getElementById('totalOrders').textContent = totalOrders;
+        
+        this.statsGrid.style.display = 'grid';
+      }
+    }
+
+    // Initialize the UI when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const seedingUI = new SeedingUI();
+      
+      // Add click handler to close modal when clicking outside
+      const completionModal = document.getElementById('completionModal');
+      if (completionModal) {
+        completionModal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            this.style.display = 'none';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

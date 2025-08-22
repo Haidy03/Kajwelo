@@ -35,6 +35,14 @@ export class Auth {
     }
 
     Storage.set("loggedInUser", foundUser);
+    if (!foundUser.isConfirmed) {
+      return { 
+        success: false, 
+        message: "account_not_confirmed", 
+        confirmCode: foundUser.confirmCode,
+        email: foundUser.email
+      };
+    }
 
     //console.log(foundUser)
     return { success: true, message: "LoggedIn Successfuly" };
@@ -97,7 +105,9 @@ export class Auth {
   static confirmEmail(email, code) {
     const users = Storage.get(USERS_KEY, []);
     let pendingConfirmUser = Storage.get("pendingConfirmUser", []);
+    //console.log(email);
     const index = users.findIndex((u) => u.email === email);
+    //console.log(index);
     if (index !== -1 && users[index].confirmCode === code) {
       users[index].isConfirmed = true;
       Storage.set(USERS_KEY, users);

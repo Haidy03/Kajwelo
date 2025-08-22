@@ -34,11 +34,46 @@ body {
 }
 
 .logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: #2c3e50;
   text-decoration: none;
-  letter-spacing: -1px;
+  display: flex;
+  align-items: center;
+}
+
+/* Fashion Forward Logo */
+.logo .logo-fashion-forward {
+  text-align: center;
+}
+
+.logo .logo-fashion-forward .brand-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2, #ffa726, #ec407a);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+  letter-spacing: -0.03em;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+
+.logo .logo-fashion-forward .tagline {
+  font-size: 0.6rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+@keyframes gradientShift {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
 }
 
 .nav-menu {
@@ -919,4 +954,27 @@ body {
 .best-sellers {
   padding: 80px 20px;
   background: #fff;
+}
+
+/* Responsive Logo */
+@media (max-width: 768px) {
+  .logo .logo-fashion-forward .brand-name {
+    font-size: 1.5rem;
+  }
+  
+  .logo .logo-fashion-forward .tagline {
+    font-size: 0.5rem;
+    letter-spacing: 0.8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo .logo-fashion-forward .brand-name {
+    font-size: 1.3rem;
+  }
+  
+  .logo .logo-fashion-forward .tagline {
+    font-size: 0.45rem;
+    letter-spacing: 0.6px;
+  }
 }
