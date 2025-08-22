@@ -7,7 +7,7 @@ window.addEventListener("load",function()
 {
     const addProductBtn=document.getElementById("addproductbtn");
     const AddProdBtn=document.getElementById("AddProdBtn");
-    const DashboardBtn=document.getElementById("DashboardBtn");
+    const DashboardBtn=document.getElementById("DashBtn");
 
     
 
