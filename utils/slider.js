@@ -1,6 +1,8 @@
 
     const images = ["/images/slider3.jpg", "/images/slider1.jpg", "/images/slider2.jpg","/images/slider4.jpg","/images/slider5.jpg"];
     let current = 0;
+
+    
     const hero = document.querySelector(".hero");
 
     // 👇 Set the first image immediately when page loads
