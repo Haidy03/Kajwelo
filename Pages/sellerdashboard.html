@@ -1168,20 +1168,20 @@
             const ctx = document.getElementById('categoryChart');
             if (!ctx) return;
 
-            // derive category totals from current user's orders' products
-            const categoryTotals = {};
+            // derive subcategory totals from current user's orders' products
+            const subcategoryTotals = {};
             const productById = new Map((currentUser?.products || []).map(p => [p.id, p]));
 
             (currentUser?.orders || []).forEach(order => {
                 (order.products || []).forEach(item => {
                     const prod = productById.get(item.productId);
-                    const cat = prod?.category || 'Other';
-                    categoryTotals[cat] = (categoryTotals[cat] || 0) + (item.quantity || 0);
+                    const subcat = prod?.subcategory || 'Other';
+                    subcategoryTotals[subcat] = (subcategoryTotals[subcat] || 0) + (item.quantity || 0);
                 });
             });
 
-            const labels = Object.keys(categoryTotals);
-            const data = Object.values(categoryTotals);
+            const labels = Object.keys(subcategoryTotals);
+            const data = Object.values(subcategoryTotals);
 
             new Chart(ctx, {
                 type: 'doughnut',

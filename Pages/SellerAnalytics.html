@@ -943,6 +943,7 @@
         import { Customer } from "../models/Customer.js";
         import { Order } from "../models/Order.js";
         import { Product } from "../models/Product.js";
+        import { retrive } from "../models/Filteration.js";
 
         // Global variables
         let currentUser = null;
@@ -974,8 +975,9 @@
                 // Load orders from current user
                 orders = currentUser.orders || [];
 
-                // Load products from current user
-                products = currentUser.products || [];
+                // Load all products from all sellers (not just current user's products)
+                const allProductsResult = retrive.allProducts();
+                products = allProductsResult.success ? allProductsResult.products : [];
 
                 // Load customers for additional analytics
                 const users = Storage.get("users", []);
@@ -1021,9 +1023,22 @@
             const topProduct = Object.entries(productSales)
                 .sort(([, a], [, b]) => b.revenue - a.revenue)[0];
             
-            const topProductName = topProduct ? 
-                products.find(p => p.id === topProduct[0])?.name || 'Unknown Product' : 
-                'No Sales';
+            let topProductName = 'No Sales';
+            if (topProduct) {
+                const foundProduct = products.find(p => p.id === topProduct[0]);
+                if (foundProduct) {
+                    topProductName = foundProduct.name;
+                } else {
+                    // Try to find product by string comparison (in case of type mismatch)
+                    const foundProductByString = products.find(p => String(p.id) === String(topProduct[0]));
+                    if (foundProductByString) {
+                        topProductName = foundProductByString.name;
+                    } else {
+                        console.warn(`Product with ID ${topProduct[0]} not found in products array. Available IDs:`, products.map(p => p.id));
+                        topProductName = `Product ${topProduct[0]}`;
+                    }
+                }
+            }
 
             // Update DOM elements
             document.getElementById('total-sales-value').innerText = `$${totalSales.toFixed(2)}`;
@@ -1048,11 +1063,12 @@
             }, new Set()).size;
             const avgCustomerValue = uniqueCustomers > 0 ? (orders.reduce((sum, order) => sum + order.totalPrice, 0) / uniqueCustomers).toFixed(2) : 0;
 
-            // Product Performance
-            const totalProducts = products.length;
-            const activeProducts = products.filter(product => product.isActive !== false).length;
-            const lowStockItems = products.filter(product => {
-                const totalStock = product.variants?.reduce((sum, variant) => sum + variant.quantity, 0) || 0;
+            // Product Performance - only count current user's products for these metrics
+            const currentUserProducts = currentUser.products || [];
+            const totalProducts = currentUserProducts.length;
+            const activeProducts = currentUserProducts.filter(product => product.isActive !== false).length;
+            const lowStockItems = currentUserProducts.filter(product => {
+                const totalStock = product.stock?.reduce((sum, variant) => sum + variant.quantity, 0) || 0;
                 return totalStock <= 5;
             }).length;
 
@@ -1177,7 +1193,17 @@
 
             const labels = topProducts.map(([productId]) => {
                 const product = products.find(p => p.id === productId);
-                return product ? product.name : `Product ${productId}`;
+                if (product) {
+                    return product.name;
+                } else {
+                    // Try to find product by string comparison (in case of type mismatch)
+                    const foundProductByString = products.find(p => String(p.id) === String(productId));
+                    if (foundProductByString) {
+                        return foundProductByString.name;
+                    } else {
+                        return `Product ${productId}`;
+                    }
+                }
             });
             const data = topProducts.map(([, sales]) => sales.quantity);
 

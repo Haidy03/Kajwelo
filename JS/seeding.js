@@ -4,7 +4,6 @@ import { Storage } from "../utils/localStorageHelper.js";
 import { Admin } from "../models/Admin.js";
 import { Seller } from "../models/Seller.js";
 import { Customer } from "../models/Customer.js";
-import { Order } from "../models/Order.js";
 import { Conversation } from "../models/Conversation.js";
 import { Message } from "../models/Message.js";
 import { User } from "../models/User.js";
@@ -13,7 +12,7 @@ export class Seeder {
     static async run() {
         console.log("🚀 Starting Kajwelo Seeding Process...");
         Storage.clear();
-        
+
         // ---------- 1. CREATE 5 ADMINS ----------
         console.log("\n📋 Step 1: Creating 5 Admins...");
         const adminData = [
@@ -44,7 +43,7 @@ export class Seeder {
                 `${brand.toLowerCase()}@fashion.com`,
                 "Seller@123",
                 {
-                    brandName: brand,
+                brandName: brand,
                     address: `Cairo Fashion District ${i + 1}`,
                     phone: `0100${i}223344`,
                     targetAudience: i % 2 === 0 ? "Men" : "Women"
@@ -168,9 +167,9 @@ export class Seeder {
                 `customer${i + 1}@mail.com`,
                 "Cust@123",
                 {
-                    gender: i % 2 === 0 ? "Male" : "Female",
-                    address: `Customer Address ${i + 1}`,
-                    phone: `0111${i}778899`
+                gender: i % 2 === 0 ? "Male" : "Female",
+                address: `Customer Address ${i + 1}`,
+                phone: `0111${i}778899`
                 }
             );
             customer.isConfirmed = i < 7; // Confirm first 7 customers
@@ -205,45 +204,8 @@ export class Seeder {
             });
         });
 
-        // ---------- 9. CREATE 5 ORDERS PER CUSTOMER ----------
-        console.log("\n📦 Step 9: Creating 5 Orders per Customer...");
-        customers.forEach(customer => {
-            for (let i = 0; i < 5; i++) {
-                const order = {
-                    orderId: crypto.randomUUID(),
-                    class: "Order",
-                    orderedAt: new Date(),
-                    products: [],
-                    shippingFee: 0,
-                    totalPrice: 0,
-                    customerId: customer.id,
-                    status: "waiting to be Checked Out"
-                };
-                
-                const numProducts = Math.floor(Math.random() * 3) + 1; // 1-3 products
-                const randomProducts = allVisibleProducts.sort(() => 0.5 - Math.random()).slice(0, numProducts);
-                
-                randomProducts.forEach(product => {
-                    const randomVariant = product.stock[Math.floor(Math.random() * product.stock.length)];
-                    if (randomVariant && randomVariant.quantity > 0) {
-                        order.products.push({
-                            productId: product.id,
-                            size: randomVariant.size,
-                            color: randomVariant.color,
-                            quantity: 1
-                        });
-                        order.totalPrice += product.price;
-                    }
-                });
-                
-                if (order.products.length > 0) {
-                    customer.orderHistory.push(order);
-                }
-            }
-        });
-
-        // ---------- 10. INITIATE MESSAGES BETWEEN USERS ----------
-        console.log("\n💬 Step 10: Initiating Messages Between Users...");
+        // ---------- 9. INITIATE MESSAGES BETWEEN USERS ----------
+        console.log("\n💬 Step 9: Initiating Messages Between Users...");
         const admins = users.filter(u => u instanceof Admin);
         const superAdmin = admins.find(a => a.adminLevel === 3);
 
@@ -306,12 +268,167 @@ export class Seeder {
             superAdmin.chats.push(conversation);
         });
 
-        // ---------- 11. SAVE ALL DATA TO LOCALSTORAGE ----------
-        console.log("\n💾 Step 11: Saving Data to LocalStorage...");
+        // ---------- 10. SAVE ALL DATA TO LOCALSTORAGE ----------
+        console.log("\n💾 Step 10: Saving Data to LocalStorage...");
         Storage.set("users", users);
 
-        // ---------- 12. PRINT USERS TABLE ----------
-        console.log("\n🚪 Step 12: Printing Users Table...");
+        // ---------- 11. CREATE ORDERS THROUGH PROPER CHECKOUT PROCESS ----------
+        console.log("\n📦 Step 11: Creating Orders Through Proper Checkout Process...");
+        
+        // Get confirmed customers only
+        const confirmedCustomers = customers.filter(c => c.isConfirmed);
+        
+        // Pre-cache all valid products for faster access
+        const validProductsCache = allVisibleProducts.map(product => ({
+            ...product,
+            availableVariants: product.stock.filter(variant => variant.quantity > 0)
+        })).filter(product => product.availableVariants.length > 0);
+        
+        console.log(`📊 Found ${validProductsCache.length} products with available stock`);
+        
+        let totalOrdersCreated = 0;
+        let totalEarningsGenerated = 0;
+        
+        // Batch process orders for better performance
+        const allOrders = [];
+        
+        confirmedCustomers.forEach((customer, customerIndex) => {
+            // Create 3-5 orders per customer
+            const numOrders = Math.floor(Math.random() * 3) + 3; // 3-5 orders
+            
+            for (let orderIndex = 0; orderIndex < numOrders; orderIndex++) {
+                // Create a new order using the Order class
+                const order = {
+                    orderId: crypto.randomUUID(),
+                    customerId: customer.id,
+                    products: [],
+                    totalPrice: 0,
+                    status: "Checked Out - Waiting to be Shipped",
+                    orderedAt: new Date(),
+                    shippingFee: 0,
+                    class: "order"
+                };
+                
+                // Add 1-3 products to the order
+                const numProducts = Math.floor(Math.random() * 3) + 1; // 1-3 products
+                const randomProducts = validProductsCache.sort(() => 0.5 - Math.random()).slice(0, numProducts);
+                
+                let productsAdded = 0;
+                randomProducts.forEach(product => {
+                    if (product.availableVariants.length > 0) {
+                        const randomVariant = product.availableVariants[Math.floor(Math.random() * product.availableVariants.length)];
+                        const quantity = Math.floor(Math.random() * Math.min(3, randomVariant.quantity)) + 1;
+                        
+                        // Directly add product to order (bypassing slow addProduct method)
+                        order.products.push({
+                            productId: product.id,
+                            size: randomVariant.size,
+                            color: randomVariant.color,
+                            quantity: quantity
+                        });
+                        
+                        // Update order total price
+                        order.totalPrice += (product.price * quantity);
+                        
+                        productsAdded++;
+                    }
+                });
+                
+                // Only proceed with checkout if products were added successfully
+                if (productsAdded > 0) {
+                    // Add order to customer's order history
+                    customer.orderHistory.push(order);
+                    
+                    // Store order for batch processing
+                    allOrders.push({
+                        order: order,
+                        customer: customer
+                    });
+                    
+                    totalOrdersCreated++;
+                    totalEarningsGenerated += order.totalPrice;
+                }
+            }
+            
+            // Show progress every 2 customers
+            if ((customerIndex + 1) % 2 === 0 || customerIndex === confirmedCustomers.length - 1) {
+                console.log(`✅ Processed ${customerIndex + 1}/${confirmedCustomers.length} customers (${totalOrdersCreated} orders created)`);
+            }
+        });
+        
+        // Batch process seller earnings and inventory updates
+        console.log(`\n🔄 Processing seller earnings and inventory updates...`);
+        
+        // Create a map for faster seller lookups
+        const sellerMap = new Map();
+        verifiedSellers.forEach(seller => {
+            sellerMap.set(seller.id, seller);
+        });
+        
+        // Process all orders in batch
+        allOrders.forEach(({ order, customer }) => {
+            order.products.forEach(orderedProduct => {
+                // Find the product and seller
+                const product = validProductsCache.find(p => p.id === orderedProduct.productId);
+                if (product) {
+                    const seller = sellerMap.get(product.sellerId);
+                    if (seller) {
+                        // Update seller earnings
+                        seller.earnings += product.price * orderedProduct.quantity;
+                        
+                        // Create seller order copy
+                        const sellerOrder = {
+                            orderId: order.orderId,
+                            customerId: customer.id,
+                            products: [...order.products],
+                            totalPrice: order.totalPrice,
+                            status: order.status,
+                            orderedAt: order.orderedAt,
+                            shippingFee: order.shippingFee,
+                            class: "order"
+                        };
+                        
+                        // Add to seller's orders
+                        seller.orders.push(sellerOrder);
+                        
+                        // Update product inventory
+                        const sellerProduct = seller.products.find(p => p.id === product.id);
+                        if (sellerProduct) {
+                            sellerProduct.stock.forEach(variant => {
+                                if (variant.size === orderedProduct.size && variant.color === orderedProduct.color) {
+                                    variant.quantity -= orderedProduct.quantity;
+                                    
+                                    // Remove variant if out of stock
+                                    if (variant.quantity <= 0) {
+                                        sellerProduct.stock = sellerProduct.stock.filter(v => 
+                                            !(v.size === variant.size && v.color === variant.color)
+                                        );
+                                        
+                                        // Update available colors and sizes
+                                        const remainingColors = [...new Set(sellerProduct.stock.map(v => v.color))];
+                                        const remainingSizes = [...new Set(sellerProduct.stock.map(v => v.size))];
+                                        
+                                        sellerProduct.availableColors = remainingColors;
+                                        sellerProduct.availableSizes = remainingSizes;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        
+        console.log(`\n🎉 Order Creation Complete!`);
+        console.log(`📦 Total Orders: ${totalOrdersCreated}`);
+        console.log(`💰 Total Revenue: EGP ${totalEarningsGenerated.toFixed(2)}`);
+
+        // ---------- 12. UPDATE ALL USERS IN STORAGE ----------
+        console.log("\n💾 Step 12: Updating All Users in Storage...");
+        Storage.set("users", users);
+
+        // ---------- 13. PRINT USERS TABLE ----------
+        console.log("\n🚪 Step 13: Printing Users Table...");
         console.table(users.map(u => ({
             Name: u.name,
             Role: u.role,
@@ -320,6 +437,7 @@ export class Seeder {
             Verified: u.isVerified ? "✅" : "❌",
             Products: u.role === "seller" ? u.products?.length || 0 : "-",
             Orders: u.role === "customer" ? u.orderHistory?.length || 0 : "-",
+            Earnings: u.role === "seller" ? `EGP ${u.earnings?.toFixed(2) || "0.00"}` : "-",
             Wishlist: u.role === "customer" ? u.wishlist?.length || 0 : "-",
             Cart: u.role === "customer" ? u.cart?.length || 0 : "-",
             Password: (u.role === "admin"
@@ -334,6 +452,13 @@ export class Seeder {
         console.log(`👨‍💼 Admins: ${users.filter(u => u instanceof Admin).length}`);
         console.log(`🏪 Sellers: ${users.filter(u => u instanceof Seller).length}`);
         console.log(`👥 Customers: ${users.filter(u => u instanceof Customer).length}`);
+        
+        // Calculate total orders and earnings
+        const totalOrders = customers.reduce((sum, c) => sum + (c.orderHistory?.length || 0), 0);
+        const totalEarnings = sellers.reduce((sum, s) => sum + (s.earnings || 0), 0);
+        
+        console.log(`📦 Total Orders Created: ${totalOrders}`);
+        console.log(`💰 Total Seller Earnings: EGP ${totalEarnings.toFixed(2)}`);
 
         // Return completion status
         return {
@@ -342,8 +467,9 @@ export class Seeder {
             totalUsers: users.length,
             totalAdmins: users.filter(u => u instanceof Admin).length,
             totalSellers: users.filter(u => u instanceof Seller).length,
-            totalCustomers: users.filter(u => u instanceof Customer).length
+            totalCustomers: users.filter(u => u instanceof Customer).length,
+            totalOrders: totalOrders,
+            totalEarnings: totalEarnings
         };
     }
 }
-
