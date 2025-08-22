@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <i class="fas fa-heart-broken fa-3x text-muted mb-3"></i>
           <h5 class="text-muted">Your wishlist is empty</h5>
           <p class="text-muted">Start adding items to see them here</p>
-          <a href="cardsss.html" class="btn btn-primary">Browse Products</a>
+          <a href="/FinalHomePage.html" class="btn btn-primary">Browse Products</a>
         </div>
       `;
       return;
