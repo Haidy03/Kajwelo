@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="../css/sellerdashboard.css"> -->
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/sellerdashboard.js"></script>
     <script src="../js/sellerNavigation.js"></script>
     <style>
@@ -363,6 +364,8 @@
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            height: 320px;
+            overflow: hidden;
         }
 
         .chart-title {
@@ -372,16 +375,10 @@
             margin-bottom: 1rem;
         }
 
-        .chart-placeholder {
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-direction: column;
-            text-align: center;
+        .chart-container {
+            position: relative;
+            height: 240px;
+            width: 100%;
         }
 
         /* Orders Section */
@@ -421,7 +418,7 @@
         .orders-table th,
         .orders-table td {
             padding: 0.75rem;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #e5e7eb;
         }
 
@@ -795,9 +792,9 @@
                             <div class="stat-icon sales">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <span class="stat-change positive">+12.5%</span>
+                            <!-- <span class="stat-change positive">+12.5%</span> -->
                         </div>
-                        <div class="stat-value">$24,680</div>
+                        <div class="stat-value" id="earnings">$24,680</div>
                         <div class="stat-label">Total Revenue</div>
                     </div>
 
@@ -806,9 +803,9 @@
                             <div class="stat-icon orders">
                                 <i class="fas fa-shopping-cart"></i>
                             </div>
-                            <span class="stat-change positive">+8.2%</span>
+                            <!-- <span class="stat-change positive">+8.2%</span> -->
                         </div>
-                        <div class="stat-value">156</div>
+                        <div class="stat-value" id="ordersCount">156</div>
                         <div class="stat-label">Total Orders</div>
                     </div>
 
@@ -817,9 +814,9 @@
                             <div class="stat-icon products">
                                 <i class="fas fa-box"></i>
                             </div>
-                            <span class="stat-change negative">-2.1%</span>
+                            <!-- <span class="stat-change negative">-2.1%</span> -->
                         </div>
-                        <div class="stat-value">89</div>
+                        <div class="stat-value" id="verifiedProducts">89</div>
                         <div class="stat-label">Active Products</div>
                     </div>
 
@@ -828,9 +825,9 @@
                             <div class="stat-icon revenue">
                                 <i class="fas fa-users"></i>
                             </div>
-                            <span class="stat-change positive">+15.7%</span>
+                            <!-- <span class="stat-change positive">+15.7%</span> -->
                         </div>
-                        <div class="stat-value">1,234</div>
+                        <div class="stat-value" id="customersCount">1,234</div>
                         <div class="stat-label">Customers</div>
                     </div>
                 </div>
@@ -838,25 +835,16 @@
                 <!-- Charts Section -->
                 <div class="charts-section">
                     <div class="chart-card">
-                        <h3 class="chart-title">Sales Analytics</h3>
-                        <div class="chart-placeholder">
-                            <i class="fas fa-chart-line" style="font-size: 3rem; opacity: 0.7;"></i>
-                            <div class="mt-1">
-                                <div>Monthly Sales Trend</div>
-                                <small style="opacity: 0.8;">Interactive chart would go here</small>
-                            </div>
+                        <h3 class="chart-title">Monthly Sales</h3>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
                         </div>
                     </div>
 
                     <div class="chart-card">
                         <h3 class="chart-title">Top Categories</h3>
-                        <div class="chart-placeholder"
-                            style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                            <i class="fas fa-chart-pie" style="font-size: 3rem; opacity: 0.7;"></i>
-                            <div class="mt-1">
-                                <div>Category Performance</div>
-                                <small style="opacity: 0.8;">Pie chart would go here</small>
-                            </div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -874,15 +862,15 @@
                                 <tr>
                                     <th>Order ID</th>
                                     <th>Customer</th>
-                                    <th class="hide-mobile">Product</th>
-                                    <th>Amount</th>
+                                    <th class="hide-mobile">Products Count</th>
+                                    <th>Total Amount</th>
                                     <th>Status</th>
                                     <th class="hide-mobile">Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td><strong>#KJ-1001</strong></td>
                                     <td>Sarah Johnson</td>
                                     <td class="hide-mobile">Classic Denim Jacket</td>
@@ -933,7 +921,7 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -941,92 +929,50 @@
             </div>
 
             <!-- Other Sections -->
-            <div id="products-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Products Management</h2>
-                    <p style="color: #6b7280;">Product management interface would go here...</p>
-                </div>
-            </div>
 
-            <div id="orders-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Orders Management</h2>
-                    <p style="color: #6b7280;">Orders management interface would go here...</p>
-                </div>
-            </div>
-
-            <div id="analytics-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Sales Analytics</h2>
-                    <p style="color: #6b7280;">Analytics interface would go here...</p>
-                </div>
-            </div>
-
-            <div id="customers-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Customer Management</h2>
-                    <p style="color: #6b7280;">Customer management interface would go here...</p>
-                </div>
-            </div>
-
-            <div id="inventory-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Inventory Management</h2>
-                    <p style="color: #6b7280;">Inventory management interface would go here...</p>
-                </div>
-            </div>
-
-            <div id="reviews-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Reviews & Ratings</h2>
-                    <p style="color: #6b7280;">Reviews management interface would go here...</p>
-                </div>
-            </div>
-
-            <div id="settings-section" class="content-section">
-                <div
-                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <h2 style="color: var(--dark-color); margin-bottom: 1rem;">Account Settings</h2>
-                    <p style="color: #6b7280;">Settings interface would go here...</p>
-                </div>
-            </div>
-        </div>
     </main>
     <script type="module" src="../JS/sellerOnly.js"></script>
-    <script>
-        function gotodashboard() {
+    <script type="module">
+        import { Auth } from "../utils/auth.js";
+        import { Seller } from "../models/Seller.js";
+        import { Customer } from "../models/Customer.js";
+        import { Storage } from "../utils/localStorageHelper.js";
+        import { Product } from "../models/Product.js";
+
+        const currentUser = Auth.getCurrentUser();
+        const users = Storage.get("users", []);
+        const customers = users.filter(user => user instanceof Customer);
+        const products = (currentUser?.products || []).map(p => p);
+
+        window.gotodashboard = function gotodashboard() {
             window.location.href = "sellerdashboard.html";
         }
-        function gotoproducts() {
+        window.gotoproducts = function gotoproducts() {
             window.location.href = "SelleraAddProduct.html";
         }
-        function gotoOrders() {
+        window.gotoOrders = function gotoOrders() {
             window.location.href = "sellerOrders.html";
         }
-        function gotoanalytics() {
+        window.gotoanalytics = function gotoanalytics() {
             window.location.href = "SellerAnalytics.html";
         }
-        function gotoCustomers() {
+        window.gotoCustomers = function gotoCustomers() {
             window.location.href = "sellerCustomers.html";
         }
-        function gotoInventory() {
+        window.gotoInventory = function gotoInventory() {
             window.location.href = "SellerInventory.html";
         }
-        function gotoPending() {
+        window.gotoPending = function gotoPending() {
             window.location.href = "sellerPending.html";
         }
 
-        function gotoSettings() {
+        window.gotoSettings = function gotoSettings() {
             window.location.href = "SellerSettings.html";
         }
-
-        function toggleSidebar() {
+        window.gotoInbox = function gotoInbox() {
+            window.location.href = "sellerInbox.html";
+        }
+        window.toggleSidebar = function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
@@ -1097,13 +1043,164 @@
             });
         }
 
+        const brandCustomersIds = []
+        const brandCustomers = [];
+        currentUser.orders.forEach(order => {
+            if (!brandCustomersIds.includes(order.customerId)) brandCustomersIds.push(order.customerId)
+        })
+
+        brandCustomersIds.forEach(id => {
+            brandCustomers.push(customers.find(cust => cust.id === id))
+        })
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function () {
             setTimeout(animateStats, 500);
 
             // Set initial active section
             document.getElementById('dashboard-section').classList.add('active');
+
+            document.querySelector("#earnings").textContent = "$" + currentUser.earnings;
+            document.querySelector("#ordersCount").textContent = currentUser.orders.length
+            document.querySelector("#verifiedProducts").textContent = currentUser.products.filter(product => product.isVerified === true).length;
+            document.querySelector("#customersCount").textContent = brandCustomersIds.length;
+
+            const ordersBody = document.querySelector("tbody");
+            const ordersToShow = (currentUser.orders || []).slice(0, 4);
+            ordersToShow.forEach(order => {
+                const currentCustomer = brandCustomers.find(cust => cust && cust.id === order.customerId);
+                const newDate = new Date(order.orderedAt)
+                const customFormat = new Intl.DateTimeFormat('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true // Use 24-hour format
+                }).format(newDate);
+
+                let statusClass = "";
+                // delivered  shipped processing pending
+                switch (order.status){
+                    default:
+                        statusClass="pending";
+                    case "waiting to be Checked Out":
+                        statusClass="pending";
+                        break;
+                    case "Checked Out - Waiting to be Shipped":
+                        statusClass="processing";
+                        break;
+                    case "Shipped":
+                        statusClass="shipped";
+                        break;
+                    case "Delivered":
+                        statusClass="delivered";
+                        break;
+                }
+
+                ordersBody.innerHTML += `
+                                <tr>
+                                    <td><strong>#${(order.orderId || '').split("-")[0]}</strong></td>
+                                    <td>${currentCustomer ? currentCustomer.name : 'Unknown'}</td>
+                                    <td class="hide-mobile">${order.products ? order.products.length : 0}</td>
+                                    <td><strong>$${order.totalPrice || 0}</strong></td>
+                                    <td><span class="status-badge ${statusClass}">${order.status || ''}</span></td>
+                                    <td class="hide-mobile">${customFormat}</td>
+                                    <td>
+                                        <button class="icon-btn" onClick="gotoOrders()" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                `
+
+            });
+
+            renderDashboardCharts();
         });
+
+        function renderDashboardCharts() {
+            try {
+                renderSalesChart();
+                renderCategoryChart();
+            } catch (err) {
+                console.error('Charts render error:', err);
+            }
+        }
+
+        function renderSalesChart() {
+            const ctx = document.getElementById('salesChart');
+            if (!ctx) return;
+
+            const monthlyTotals = {};
+            (currentUser?.orders || []).forEach(order => {
+                const d = new Date(order.orderedAt);
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                monthlyTotals[key] = (monthlyTotals[key] || 0) + (order.totalPrice || 0);
+            });
+
+            const labels = Object.keys(monthlyTotals).sort();
+            const data = labels.map(l => monthlyTotals[l]);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102,126,234,0.2)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function renderCategoryChart() {
+            const ctx = document.getElementById('categoryChart');
+            if (!ctx) return;
+
+            // derive category totals from current user's orders' products
+            const categoryTotals = {};
+            const productById = new Map((currentUser?.products || []).map(p => [p.id, p]));
+
+            (currentUser?.orders || []).forEach(order => {
+                (order.products || []).forEach(item => {
+                    const prod = productById.get(item.productId);
+                    const cat = prod?.category || 'Other';
+                    categoryTotals[cat] = (categoryTotals[cat] || 0) + (item.quantity || 0);
+                });
+            });
+
+            const labels = Object.keys(categoryTotals);
+            const data = Object.values(categoryTotals);
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        backgroundColor: ['#667eea','#764ba2','#10b981','#f59e0b','#ef4444','#8b5cf6','#14b8a6'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
 
         // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function (e) {

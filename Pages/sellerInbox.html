@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,7 @@
 
         .sidebar-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-logo {
@@ -81,7 +82,7 @@
         }
 
         .sidebar-subtitle {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.875rem;
         }
 
@@ -94,7 +95,7 @@
             display: flex;
             align-items: center;
             padding: 0.875rem 1.5rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: all 0.2s ease;
             border: none;
@@ -105,7 +106,7 @@
 
         .sidebar-link:hover,
         .sidebar-link.active {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
             transform: translateX(5px);
         }
@@ -125,7 +126,7 @@
         /* Top Bar */
         .topbar {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -593,6 +594,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -662,7 +664,7 @@
         </ul>
 
         <div>
-            <button class="sidebar-link">
+            <button class="sidebar-link" id="logoutBtn" >
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
@@ -690,8 +692,8 @@
                 </button>
                 
                 <div class="user-profile">
-                    <div class="user-avatar">JS</div>
-                    <span>John Seller</span>
+                    <div class="user-avatar"></div>
+                    <span></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -708,8 +710,8 @@
                     </div>
                     <div class="filter-tabs">
                         <button class="filter-tab active" data-filter="all">All</button>
-                        <button class="filter-tab" data-filter="starred">Starred</button>
-                        <button class="filter-tab" data-filter="trash">Trash</button>
+                        <button class="filter-tab" data-filter="admins">Admins</button>
+                        <button class="filter-tab" data-filter="customers">Customers</button>
                     </div>
                 </div>
                 <div class="chats-list" id="chatsList">
@@ -727,184 +729,126 @@
             </div>
         </div>
     </main>
+    <script type="module" src="../JS/sellerOnly.js"></script>
+    <script type="module">
+        import { Auth } from "../utils/auth.js";
+        import { Storage } from "../utils/localStorageHelper.js";
+        import { Conversation } from "../models/Conversation.js";
+        import { Message } from "../models/Message.js";
+        import { Customer } from "../models/Customer.js";
+        import { Admin } from "../models/Admin.js";
 
-    <script>
-        // Sample chat data
-        let chats = [
-            {
-                id: 1,
-                name: 'Sarah Johnson',
-                avatar: 'SJ',
-                lastMessage: 'Thank you for the quick response!',
-                time: '2025-08-21T10:30:00',
-                unread: true,
-                starred: false,
-                deleted: false,
-                messages: [
-                    {
-                        id: 1,
-                        sender: 'customer',
-                        text: 'Hi! I\'m interested in the Classic Denim Jacket. Is it available in Medium?',
-                        time: '2025-08-21T09:15:00'
-                    },
-                    {
-                        id: 2,
-                        sender: 'seller',
-                        text: 'Hello Sarah! Yes, the Classic Denim Jacket is available in Medium. Would you like me to reserve it for you?',
-                        time: '2025-08-21T09:45:00'
-                    },
-                    {
-                        id: 3,
-                        sender: 'customer',
-                        text: 'That would be great! How much would shipping cost?',
-                        time: '2025-08-21T10:00:00'
-                    },
-                    {
-                        id: 4,
-                        sender: 'seller',
-                        text: 'Shipping is free for orders over $75, and your jacket qualifies! I\'ll reserve it for 24 hours.',
-                        time: '2025-08-21T10:15:00'
-                    },
-                    {
-                        id: 5,
-                        sender: 'customer',
-                        text: 'Thank you for the quick response!',
-                        time: '2025-08-21T10:30:00'
-                    }
-                ]
-            },
-            {
-                id: 2,
-                name: 'Mike Chen',
-                avatar: 'MC',
-                lastMessage: 'Can you help me update my shipping address?',
-                time: '2025-08-20T16:45:00',
-                unread: false,
-                starred: true,
-                deleted: false,
-                messages: [
-                    {
-                        id: 1,
-                        sender: 'customer',
-                        text: 'Hello, I placed order #KJ-1002 yesterday but I need to change my shipping address.',
-                        time: '2025-08-20T16:30:00'
-                    },
-                    {
-                        id: 2,
-                        sender: 'customer',
-                        text: 'Can you help me update my shipping address?',
-                        time: '2025-08-20T16:45:00'
-                    }
-                ]
-            },
-            {
-                id: 3,
-                name: 'Emma Wilson',
-                avatar: 'EW',
-                lastMessage: 'Perfect! Thanks so much',
-                time: '2025-08-20T14:20:00',
-                unread: false,
-                starred: true,
-                deleted: false,
-                messages: [
-                    {
-                        id: 1,
-                        sender: 'customer',
-                        text: 'Hi! I received the Summer Dress and it\'s beautiful!',
-                        time: '2025-08-20T14:00:00'
-                    },
-                    {
-                        id: 2,
-                        sender: 'seller',
-                        text: 'I\'m so glad you love it! Thank you for choosing our store.',
-                        time: '2025-08-20T14:10:00'
-                    },
-                    {
-                        id: 3,
-                        sender: 'customer',
-                        text: 'Perfect! Thanks so much',
-                        time: '2025-08-20T14:20:00'
-                    }
-                ]
-            },
-            {
-                id: 4,
-                name: 'David Brown',
-                avatar: 'DB',
-                lastMessage: 'I understand, thanks for explaining',
-                time: '2025-08-19T11:30:00',
-                unread: false,
-                starred: false,
-                deleted: true,
-                messages: [
-                    {
-                        id: 1,
-                        sender: 'customer',
-                        text: 'I want to return the Designer Handbag I ordered.',
-                        time: '2025-08-19T11:00:00'
-                    },
-                    {
-                        id: 2,
-                        sender: 'seller',
-                        text: 'I can help with that. May I ask the reason for the return?',
-                        time: '2025-08-19T11:15:00'
-                    },
-                    {
-                        id: 3,
-                        sender: 'customer',
-                        text: 'I understand, thanks for explaining',
-                        time: '2025-08-19T11:30:00'
-                    }
-                ]
-            },
-            {
-                id: 5,
-                name: 'Lisa Martinez',
-                avatar: 'LM',
-                lastMessage: 'Looking forward to our partnership!',
-                time: '2025-08-19T08:45:00',
-                unread: false,
-                starred: true,
-                deleted: false,
-                messages: [
-                    {
-                        id: 1,
-                        sender: 'customer',
-                        text: 'Hi, I represent a boutique and I\'m interested in wholesale pricing for bulk orders.',
-                        time: '2025-08-19T08:30:00'
-                    },
-                    {
-                        id: 2,
-                        sender: 'seller',
-                        text: 'That sounds great! I\'d love to discuss wholesale options. How many pieces are you thinking?',
-                        time: '2025-08-19T08:40:00'
-                    },
-                    {
-                        id: 3,
-                        sender: 'customer',
-                        text: 'Looking forward to our partnership!',
-                        time: '2025-08-19T08:45:00'
-                    }
-                ]
-            }
-        ];
-
+        // Global variables
+        let currentUser = null;
+        let chats = [];
+        let customers = [];
+        let admins = [];
         let currentFilter = 'all';
         let activeChatId = null;
+        let refreshTimer = null;
+
+        // Initialize the page
+        function initializePage() {
+            currentUser = Auth.getCurrentUser();
+            if (!currentUser) {
+                window.location.href = "../login.html";
+                return;
+            }
+
+            loadChatsData();
+            updateUserProfile();
+            updateNotificationBadge();
+            initializeFilters();
+            initializeSearch();
+            renderChats();
+
+            // periodic refresh for chats/messages
+            if (refreshTimer) clearInterval(refreshTimer);
+            refreshTimer = setInterval(() => {
+                refreshChats();
+            }, 3000);
+        }
+
+        // Load chats data from current user
+        function loadChatsData() {
+            try {
+                // Load chats from current user
+                chats = currentUser.chats || [];
+
+                // Load users for chat information
+                const users = Storage.get("users", []);
+                customers = users.filter(user => user instanceof Customer);
+                admins = users.filter(user => user instanceof Admin);
+
+                console.log(`Found ${chats.length} chats, ${customers.length} customers, ${admins.length} admins`);
+            } catch (error) {
+                console.error('Error loading chats data:', error);
+                chats = [];
+                customers = [];
+                admins = [];
+            }
+        }
+
+        function refreshChats() {
+            try {
+                // reload current user state
+                currentUser = Auth.getCurrentUser();
+                if (!currentUser) return;
+                loadChatsData();
+                updateNotificationBadge();
+                renderChats();
+                // if an active chat is open, re-render its messages
+                if (activeChatId) {
+                    const chat = getChatByParticipant(activeChatId);
+                    if (chat) {
+                        renderChatView(chat);
+                    }
+                }
+            } catch (e) {
+                console.error('Refresh error:', e);
+            }
+        }
+
+        // Update user profile display
+        function updateUserProfile() {
+            const userAvatar = document.querySelector('.user-avatar');
+            const userName = document.querySelector('.user-profile span');
+
+            if (userAvatar) {
+                userAvatar.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'SE';
+            }
+
+            if (userName) {
+                userName.textContent = currentUser.name || 'Seller';
+            }
+        }
+
+        // Update notification badge
+        function updateNotificationBadge() {
+            const unreadCount = chats.reduce((count, chat) => {
+                return count + chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
+            }, 0);
+
+            const notificationBadge = document.querySelector('.notification-badge');
+            if (notificationBadge) {
+                notificationBadge.textContent = unreadCount;
+                notificationBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
+            }
+        }
 
         // Navigation functions
-        function gotoDashboard() { window.location.href = "sellerdashboard.html"; }
-        function gotoProducts() { window.location.href = "SelleraAddProduct.html"; }
-        function gotoOrders() { window.location.href = "sellerOrders.html"; }
-        function gotoAnalytics() { window.location.href = "SellerAnalytics.html"; }
-        function gotoCustomers() { window.location.href = "sellerCustomers.html"; }
-        function gotoInventory() { window.location.href = "SellerInventory.html"; }
-        function gotoPending() { window.location.href = "sellerPending.html"; }
-        function gotoSettings() { window.location.href = "SellerSettings.html"; }
-        function gotoInbox() { window.location.href = "sellerInbox.html"; }
+        window.gotoDashboard = function () { window.location.href = "sellerdashboard.html"; }
+        window.gotoProducts = function () { window.location.href = "SelleraAddProduct.html"; }
+        window.gotoOrders = function () { window.location.href = "sellerOrders.html"; }
+        window.gotoAnalytics = function () { window.location.href = "SellerAnalytics.html"; }
+        window.gotoCustomers = function () { window.location.href = "sellerCustomers.html"; }
+        window.gotoInventory = function () { window.location.href = "SellerInventory.html"; }
+        window.gotoPending = function () { window.location.href = "sellerPending.html"; }
+        window.gotoSettings = function () { window.location.href = "SellerSettings.html"; }
+        window.gotoInbox = function () { window.location.href = "sellerInbox.html"; }
 
         // Sidebar toggle
-        function toggleSidebar() {
+        window.toggleSidebar = function () {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             
@@ -912,7 +856,7 @@
             overlay.classList.toggle('active');
         }
 
-        function toggleChatList() {
+        window.toggleChatList = function () {
             const chatList = document.getElementById('chatList');
             chatList.classList.toggle('open');
         }
@@ -931,16 +875,48 @@
             });
         }
 
+        // Helper function to get chat by participant ID
+        function getChatByParticipant(participantId) {
+            return chats.find(chat => 
+                chat.participants?.sender === participantId || 
+                chat.participants?.reciever === participantId
+            );
+        }
+
         // Filter chats based on current filter
         function getFilteredChats() {
-            switch(currentFilter) {
-                case 'starred':
-                    return chats.filter(chat => chat.starred && !chat.deleted);
-                case 'trash':
-                    return chats.filter(chat => chat.deleted);
+            // Build admin chat entries (always present so seller can contact admins)
+            const adminChatEntries = admins.map(admin => {
+                const existing = chats.find(c => c.participants?.reciever === admin.id || c.participants?.sender === admin.id);
+                if (existing) return existing;
+                // create placeholder chat structure
+                return {
+                    participants: { sender: currentUser.id, reciever: admin.id },
+                    messages: [],
+                    starred: false,
+                    deleted: false
+                };
+            });
+
+            // Merge admin entries with existing chats (avoid duplicates)
+            const allChats = [
+                ...chats.filter(c => !admins.some(a => a.id === c.participants?.reciever || a.id === c.participants?.sender)),
+                ...adminChatEntries
+            ];
+
+            switch (currentFilter) {
+                case 'admins':
+                    return allChats.filter(chat => isAdminParticipant(chat));
+                case 'customers':
+                    return allChats.filter(chat => !isAdminParticipant(chat));
                 default:
-                    return chats.filter(chat => !chat.deleted);
+                    return allChats;
             }
+        }
+
+        function isAdminParticipant(chat) {
+            const pid = chat.participants?.reciever === currentUser.id ? chat.participants?.sender : chat.participants?.reciever;
+            return admins.some(a => a.id === pid);
         }
 
         // Render chat list
@@ -960,23 +936,23 @@
             }
 
             chatsList.innerHTML = filteredChats.map(chat => {
-                const timeAgo = formatTimeAgo(chat.time);
+                const participant = getParticipantFromChat(chat);
+                const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+                const timeAgo = lastMessage ? formatTimeAgo(lastMessage.sentAt) : '';
+                const unreadCount = chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
                 
                 return `
-                    <div class="chat-item ${chat.unread ? 'unread' : ''} ${activeChatId === chat.id ? 'active' : ''}" 
-                         onclick="openChat(${chat.id})">
-                        <div class="chat-avatar">${chat.avatar}</div>
+                    <div class="chat-item ${unreadCount > 0 ? 'unread' : ''} ${activeChatId === (chat.participants.reciever) ? 'active' : ''}" 
+                         onclick="openChat('${chat.participants.reciever}')">
+                        <div class="chat-avatar">${participant ? participant.name.substring(0, 2).toUpperCase() : 'US'}</div>
                         <div class="chat-info">
-                            <div class="chat-name">${chat.name}</div>
-                            <div class="chat-last-message">${chat.lastMessage}</div>
+                            <div class="chat-name">${participant ? participant.name : 'User'}</div>
+                            <div class="chat-last-message">${lastMessage ? lastMessage.content : 'No messages yet'}</div>
                         </div>
                         <div class="chat-meta">
                             <div class="chat-time">${timeAgo}</div>
                             <div class="chat-actions">
-                                <button class="action-btn ${chat.starred ? 'starred' : ''}" onclick="toggleStar(event, ${chat.id})" title="Star chat">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                                <button class="action-btn" onclick="deleteChat(event, ${chat.id})" title="Delete chat">
+                                <button class="action-btn" onclick="deleteChat(event, '${chat.participants.reciever}')" title="Delete chat">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -986,22 +962,58 @@
             }).join('');
         }
 
-        // Open chat conversation
-        function openChat(chatId) {
-            const chat = chats.find(c => c.id === chatId);
-            if (!chat) return;
+        // Get customer from chat
+        function getCustomerFromChat(chat) {
+            return customers.find(customer => customer.id === chat.participants.reciever);
+        }
 
-            activeChatId = chatId;
-            chat.unread = false;
+        function getParticipantFromChat(chat) {
+            const receiverId = chat.participants?.reciever;
+            return admins.find(a => a.id === receiverId) || customers.find(c => c.id === receiverId);
+        }
+
+        // Open chat conversation
+        window.openChat = async function (customerId) {
+            let chat = chats.find(c => c.participants.reciever === customerId);
+            // If no previous chat and the participant is an admin, initiate a new chat
+            if (!chat) {
+                const isAdmin = admins.some(a => a.id === customerId);
+                if (isAdmin) {
+                    const newChat = {
+                        participants: { sender: currentUser.id, reciever: customerId },
+                        messages: [],
+                        starred: false,
+                        deleted: false
+                    };
+                    chats.push(newChat);
+                    currentUser.chats = chats;
+                    const { User } = await import("../models/User.js");
+                    User.updateCurrentUser(currentUser);
+                    chat = newChat;
+                    renderChats();
+                } else {
+                    return;
+                }
+            }
+
+            activeChatId = customerId;
+
+            // Mark messages as read
+            chat.messages.forEach(msg => {
+                if (msg.sender !== currentUser.id && !msg.status) {
+                    msg.status = true;
+                }
+            });
 
             // Update active state in chat list
             document.querySelectorAll('.chat-item').forEach(item => {
                 item.classList.remove('active');
             });
-            document.querySelector(`[onclick="openChat(${chatId})"]`).classList.add('active');
+            document.querySelector(`[onclick="openChat('${customerId}')"]`).classList.add('active');
 
             renderChatView(chat);
             renderChats(); // Re-render to update unread status
+            updateNotificationBadge();
 
             // Close chat list on mobile
             if (window.innerWidth <= 768) {
@@ -1012,21 +1024,17 @@
         // Render chat conversation view
         function renderChatView(chat) {
             const chatView = document.getElementById('chatView');
+            const participant = getParticipantFromChat(chat);
             
             chatView.innerHTML = `
                 <div class="chat-view-header">
                     <button class="back-btn" onclick="closeChatView()">
                         <i class="fas fa-arrow-left"></i>
                     </button>
-                    <div class="chat-view-avatar">${chat.avatar}</div>
+                    <div class="chat-view-avatar">${participant ? participant.name.substring(0, 2).toUpperCase() : 'US'}</div>
                     <div class="chat-view-info">
-                        <h3>${chat.name}</h3>
-                        <p>Customer</p>
-                    </div>
-                    <div style="margin-left: auto;">
-                        <button class="action-btn ${chat.starred ? 'starred' : ''}" onclick="toggleStar(event, ${chat.id})" title="Star chat">
-                            <i class="fas fa-star"></i>
-                        </button>
+                        <h3>${participant ? participant.name : 'User'}</h3>
+                        <p>${admins.some(a => a.id === (chat.participants.reciever)) ? 'Admin' : 'Customer'}</p>
                     </div>
                 </div>
                 
@@ -1035,8 +1043,8 @@
                 </div>
                 
                 <div class="message-input-container">
-                    <form class="message-input-form" onsubmit="sendMessage(event, ${chat.id})">
-                        <textarea class="message-input" id="messageInput" placeholder="Type your message..." rows="1" onkeydown="handleKeyDown(event, ${chat.id})"></textarea>
+                    <form class="message-input-form" onsubmit="sendMessage(event, '${chat.participants.reciever === currentUser.id ? chat.participants.sender : chat.participants.reciever}')">
+                        <textarea class="message-input" id="messageInput" placeholder="Type your message..." rows="1" onkeydown="handleKeyDown(event, '${chat.participants.reciever === currentUser.id ? chat.participants.sender : chat.participants.reciever}')"></textarea>
                         <button type="submit" class="send-btn" id="sendBtn">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -1055,12 +1063,12 @@
         // Render messages in chat
         function renderMessages(messages) {
             return messages.map(message => {
-                const messageTime = formatMessageTime(message.time);
-                const messageClass = message.sender === 'seller' ? 'sent' : 'received';
+                const messageTime = formatMessageTime(message.sentAt);
+                const messageClass = message.sender === currentUser.id ? 'sent' : 'received';
                 
                 return `
                     <div class="message ${messageClass}">
-                        <div>${message.text}</div>
+                        <div>${message.content}</div>
                         <div class="message-time">${messageTime}</div>
                     </div>
                 `;
@@ -1068,7 +1076,7 @@
         }
 
         // Send message
-        function sendMessage(event, chatId) {
+        window.sendMessage = function (event, customerId) {
             event.preventDefault();
             
             const messageInput = document.getElementById('messageInput');
@@ -1076,42 +1084,58 @@
             
             if (!messageText) return;
 
-            const chat = chats.find(c => c.id === chatId);
-            if (!chat) return;
+            // Send message using Conversation model
+            const result = Conversation.send(messageText, customerId);
 
-            // Add new message
+            if (result.success) {
+                // Clear input
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+
+                // Update the current chat with the new message immediately
+                const chat = chats.find(c => c.participants.reciever === customerId);
+                if (chat) {
+                    // Add the new message to the chat
             const newMessage = {
-                id: Date.now(),
-                sender: 'seller',
-                text: messageText,
-                time: new Date().toISOString()
-            };
-
+                        sender: currentUser.id,
+                        content: messageText,
+                        sentAt: new Date(),
+                        status: false
+                    };
             chat.messages.push(newMessage);
-            chat.lastMessage = messageText;
-            chat.time = newMessage.time;
 
-            // Move chat to top of list
-            const chatIndex = chats.findIndex(c => c.id === chatId);
-            if (chatIndex > 0) {
-                const [movedChat] = chats.splice(chatIndex, 1);
-                chats.unshift(movedChat);
+                    // Update the chat list to show the new last message
+                    renderChats();
+
+                    // If this chat is currently open, add the message to the view without re-rendering everything
+                    // if (activeChatId === customerId) {
+                    //     const messagesContainer = document.getElementById('messagesContainer');
+                    //     console.log(messagesContainer);
+                    //     if (messagesContainer) {
+                    //         const messageTime = formatMessageTime(newMessage.sentAt);
+                    //         const messageHTML = `
+                    //             <div class="message sent">
+                    //                 <div>${newMessage.content}</div>
+                    //                 <div class="message-time">${messageTime}</div>
+                    //             </div>
+                    //         `;
+                    //         messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+                    //         scrollToBottom();
+                    //     }
+                    // }
+                }
+
+                updateNotificationBadge();
+            } else {
+                alert('Failed to send message: ' + result.message);
             }
-
-            // Clear input
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-
-            // Re-render
-            renderChats();
-            renderChatView(chat);
         }
 
         // Handle Enter key in textarea
-        function handleKeyDown(event, chatId) {
+        window.handleKeyDown = function (event, customerId) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
-                sendMessage(event, chatId);
+                sendMessage(event, customerId);
             }
         }
 
@@ -1133,39 +1157,30 @@
         }
 
         // Close chat view (mobile)
-        function closeChatView() {
+        window.closeChatView = function () {
             if (window.innerWidth <= 768) {
                 document.getElementById('chatList').classList.add('open');
             }
         }
 
-        // Toggle star
-        function toggleStar(event, chatId) {
-            event.stopPropagation();
-            
-            const chat = chats.find(c => c.id === chatId);
-            if (chat) {
-                chat.starred = !chat.starred;
-                renderChats();
-                
-                if (activeChatId === chatId) {
-                    renderChatView(chat);
-                }
-            }
-        }
+
 
         // Delete chat
-        function deleteChat(event, chatId) {
+        window.deleteChat = async function (event, customerId) {
             event.stopPropagation();
             
-            const chat = chats.find(c => c.id === chatId);
-            if (chat) {
-                if (currentFilter === 'trash') {
-                    // Permanently delete
-                    const index = chats.findIndex(c => c.id === chatId);
-                    chats.splice(index, 1);
-                    
-                    if (activeChatId === chatId) {
+            if (confirm('Are you sure you want to delete this conversation?')) {
+                // Remove chat from current user's chats
+                const chatIndex = chats.findIndex(c => c.participants.reciever === customerId);
+                if (chatIndex !== -1) {
+                    chats.splice(chatIndex, 1);
+
+                    // Update current user
+                    currentUser.chats = chats;
+                    const { User } = await import("../models/User.js");
+                    User.updateCurrentUser(currentUser);
+
+                    if (activeChatId === customerId) {
                         document.getElementById('chatView').innerHTML = `
                             <div class="empty-chat">
                                 <i class="fas fa-comments"></i>
@@ -1174,24 +1189,11 @@
                             </div>
                         `;
                         activeChatId = null;
-                    }
-                } else {
-                    // Move to trash
-                    chat.deleted = true;
-                    
-                    if (activeChatId === chatId && currentFilter !== 'trash') {
-                        document.getElementById('chatView').innerHTML = `
-                            <div class="empty-chat">
-                                <i class="fas fa-comments"></i>
-                                <h3>Select a conversation</h3>
-                                <p>Choose a chat from the list to start messaging</p>
-                            </div>
-                        `;
-                        activeChatId = null;
-                    }
                 }
                 
                 renderChats();
+                    updateNotificationBadge();
+                }
             }
         }
 
@@ -1203,30 +1205,32 @@
                 if (query === '') {
                     renderChats();
                 } else {
-                    const filteredChats = getFilteredChats().filter(chat => 
-                        chat.name.toLowerCase().includes(query) ||
-                        chat.lastMessage.toLowerCase().includes(query)
-                    );
+                    const filteredChats = getFilteredChats().filter(chat => {
+                        const customer = getCustomerFromChat(chat);
+                        const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+                        return (customer && customer.name.toLowerCase().includes(query)) ||
+                            (lastMessage && lastMessage.content.toLowerCase().includes(query));
+                    });
                     
                     const chatsList = document.getElementById('chatsList');
                     chatsList.innerHTML = filteredChats.map(chat => {
-                        const timeAgo = formatTimeAgo(chat.time);
+                        const customer = getCustomerFromChat(chat);
+                        const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+                        const timeAgo = lastMessage ? formatTimeAgo(lastMessage.sentAt) : '';
+                        const unreadCount = chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
                         
                         return `
-                            <div class="chat-item ${chat.unread ? 'unread' : ''} ${activeChatId === chat.id ? 'active' : ''}" 
-                                 onclick="openChat(${chat.id})">
-                                <div class="chat-avatar">${chat.avatar}</div>
+                            <div class="chat-item ${unreadCount > 0 ? 'unread' : ''} ${activeChatId === chat.participants.reciever ? 'active' : ''}" 
+                                 onclick="openChat('${chat.participants.reciever}')">
+                                <div class="chat-avatar">${customer ? customer.name.substring(0, 2).toUpperCase() : 'CU'}</div>
                                 <div class="chat-info">
-                                    <div class="chat-name">${chat.name}</div>
-                                    <div class="chat-last-message">${chat.lastMessage}</div>
+                                    <div class="chat-name">${customer ? customer.name : 'Customer'}</div>
+                                    <div class="chat-last-message">${lastMessage ? lastMessage.content : 'No messages yet'}</div>
                                 </div>
                                 <div class="chat-meta">
                                     <div class="chat-time">${timeAgo}</div>
                                     <div class="chat-actions">
-                                        <button class="action-btn ${chat.starred ? 'starred' : ''}" onclick="toggleStar(event, ${chat.id})" title="Star chat">
-                                            <i class="fas fa-star"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteChat(event, ${chat.id})" title="Delete chat">
+                                        <button class="action-btn" onclick="deleteChat(event, '${chat.participants.reciever}')" title="Delete chat">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -1263,13 +1267,11 @@
         }
 
         // Initialize everything
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeFilters();
-            initializeSearch();
-            renderChats();
+        document.addEventListener('DOMContentLoaded', function () {
+            initializePage();
 
             // Handle window resize
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 const sidebar = document.getElementById('sidebar');
                 const overlay = document.getElementById('sidebarOverlay');
                 const chatList = document.getElementById('chatList');
@@ -1285,7 +1287,7 @@
             });
 
             // Close sidebars when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 const sidebar = document.getElementById('sidebar');
                 const menuToggle = document.querySelector('.menu-toggle');
                 const overlay = document.getElementById('sidebarOverlay');
@@ -1312,4 +1314,5 @@
         });
     </script>
 </body>
+
 </html>

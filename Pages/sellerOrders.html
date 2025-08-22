@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>Kajwelo - Orders</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +74,7 @@
 
         .sidebar-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-logo {
@@ -83,7 +85,7 @@
         }
 
         .sidebar-subtitle {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.875rem;
         }
 
@@ -96,7 +98,7 @@
             display: flex;
             align-items: center;
             padding: 0.875rem 1.5rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: all 0.2s ease;
             border: none;
@@ -107,7 +109,7 @@
 
         .sidebar-link:hover,
         .sidebar-link.active {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
             transform: translateX(5px);
         }
@@ -127,7 +129,7 @@
         /* Top Bar */
         .topbar {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -220,7 +222,7 @@
             background: white;
             padding: 1.5rem;
             border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
         }
 
@@ -232,7 +234,7 @@
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             text-align: center;
             border-left: 4px solid var(--primary-color);
             transition: transform 0.2s ease;
@@ -276,14 +278,14 @@
             background: white;
             padding: 1.5rem;
             border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
         }
 
         .orders-table-section {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
 
@@ -464,6 +466,16 @@
             transform: translateY(-1px);
         }
 
+        .btn-accept {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -525,20 +537,7 @@
             color: #6b7280;
         }
 
-        .pagination-container {
-            padding: 1.5rem;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
 
-        .pagination-info {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
 
         /* Table improvements */
         .table-responsive {
@@ -553,13 +552,41 @@
             table-layout: fixed;
         }
 
-        .orders-table th:nth-child(1) { width: 12%; } /* Order ID */
-        .orders-table th:nth-child(2) { width: 20%; } /* Customer */
-        .orders-table th:nth-child(3) { width: 15%; } /* Items */
-        .orders-table th:nth-child(4) { width: 10%; } /* Total */
-        .orders-table th:nth-child(5) { width: 12%; } /* Status */
-        .orders-table th:nth-child(6) { width: 15%; } /* Date */
-        .orders-table th:nth-child(7) { width: 16%; } /* Actions */
+        .orders-table th:nth-child(1) {
+            width: 12%;
+        }
+
+        /* Order ID */
+        .orders-table th:nth-child(2) {
+            width: 20%;
+        }
+
+        /* Customer */
+        .orders-table th:nth-child(3) {
+            width: 15%;
+        }
+
+        /* Items */
+        .orders-table th:nth-child(4) {
+            width: 10%;
+        }
+
+        /* Total */
+        .orders-table th:nth-child(5) {
+            width: 12%;
+        }
+
+        /* Status */
+        .orders-table th:nth-child(6) {
+            width: 15%;
+        }
+
+        /* Date */
+        .orders-table th:nth-child(7) {
+            width: 16%;
+        }
+
+        /* Actions */
 
         .orders-table th,
         .orders-table td {
@@ -567,40 +594,7 @@
             overflow-wrap: break-word;
         }
 
-        /* Custom Bootstrap pagination */
-        .pagination {
-            margin: 0;
-            justify-content: center;
-        }
 
-        .pagination .page-link {
-            border: 1px solid #dee2e6;
-            color: var(--dark-color);
-            padding: 0.5rem 0.75rem;
-            margin: 0 0.125rem;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .pagination .page-link:hover {
-            background-color: rgba(102, 126, 234, 0.1);
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .pagination .page-item.active .page-link {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-color: var(--primary-color);
-            color: white;
-        }
-
-        .pagination .page-item.disabled .page-link {
-            color: #6c757d;
-            background-color: #fff;
-            border-color: #dee2e6;
-            cursor: not-allowed;
-        }
 
         /* Responsive Design */
         @media (min-width: 993px) {
@@ -672,7 +666,7 @@
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--primary-color);
         }
 
@@ -771,8 +765,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .empty-state {
@@ -788,6 +787,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -900,26 +900,26 @@
                     <div class="row g-3">
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="stat-card">
-                                <div class="stat-number">156</div>
+                                <div class="stat-number">0</div>
                                 <div class="stat-label">Total Orders</div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="stat-card success">
-                                <div class="stat-number">98</div>
+                                <div class="stat-number">0</div>
                                 <div class="stat-label">Delivered</div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="stat-card warning">
-                                <div class="stat-number">23</div>
-                                <div class="stat-label">Processing</div>
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Pending</div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-4 col-md-6">
-                            <div class="stat-card danger">
-                                <div class="stat-number">5</div>
-                                <div class="stat-label">Cancelled</div>
+                            <div class="stat-card info">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Shipped</div>
                             </div>
                         </div>
                     </div>
@@ -1009,249 +1009,365 @@
                     <!-- Mobile order cards will be populated here by JavaScript -->
                 </div>
 
-                <!-- Pagination -->
-                <div class="pagination-container">
-                    <div class="pagination-info">
-                        Showing <span id="currentRange">1-5</span> of <span id="totalOrders">15</span> orders
+
                     </div>
-                    <nav aria-label="Orders pagination">
-                        <ul class="pagination" id="ordersPagination">
-                            <!-- Pagination will be populated by JavaScript -->
-                        </ul>
-                    </nav>
+                </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Order details will be populated by JavaScript -->
+        </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="acceptOrderBtn">Accept Order</button>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     
-    <script>
-        function gotodashboard(){
-            window.location.href="sellerdashboard.html";
-        }
-        function gotoproducts(){
-            window.location.href="SelleraAddProduct.html";
-        }
-        function gotoOrders(){
-            window.location.href="sellerOrders.html";
-        }
-        function gotoanalytics(){
-            window.location.href="SellerAnalytics.html";
-        }
-        function gotoCustomers(){
-            window.location.href="sellerCustomers.html";
-        }
-        function gotoInventory(){
-            window.location.href="SellerInventory.html";
-        }
-        function gotoPending(){
-            window.location.href="sellerPending.html";
-        }
-        
-        function gotoSettings(){
-            window.location.href="SellerSettings.html";
-        }
+    <script type="module">
+        import { Auth } from "../utils/auth.js";
+        import { Storage } from "../utils/localStorageHelper.js";
+        import { Customer } from "../models/Customer.js";
+        import { Order } from "../models/Order.js";
+        import { User } from "../models/User.js";
 
-        // Sample order data - Extended to show pagination
-        const ordersData = [
-            {
-                id: 'ORD-2024-001',
-                customer: { name: 'Alice Johnson', email: 'alice@email.com' },
-                items: [
-                    { name: 'Oversized Graphic Tee', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100&h=100&fit=crop&crop=center', quantity: 2 }
-                ],
-                total: 89.98,
-                status: 'delivered',
-                date: '2024-08-15',
-                time: '14:30'
-            },
-            {
-                id: 'ORD-2024-002',
-                customer: { name: 'Bob Smith', email: 'bob@email.com' },
-                items: [
-                    { name: 'Summer Dress', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=100&h=100&fit=crop&crop=center', quantity: 1 },
-                    { name: 'Denim Jacket', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 156.50,
-                status: 'processing',
-                date: '2024-08-15',
-                time: '12:15'
-            },
-            {
-                id: 'ORD-2024-003',
-                customer: { name: 'Carol Wilson', email: 'carol@email.com' },
-                items: [
-                    { name: 'Casual Pants', image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=100&h=100&fit=crop&crop=center', quantity: 3 }
-                ],
-                total: 134.97,
-                status: 'shipped',
-                date: '2024-08-14',
-                time: '16:45'
-            },
-            {
-                id: 'ORD-2024-004',
-                customer: { name: 'David Brown', email: 'david@email.com' },
-                items: [
-                    { name: 'Polo Shirt', image: 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=100&h=100&fit=crop&crop=center', quantity: 2 },
-                    { name: 'Shorts', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 98.75,
-                status: 'pending',
-                date: '2024-08-14',
-                time: '10:20'
-            },
-            {
-                id: 'ORD-2024-005',
-                customer: { name: 'Emma Davis', email: 'emma@email.com' },
-                items: [
-                    { name: 'Evening Gown', image: 'https://images.unsplash.com/photo-1566479179817-c23c1f1a4540?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 245.00,
-                status: 'cancelled',
-                date: '2024-08-13',
-                time: '18:30'
-            },
-            {
-                id: 'ORD-2024-006',
-                customer: { name: 'Frank Miller', email: 'frank@email.com' },
-                items: [
-                    { name: 'Business Suit', image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=100&h=100&fit=crop&crop=center', quantity: 1 },
-                    { name: 'Dress Shirt', image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=100&h=100&fit=crop&crop=center', quantity: 2 }
-                ],
-                total: 389.99,
-                status: 'delivered',
-                date: '2024-08-13',
-                time: '09:15'
-            },
-            {
-                id: 'ORD-2024-007',
-                customer: { name: 'Grace Taylor', email: 'grace@email.com' },
-                items: [
-                    { name: 'Yoga Pants', image: 'https://images.unsplash.com/photo-1506629905821-b51bbb535897?w=100&h=100&fit=crop&crop=center', quantity: 2 },
-                    { name: 'Sports Top', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 76.48,
-                status: 'processing',
-                date: '2024-08-12',
-                time: '15:22'
-            },
-            {
-                id: 'ORD-2024-008',
-                customer: { name: 'Henry Anderson', email: 'henry@email.com' },
-                items: [
-                    { name: 'Winter Coat', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 199.00,
-                status: 'shipped',
-                date: '2024-08-12',
-                time: '11:45'
-            },
-            {
-                id: 'ORD-2024-009',
-                customer: { name: 'Iris Thompson', email: 'iris@email.com' },
-                items: [
-                    { name: 'Sandals', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=100&h=100&fit=crop&crop=center', quantity: 1 },
-                    { name: 'Sun Hat', image: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 67.99,
-                status: 'delivered',
-                date: '2024-08-11',
-                time: '13:55'
-            },
-            {
-                id: 'ORD-2024-010',
-                customer: { name: 'Jack Robinson', email: 'jack@email.com' },
-                items: [
-                    { name: 'Casual Sneakers', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop&crop=center', quantity: 1 },
-                    { name: 'Athletic Shorts', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=100&h=100&fit=crop&crop=center', quantity: 2 }
-                ],
-                total: 124.97,
-                status: 'pending',
-                date: '2024-08-11',
-                time: '08:30'
-            },
-            // Additional orders to demonstrate pagination
-            {
-                id: 'ORD-2024-011',
-                customer: { name: 'Kelly White', email: 'kelly@email.com' },
-                items: [
-                    { name: 'Leather Boots', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 189.99,
-                status: 'processing',
-                date: '2024-08-10',
-                time: '16:20'
-            },
-            {
-                id: 'ORD-2024-012',
-                customer: { name: 'Liam Garcia', email: 'liam@email.com' },
-                items: [
-                    { name: 'Hoodie', image: 'https://images.unsplash.com/photo-1556821840-3a9fbc0cd06b?w=100&h=100&fit=crop&crop=center', quantity: 1 },
-                    { name: 'Jeans', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=100&h=100&fit=crop&crop=center', quantity: 2 }
-                ],
-                total: 145.97,
-                status: 'shipped',
-                date: '2024-08-10',
-                time: '11:15'
-            },
-            {
-                id: 'ORD-2024-013',
-                customer: { name: 'Maria Lopez', email: 'maria@email.com' },
-                items: [
-                    { name: 'Blouse', image: 'https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?w=100&h=100&fit=crop&crop=center', quantity: 2 }
-                ],
-                total: 78.98,
-                status: 'delivered',
-                date: '2024-08-09',
-                time: '14:45'
-            },
-            {
-                id: 'ORD-2024-014',
-                customer: { name: 'Noah Martinez', email: 'noah@email.com' },
-                items: [
-                    { name: 'Formal Shirt', image: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=100&h=100&fit=crop&crop=center', quantity: 3 }
-                ],
-                total: 167.97,
-                status: 'pending',
-                date: '2024-08-09',
-                time: '09:30'
-            },
-            {
-                id: 'ORD-2024-015',
-                customer: { name: 'Olivia Wilson', email: 'olivia@email.com' },
-                items: [
-                    { name: 'Maxi Dress', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=100&h=100&fit=crop&crop=center', quantity: 1 }
-                ],
-                total: 129.99,
-                status: 'processing',
-                date: '2024-08-08',
-                time: '13:20'
-            }
-        ];
-
-        let currentPage = 1;
-        const ordersPerPage = 5; // Reduced to better demonstrate pagination
-        let filteredOrders = [...ordersData];
+        // Global variables
+        let orders = [];
+        let filteredOrders = [];
+        let currentUser = null;
+        let customers = [];
+        let currentOrderId = null;
 
         // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            renderOrders();
-            setupEventListeners();
-            setupMobileBehavior();
+        document.addEventListener('DOMContentLoaded', function () {
+            initializePage();
         });
 
+        function initializePage() {
+            currentUser = Auth.getCurrentUser();
+            if (!currentUser) {
+                window.location.href = "../login.html";
+                return;
+            }
+
+            loadOrdersData();
+            setupEventListeners();
+            updateStats();
+            renderOrders();
+        }
+
+        function loadOrdersData() {
+            try {
+                // Load orders from current user
+                orders = currentUser.orders || [];
+
+                // Load customers for order details
+                const users = Storage.get("users", []);
+                customers = users.filter(user => user instanceof Customer);
+
+                console.log(`Found ${orders.length} orders in localStorage`);
+
+                // Process orders to add customer information
+                orders.forEach(order => {
+                    order.customer = customers.find(customer => customer.id === order.customerId);
+                    order.formattedDate = formatDate(order.orderedAt);
+                    order.formattedTime = formatTime(order.orderedAt);
+                    order.statusClass = getStatusClass(order.status);
+                    order.displayStatus = getDisplayStatus(order.status);
+                });
+
+                // Group orders by orderId
+                const groupedOrders = groupOrdersByOrderId(orders);
+                orders = groupedOrders;
+                console.log(orders);
+                filteredOrders = [...orders];
+            } catch (error) {
+                console.error('Error loading orders data:', error);
+                orders = [];
+                filteredOrders = [];
+            }
+        }
+
+        function groupOrdersByOrderId(orders) {
+            const grouped = {};
+            
+            orders.forEach(order => {
+                const orderId = order.orderId.split("-")[0]; // Get base orderId without suffix
+                if (!grouped[orderId]) {
+                    grouped[orderId] = {
+                        orderId: orderId,
+                        orders: [],
+                        totalPrice: 0,
+                        totalItems: 0,
+                        customer: order.customer,
+                        status: order.status,
+                        statusClass: order.statusClass,
+                        displayStatus: order.displayStatus,
+                        orderedAt: order.orderedAt,
+                        formattedDate: order.formattedDate,
+                        formattedTime: order.formattedTime,
+                        allProducts: []
+                    };
+                }
+                
+                grouped[orderId].orders.push(order);
+                grouped[orderId].totalPrice += order.totalPrice;
+                grouped[orderId].totalItems += order.products.length;
+                grouped[orderId].allProducts.push(...order.products);
+                
+                // Use the earliest date for the group
+                if (new Date(order.orderedAt) < new Date(grouped[orderId].orderedAt)) {
+                    grouped[orderId].orderedAt = order.orderedAt;
+                    grouped[orderId].formattedDate = order.formattedDate;
+                    grouped[orderId].formattedTime = order.formattedTime;
+                }
+                
+                // If any order in the group is pending, show as pending
+                if (order.status === 'Pending') {
+                    grouped[orderId].status = 'Pending';
+                    grouped[orderId].statusClass = 'pending';
+                    grouped[orderId].displayStatus = 'Pending';
+                }
+            });
+            
+            return Object.values(grouped);
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case "waiting to be Checked Out":
+                    return "pending";
+                case "Checked Out - Waiting to be Shipped":
+                    return "processing";
+                case "Shipped":
+                    return "shipped";
+                case "Delivered":
+                    return "delivered";
+                case "Cancelled":
+                    return "cancelled";
+                default:
+                    return "pending";
+            }
+        }
+
+        function getDisplayStatus(status) {
+            switch (status) {
+                case "waiting to be Checked Out":
+                    return "Pending";
+                case "Checked Out - Waiting to be Shipped":
+                    return "Processing";
+                case "Shipped":
+                    return "Shipped";
+                case "Delivered":
+                    return "Delivered";
+                case "Cancelled":
+                    return "Cancelled";
+                default:
+                    return "Pending";
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function formatTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        function updateStats() {
+            const totalOrders = orders.length;
+            const deliveredOrders = orders.filter(order => order.status === "Delivered").length;
+            const pendingOrders = orders.filter(order => order.status === "waiting to be Checked Out").length;
+            const shippedOrders = orders.filter(order => order.status === "Shipped").length;
+
+            // Update stats cards
+            const statCards = document.querySelectorAll('.stat-card');
+            if (statCards.length >= 4) {
+                statCards[0].querySelector('.stat-number').textContent = totalOrders;
+                statCards[1].querySelector('.stat-number').textContent = deliveredOrders;
+                statCards[2].querySelector('.stat-number').textContent = pendingOrders;
+                statCards[3].querySelector('.stat-number').textContent = shippedOrders;
+            }
+
+            // Update notification badge
+            const pendingOrdersCount = orders.filter(order => order.status === "waiting to be Checked Out").length;
+            const notificationBadge = document.querySelector('.notification-badge');
+            if (notificationBadge) {
+                notificationBadge.textContent = pendingOrdersCount;
+                notificationBadge.style.display = pendingOrdersCount > 0 ? 'flex' : 'none';
+            }
+
+            // Update total orders badge
+            const totalBadge = document.querySelector('.badge.bg-primary');
+            if (totalBadge) {
+                totalBadge.textContent = `${totalOrders} total`;
+            }
+        }
+
+        function renderOrders() {
+            // Render desktop table
+            renderDesktopTable();
+            
+            // Render mobile cards
+            renderMobileCards();
+        }
+
+        function renderDesktopTable() {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="fas fa-shopping-bag empty-icon"></i>
+                                <h5>No orders found</h5>
+                                <p>Try adjusting your search or filter criteria.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredOrders.map(orderGroup => `
+                <tr>
+                    <td>
+                        <div class="order-id">#${orderGroup.orderId}</div>
+                        ${orderGroup.orders.length > 1 ? `<small class="text-muted">${orderGroup.orders.length} orders</small>` : ''}
+                    </td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-avatar">
+                                ${orderGroup.customer ? orderGroup.customer.name.split(' ').map(n => n[0]).join('') : 'N/A'}
+                            </div>
+                            <div class="customer-details">
+                                <h6>${orderGroup.customer ? orderGroup.customer.name : 'Unknown Customer'}</h6>
+                                <p>${orderGroup.customer ? orderGroup.customer.email : 'No email'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="order-items">
+                            <span class="item-count">${orderGroup.totalItems} items</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="order-total">$${orderGroup.totalPrice.toFixed(2)}</div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${orderGroup.statusClass}">
+                            ${orderGroup.displayStatus}
+                        </span>
+                    </td>
+                    <td>
+                        <div>${orderGroup.formattedDate}</div>
+                        <small class="text-muted">${orderGroup.formattedTime}</small>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                             <button class="btn-action btn-view" onclick="viewOrder('${orderGroup.orderId}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                             <button class="btn-action btn-accept" onclick="acceptOrder('${orderGroup.orderId}')">
+                                 <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderMobileCards() {
+            const container = document.getElementById('mobileOrderCards');
+            
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag empty-icon"></i>
+                        <h5>No orders found</h5>
+                        <p>Try adjusting your search or filter criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredOrders.map(orderGroup => `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div class="order-id">#${orderGroup.orderId}</div>
+                        <span class="status-badge status-${orderGroup.statusClass}">
+                            ${orderGroup.displayStatus}
+                        </span>
+                    </div>
+                    <div class="order-card-body">
+                        <div class="customer-info mb-2">
+                            <div class="customer-avatar">
+                                ${orderGroup.customer ? orderGroup.customer.name.split(' ').map(n => n[0]).join('') : 'N/A'}
+                            </div>
+                            <div class="customer-details">
+                                <h6>${orderGroup.customer ? orderGroup.customer.name : 'Unknown Customer'}</h6>
+                                <p>${orderGroup.customer ? orderGroup.customer.email : 'No email'}</p>
+                            </div>
+                        </div>
+                        <div class="order-items mb-2">
+                            <span class="item-count">${orderGroup.totalItems} items</span>
+                            ${orderGroup.orders.length > 1 ? `<small class="text-muted">(${orderGroup.orders.length} orders)</small>` : ''}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="order-total">$${orderGroup.totalPrice.toFixed(2)}</div>
+                            <div>
+                                <div>${orderGroup.formattedDate}</div>
+                                <small class="text-muted">${orderGroup.formattedTime}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card-footer">
+                        <div class="action-buttons">
+                             <button class="btn-action btn-view" onclick="viewOrder('${orderGroup.orderId}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                             <button class="btn-action btn-accept" onclick="acceptOrder('${orderGroup.orderId}')">
+                                 <i class="fas fa-check"></i> Accept
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // Sidebar functionality
-        function toggleSidebar() {
+        window.toggleSidebar = function () {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const body = document.body;
-            
+
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
-            
-            // Prevent body scrolling when sidebar is open on mobile
+
             if (window.innerWidth < 993) {
                 if (sidebar.classList.contains('open')) {
                     body.style.overflow = 'hidden';
@@ -1261,10 +1377,73 @@
             }
         }
 
-        // Setup mobile behavior
-        function setupMobileBehavior() {
+        // Navigation functions
+        window.gotodashboard = function () {
+            window.location.href = "sellerdashboard.html";
+        }
+        window.gotoproducts = function () {
+            window.location.href = "SelleraAddProduct.html";
+        }
+        window.gotoOrders = function () {
+            window.location.href = "sellerOrders.html";
+        }
+        window.gotoanalytics = function () {
+            window.location.href = "SellerAnalytics.html";
+        }
+        window.gotoCustomers = function () {
+            window.location.href = "sellerCustomers.html";
+        }
+        window.gotoInventory = function () {
+            window.location.href = "SellerInventory.html";
+        }
+        window.gotoPending = function () {
+            window.location.href = "sellerPending.html";
+        }
+        window.gotoSettings = function () {
+            window.location.href = "SellerSettings.html";
+        }
+        window.gotoInbox = function () {
+            window.location.href = "sellerInbox.html";
+        }
+
+        function setupEventListeners() {
+            // Search functionality
+            const searchInput = document.getElementById('orderSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', handleSearch);
+            }
+
+            // Filter functionality
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.addEventListener('change', applyFilters);
+            }
+
+            const dateFilter = document.getElementById('dateFilter');
+            if (dateFilter) {
+                dateFilter.addEventListener('change', applyFilters);
+            }
+
+            const valueFilter = document.getElementById('valueFilter');
+            if (valueFilter) {
+                valueFilter.addEventListener('change', applyFilters);
+            }
+
+            // Modal accept button
+            const acceptOrderBtn = document.getElementById('acceptOrderBtn');
+            if (acceptOrderBtn) {
+                acceptOrderBtn.addEventListener('click', function() {
+                    if (currentOrderId) {
+                        acceptOrder(currentOrderId);
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
+                        modal.hide();
+                    }
+                });
+            }
+
+            // Sidebar links
             document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.addEventListener('click', function() {
+                link.addEventListener('click', function () {
                     if (window.innerWidth < 993) {
                         toggleSidebar();
                     }
@@ -1272,61 +1451,35 @@
             });
         }
 
-        // Setup event listeners
-        function setupEventListeners() {
-            // Search functionality
-            document.getElementById('orderSearch').addEventListener('input', handleSearch);
-            
-            // Filter functionality
-            document.getElementById('statusFilter').addEventListener('change', applyFilters);
-            document.getElementById('dateFilter').addEventListener('change', applyFilters);
-            document.getElementById('valueFilter').addEventListener('change', applyFilters);
-
-            // Window resize handler
-            window.addEventListener('resize', function() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebarOverlay');
-                
-                if (window.innerWidth >= 993) {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-        }
-
-        // Handle search
         function handleSearch(e) {
             const searchTerm = e.target.value.toLowerCase();
-            filteredOrders = ordersData.filter(order => 
-                order.id.toLowerCase().includes(searchTerm) ||
-                order.customer.name.toLowerCase().includes(searchTerm) ||
-                order.customer.email.toLowerCase().includes(searchTerm)
+            filteredOrders = orders.filter(orderGroup =>
+                orderGroup.orderId.toLowerCase().includes(searchTerm) ||
+                (orderGroup.customer && orderGroup.customer.name.toLowerCase().includes(searchTerm)) ||
+                (orderGroup.customer && orderGroup.customer.email.toLowerCase().includes(searchTerm))
             );
-            currentPage = 1;
             renderOrders();
         }
 
-        // Apply filters
         function applyFilters() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
-            const valueFilter = document.getElementById('valueFilter').value;
+            const statusFilter = document.getElementById('statusFilter')?.value || '';
+            const dateFilter = document.getElementById('dateFilter')?.value || '';
+            const valueFilter = document.getElementById('valueFilter')?.value || '';
 
-            filteredOrders = ordersData.filter(order => {
+            filteredOrders = orders.filter(orderGroup => {
                 let matches = true;
 
                 // Status filter
-                if (statusFilter && order.status !== statusFilter) {
+                if (statusFilter && orderGroup.status !== statusFilter) {
                     matches = false;
                 }
 
                 // Date filter
                 if (dateFilter) {
-                    const orderDate = new Date(order.date);
+                    const orderDate = new Date(orderGroup.orderedAt);
                     const today = new Date();
-                    
-                    switch(dateFilter) {
+
+                    switch (dateFilter) {
                         case 'today':
                             matches = matches && orderDate.toDateString() === today.toDateString();
                             break;
@@ -1347,8 +1500,8 @@
 
                 // Value filter
                 if (valueFilter) {
-                    const total = order.total;
-                    switch(valueFilter) {
+                    const total = orderGroup.totalPrice;
+                    switch (valueFilter) {
                         case '0-50':
                             matches = matches && total >= 0 && total <= 50;
                             break;
@@ -1367,23 +1520,19 @@
                 return matches;
             });
 
-            currentPage = 1;
             renderOrders();
         }
 
-        // Reset filters
-        function resetFilters() {
+        window.resetFilters = function () {
             document.getElementById('statusFilter').value = '';
             document.getElementById('dateFilter').value = '';
             document.getElementById('valueFilter').value = '';
             document.getElementById('orderSearch').value = '';
-            filteredOrders = [...ordersData];
-            currentPage = 1;
+            filteredOrders = [...orders];
             renderOrders();
         }
 
-        // Export orders
-        function exportOrders() {
+        window.exportOrders = function () {
             const csvContent = generateCSV(filteredOrders);
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -1396,301 +1545,249 @@
             window.URL.revokeObjectURL(url);
         }
 
-        // Generate CSV content
         function generateCSV(orders) {
-            const headers = ['Order ID', 'Customer Name', 'Customer Email', 'Items', 'Total', 'Status', 'Date', 'Time'];
-            const rows = orders.map(order => [
-                order.id,
-                order.customer.name,
-                order.customer.email,
-                order.items.map(item => `${item.name} (${item.quantity})`).join('; '),
-                `${order.total.toFixed(2)}`,
-                order.status.charAt(0).toUpperCase() + order.status.slice(1),
-                order.date,
-                order.time
+            const headers = ['Order ID', 'Customer Name', 'Customer Email', 'Items Count', 'Total', 'Status', 'Date', 'Time', 'Number of Orders'];
+            const rows = orders.map(orderGroup => [
+                orderGroup.orderId,
+                orderGroup.customer ? orderGroup.customer.name : 'Unknown Customer',
+                orderGroup.customer ? orderGroup.customer.email : 'No email',
+                orderGroup.totalItems,
+                `${orderGroup.totalPrice.toFixed(2)}`,
+                orderGroup.displayStatus,
+                orderGroup.formattedDate,
+                orderGroup.formattedTime,
+                orderGroup.orders.length
             ]);
 
             return [headers, ...rows].map(row => row.join(',')).join('\n');
         }
 
-        // Render orders
-        function renderOrders() {
-            const startIndex = (currentPage - 1) * ordersPerPage;
-            const endIndex = startIndex + ordersPerPage;
-            const pageOrders = filteredOrders.slice(startIndex, endIndex);
-
-            // Render desktop table
-            renderDesktopTable(pageOrders);
-            
-            // Render mobile cards
-            renderMobileCards(pageOrders);
-            
-            // Render pagination
-            renderPagination();
-            
-            // Update pagination info
-            updatePaginationInfo();
+        window.viewOrder = function (orderId) {
+            const orderGroup = orders.find(o => o.orderId === orderId);
+            if (orderGroup) {
+                currentOrderId = orderId;
+                showOrderDetailsModal(orderGroup);
+            }
         }
 
-        // Render desktop table
-        function renderDesktopTable(orders) {
-            const tbody = document.getElementById('ordersTableBody');
-            
-            if (orders.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center py-5">
-                            <div class="empty-state">
-                                <i class="fas fa-shopping-bag empty-icon"></i>
-                                <h5>No orders found</h5>
-                                <p>Try adjusting your search or filter criteria.</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                return;
+        window.acceptOrder = function (orderId) {
+            const orderGroup = orders.find(o => o.orderId === orderId);
+            if (orderGroup) {
+                const orderCount = orderGroup.orders.length;
+                const message = orderCount > 1 
+                    ? `Are you sure you want to accept ${orderCount} orders with ID ${orderId}? This will update all orders to "Shipped".`
+                    : `Are you sure you want to accept order ${orderId}? This will update the status to "Shipped".`;
+                
+                if (confirm(message)) {
+                    updateOrderStatus(orderId, "Shipped");
+                }
             }
-
-            tbody.innerHTML = orders.map(order => `
-                <tr>
-                    <td>
-                        <div class="order-id">${order.id}</div>
-                    </td>
-                    <td>
-                        <div class="customer-info">
-                            <div class="customer-avatar">
-                                ${order.customer.name.split(' ').map(n => n[0]).join('')}
-                            </div>
-                            <div class="customer-details">
-                                <h6>${order.customer.name}</h6>
-                                <p>${order.customer.email}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="order-items">
-                            ${order.items.slice(0, 2).map(item => 
-                                `<img src="${item.image}" alt="${item.name}" class="item-image">`
-                            ).join('')}
-                            ${order.items.length > 2 ? `<span class="item-count">+${order.items.length - 2}</span>` : ''}
-                            ${order.items.length === 1 ? `<span class="item-count">${order.items[0].quantity}x</span>` : ''}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="order-total">${order.total.toFixed(2)}</div>
-                    </td>
-                    <td>
-                        <span class="status-badge status-${order.status}">
-                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
-                    </td>
-                    <td>
-                        <div>${formatDate(order.date)}</div>
-                        <small class="text-muted">${order.time}</small>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-action btn-view" onclick="viewOrder('${order.id}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn-action btn-edit" onclick="editOrder('${order.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
         }
 
-        // Render mobile cards
-        function renderMobileCards(orders) {
-            const container = document.getElementById('mobileOrderCards');
+        function showOrderDetailsModal(orderGroup) {
+            const modalContent = document.getElementById('orderDetailsContent');
             
-            if (orders.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-shopping-bag empty-icon"></i>
-                        <h5>No orders found</h5>
-                        <p>Try adjusting your search or filter criteria.</p>
+            modalContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Order Information</h6>
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <td><strong>Order ID:</strong></td>
+                                <td>${orderGroup.orderId}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Number of Orders:</strong></td>
+                                <td>${orderGroup.orders.length} order${orderGroup.orders.length > 1 ? 's' : ''}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status:</strong></td>
+                                <td>
+                                    <span class="status-badge status-${orderGroup.statusClass}">
+                                        ${orderGroup.displayStatus}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date:</strong></td>
+                                <td>${orderGroup.formattedDate} at ${orderGroup.formattedTime}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Amount:</strong></td>
+                                <td><strong>$${orderGroup.totalPrice.toFixed(2)}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Items Count:</strong></td>
+                                <td>${orderGroup.totalItems} items</td>
+                            </tr>
+                        </table>
                     </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = orders.map(order => `
-                <div class="order-card">
-                    <div class="order-card-header">
-                        <div class="order-id">${order.id}</div>
-                        <span class="status-badge status-${order.status}">
-                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Customer Information</h6>
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td>${orderGroup.customer ? orderGroup.customer.name : 'Unknown Customer'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>${orderGroup.customer ? orderGroup.customer.email : 'No email'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone:</strong></td>
+                                <td>${orderGroup.customer ? (orderGroup.customer.phone || 'Not provided') : 'Not provided'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Address:</strong></td>
+                                <td>${orderGroup.customer ? (orderGroup.customer.address || 'Not provided') : 'Not provided'}</td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="order-card-body">
-                        <div class="customer-info mb-2">
-                            <div class="customer-avatar">
-                                ${order.customer.name.split(' ').map(n => n[0]).join('')}
-                            </div>
-                            <div class="customer-details">
-                                <h6>${order.customer.name}</h6>
-                                <p>${order.customer.email}</p>
-                            </div>
-                        </div>
-                        <div class="order-items mb-2">
-                            ${order.items.slice(0, 3).map(item => 
-                                `<img src="${item.image}" alt="${item.name}" class="item-image">`
-                            ).join('')}
-                            ${order.items.length > 3 ? `<span class="item-count">+${order.items.length - 3}</span>` : ''}
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="order-total">${order.total.toFixed(2)}</div>
-                            <div>
-                                <div>${formatDate(order.date)}</div>
-                                <small class="text-muted">${order.time}</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-card-footer">
-                        <div class="action-buttons">
-                            <button class="btn-action btn-view" onclick="viewOrder('${order.id}')">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn-action btn-edit" onclick="editOrder('${order.id}')">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
+                </div>
+                ${orderGroup.orders.length > 1 ? `
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6 class="text-primary">Individual Orders</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Status</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${orderGroup.orders.map(order => `
+                                        <tr>
+                                            <td>${order.orderId}</td>
+                                            <td>
+                                                <span class="status-badge status-${order.statusClass}">
+                                                    ${order.displayStatus}
+                                                </span>
+                                            </td>
+                                            <td>${order.products.length} items</td>
+                                            <td>$${order.totalPrice.toFixed(2)}</td>
+                                            <td>${order.formattedDate}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-
-        // Render pagination
-        function renderPagination() {
-            const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-            const pagination = document.getElementById('ordersPagination');
-
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let paginationHTML = '';
-
-            // Previous button
-            paginationHTML += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                </li>
+                ` : ''}
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6 class="text-primary">All Order Items</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Product ID</th>
+                                        <th>Size</th>
+                                        <th>Color</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${orderGroup.allProducts.map(product => `
+                                        <tr>
+                                            <td>${product.productId}</td>
+                                            <td>${product.size}</td>
+                                            <td>${product.color}</td>
+                                            <td>${product.quantity}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             `;
 
-            // Page numbers
-            const startPage = Math.max(1, currentPage - 2);
-            const endPage = Math.min(totalPages, currentPage + 2);
-
-            if (startPage > 1) {
-                paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>`;
-                if (startPage > 2) {
-                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-                }
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                paginationHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}">
-                        <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
-                    </li>
-                `;
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-                }
-                paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a></li>`;
-            }
-
-            // Next button
-            paginationHTML += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </li>
-            `;
-
-            pagination.innerHTML = paginationHTML;
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            modal.show();
         }
 
-        // Update pagination info
-        function updatePaginationInfo() {
-            const startIndex = (currentPage - 1) * ordersPerPage + 1;
-            const endIndex = Math.min(currentPage * ordersPerPage, filteredOrders.length);
-            
-            document.getElementById('currentRange').textContent = `${startIndex}-${endIndex}`;
-            document.getElementById('totalOrders').textContent = filteredOrders.length;
-        }
-
-        // Change page
-        function changePage(page) {
-            const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-            if (page >= 1 && page <= totalPages) {
-                currentPage = page;
-                renderOrders();
-                // Scroll to top of table
-                document.querySelector('.orders-table-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-            });
-        }
-
-        // Order actions
-        function viewOrder(orderId) {
-            const order = ordersData.find(o => o.id === orderId);
-            if (order) {
-                // Create a detailed view modal or navigate to order details page
-                alert(`Viewing order ${orderId}\n\nCustomer: ${order.customer.name}\nTotal: ${order.total.toFixed(2)}\nStatus: ${order.status}`);
-                // In a real app, this would open a modal or navigate to a detailed view
-            }
-        }
-
-        function editOrder(orderId) {
-            const order = ordersData.find(o => o.id === orderId);
-            if (order) {
-                // Navigate to order edit page or open edit modal
-                alert(`Editing order ${orderId}\n\nThis would typically open an order management interface where you can:\n- Update order status\n- Modify shipping information\n- Add tracking details\n- Process refunds`);
-                // In a real app, this would open an edit interface
-            }
-        }
-
-        // Update order status (example function)
         function updateOrderStatus(orderId, newStatus) {
-            const orderIndex = ordersData.findIndex(o => o.id === orderId);
+            try {
+                // Find the order group
+                const orderGroup = orders.find(o => o.orderId === orderId);
+                if (!orderGroup) {
+                    alert('Order not found!');
+                    return;
+                }
+
+                // Update all orders in the group
+                orderGroup.orders.forEach(order => {
+                    // Update order in current user (seller)
+                    const orderIndex = currentUser.orders.findIndex(o => o.orderId === order.orderId);
             if (orderIndex !== -1) {
-                ordersData[orderIndex].status = newStatus;
-                applyFilters(); // Reapply filters and re-render
+                        currentUser.orders[orderIndex].status = newStatus;
+                    }
+
+                    // Update order in customer's order history
+                    if (order.customer) {
+                        const customerOrderIndex = order.customer.orderHistory.findIndex(o => o.orderId === order.orderId);
+                        if (customerOrderIndex !== -1) {
+                            order.customer.orderHistory[customerOrderIndex].status = newStatus;
+                            User.updateInDB(order.customer);
+                        }
+                    }
+                });
+
+                // Update current user in localStorage
+                User.updateCurrentUser(currentUser);
+
+                // Reload data and update UI
+                loadOrdersData();
+                updateStats();
+                renderOrders();
+
+                // Show success message
+                const orderCount = orderGroup.orders.length;
+                const message = orderCount > 1 
+                    ? `${orderCount} orders with ID ${orderId} have been ${newStatus.toLowerCase()} successfully!`
+                    : `Order ${orderId} has been ${newStatus.toLowerCase()} successfully!`;
+                alert(message);
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                alert('Error updating order status. Please try again.');
             }
         }
 
-        // Mark order as delivered (example function)
-        function markAsDelivered(orderId) {
-            updateOrderStatus(orderId, 'delivered');
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const body = document.body;
+
+            if (window.innerWidth >= 993) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                body.style.overflow = '';
+            }
+        });
+
+        // Touch device improvements
+        if ('ontouchstart' in window) {
+            document.body.classList.add('touch-device');
+            document.addEventListener('touchstart', function () { }, { passive: true });
         }
 
-        // Cancel order (example function)
-        function cancelOrder(orderId) {
-            if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
-                updateOrderStatus(orderId, 'cancelled');
-            }
+        // iPad detection
+        function isiPad() {
+            return navigator.userAgent.match(/(iPad)/) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        if (isiPad()) {
+            document.body.classList.add('ipad-device');
         }
     </script>
 </body>
+
 </html>

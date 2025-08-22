@@ -1014,12 +1014,12 @@
             <div class="topbar-right">
                 <button class="notification-btn">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge"></span>
                 </button>
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span class="hide-mobile"></span>
-                    
+
                 </div>
             </div>
         </header>
@@ -1030,7 +1030,7 @@
                         <div class="stat-icon total">
                             <i class="fas fa-boxes"></i>
                         </div>
-                        <span class="stat-change positive">+5.2%</span>
+                        <!-- <span class="stat-change positive">+5.2%</span> -->
                     </div>
                     <div class="stat-value">1,245</div>
                     <div class="stat-label">Total Products</div>
@@ -1041,7 +1041,7 @@
                         <div class="stat-icon low">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <span class="stat-change negative">+12</span>
+                        <!-- <span class="stat-change negative">+12</span> -->
                     </div>
                     <div class="stat-value">28</div>
                     <div class="stat-label">Low Stock Items</div>
@@ -1052,7 +1052,7 @@
                         <div class="stat-icon out">
                             <i class="fas fa-ban"></i>
                         </div>
-                        <span class="stat-change negative">+3</span>
+                        <!-- <span class="stat-change negative">+3</span> -->
                     </div>
                     <div class="stat-value">15</div>
                     <div class="stat-label">Out of Stock</div>
@@ -1063,7 +1063,7 @@
                         <div class="stat-icon value">
                             <i class="fas fa-dollar-sign"></i>
                         </div>
-                        <span class="stat-change positive">+8.7%</span>
+                        <!-- <span class="stat-change positive">+8.7%</span> -->
                     </div>
                     <div class="stat-value">$45.2K</div>
                     <div class="stat-label">Inventory Value</div>
@@ -1081,26 +1081,19 @@
                     </div>
                     <select id="categoryFilter" class="filter-select">
                         <option value="">All Categories</option>
-                        <option value="electronics">Electronics</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
 
-                        <option value="clothing">Clothing</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="home">Home</option>
                     </select>
 
                     <select id="stockFilter" class="filter-select">
                         <option value="">All Stock Levels</option>
                         <option value="high">In Stock</option>
                         <option value="low">Low Stock</option>
-
                         <option value="out">Out of Stock</option>
                     </select>
                 </div>
                 <div class="controls-right">
-                    <button class="btn btn-secondary hide-mobile" onclick="exportInventory()">
-
-                        <i class="fas fa-download"></i> Export
-                    </button>
                     <button class="btn btn-primary" onclick="openAddProductModal()">
                         <i class="fas fa-plus"></i> Add Product
 
@@ -1158,17 +1151,16 @@
                     <label for="productCategory" class="form-label">Category</label>
                     <select id="productCategory" class="form-input" required>
                         <option value="">Select a category</option>
-                        <option value="electronics">Electronics</option>
-
-                        <option value="clothing">Clothing</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="home">Home</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="productPrice" class="form-label">Price ($)</label>
                     <input type="number" id="productPrice" class="form-input" step="0.01" min="0" required>
+                    <label for="productSalePrice" class="form-label">Sale Price ($)</label>
+                    <input type="number" id="productSalePrice" class="form-input" step="0.01" min="0">
                 </div>
                 <div class="form-group">
 
@@ -1186,7 +1178,6 @@
                                 <th>Color</th>
                                 <th>Size</th>
                                 <th>Quantity</th>
-
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -1212,193 +1203,232 @@
     </div>
     <div id="notification" class="notification"></div>
 
-    <script>
-        function gotodashboard() {
+    <script type="module">
+
+        import { Auth } from "../utils/auth.js";
+        import { Storage } from "../utils/localStorageHelper.js";
+        import { Seller } from "../models/Seller.js";
+        import { Product } from "../models/Product.js";
+
+        const currentUser = Auth.getCurrentUser();
+
+
+        window.gotodashboard = function gotodashboard() {
             window.location.href = "sellerdashboard.html";
         }
-        function gotoproducts() {
+        window.gotoproducts = function gotoproducts() {
             window.location.href = "SelleraAddProduct.html";
         }
-        function gotoOrders() {
+        window.gotoOrders = function gotoOrders() {
             window.location.href = "sellerOrders.html";
         }
-        function gotoanalytics() {
+        window.gotoanalytics = function gotoanalytics() {
             window.location.href = "SellerAnalytics.html";
         }
-        function gotoCustomers() {
+        window.gotoCustomers = function gotoCustomers() {
             window.location.href = "sellerCustomers.html";
         }
-        function gotoInventory() {
+        window.gotoInventory = function gotoInventory() {
             window.location.href = "SellerInventory.html";
         }
-        function gotoPending() {
+        window.gotoPending = function gotoPending() {
             window.location.href = "sellerPending.html";
         }
-
-        function gotoSettings() {
+        window.gotoSettings = function gotoSettings() {
             window.location.href = "SellerSettings.html";
+        }
+        window.gotoInbox = function gotoInbox() {
+            window.location.href = "sellerInbox.html";
         }
         // بيانات المخزون المحدثة مع خاصية 'visible'
 
-        let inventoryData = [{
-            id: 1,
-            name: "Wireless Bluetooth Headphones",
-            sku: "WBH-001",
-            category: "electronics",
-            price: 79.99,
-            stock: 65,
-            lowStockThreshold: 10,
-            lastUpdated: "2025-08-14",
-            image: "🎧",
-            variants: [{
+        let inventoryData = [];
+        const products = currentUser.products.filter(product => product.isVerified === true)
+        for (let i = 0; i < products.length; i++) {
+            let totalquantity = 0;
+            products[i].stock.forEach(v => totalquantity += v.quantity)
+            const newDate = new Date(products[i].updatedAt)
+            const customFormat = new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            }).format(newDate);
 
-                color: "Black",
-                size: "One Size",
-                quantity: 45
-            }, {
-                color: "White",
-                size: "One Size",
-                quantity: 20
-            }],
+            const obj = {
+                id: products[i].id,
+                name: products[i].name,
+                sku: products[i].description,
+                category: products[i].category,
+                price: products[i].price,
+                stock: totalquantity,
+                lowStockThreshold: 10,
+                lastUpdated: customFormat,
+                image: "👕",
+                variants: products[i].stock,
 
-            visible: true
-        }, {
-            id: 2,
-            name: "Classic Denim Jacket",
-            sku: "CDJ-002",
-            category: "clothing",
-            price: 89.99,
-            stock: 8,
-            lowStockThreshold: 15,
-            lastUpdated: "2025-08-13",
-            image: "🧥",
+                visible: products[i].visibility
+            }
+            inventoryData.push(obj)
+        }
+        // [{
+        //     id: 1,
+        //     name: "Wireless Bluetooth Headphones",
+        //     sku: "WBH-001",
+        //     category: "electronics",
+        //     price: 79.99,
+        //     stock: 65,
+        //     lowStockThreshold: 10,
+        //     lastUpdated: "2025-08-14",
+        //     image: "🎧",
+        //     variants: [{
 
-            variants: [{
-                color: "Blue",
-                size: "M",
-                quantity: 5
-            }, {
-                color: "Blue",
-                size: "L",
-                quantity: 3
-            }],
+        //         color: "Black",
+        //         size: "One Size",
+        //         quantity: 45
+        //     }, {
+        //         color: "White",
+        //         size: "One Size",
+        //         quantity: 20
+        //     }],
 
-            visible: true
-        }, {
-            id: 3,
-            name: "Designer Handbag",
-            sku: "DHB-003",
-            category: "accessories",
-            price: 299.99,
-            stock: 0,
-            lowStockThreshold: 5,
-            lastUpdated: "2025-08-12",
-            image: "👜",
+        //     visible: true
+        // }, {
+        //     id: 2,
+        //     name: "Classic Denim Jacket",
+        //     sku: "CDJ-002",
+        //     category: "clothing",
+        //     price: 89.99,
+        //     stock: 8,
+        //     lowStockThreshold: 15,
+        //     lastUpdated: "2025-08-13",
+        //     image: "🧥",
 
-            variants: [{
-                color: "Red",
-                size: "Standard",
-                quantity: 0
-            }],
-            visible: true
-        }, {
-            id: 4,
-            name: "Athletic Running Shoes",
-            sku: "ARS-004",
-            category:
-                "clothing",
-            price: 120.00,
-            stock: 32,
-            lowStockThreshold: 12,
-            lastUpdated: "2025-08-15",
-            image: "👟",
-            variants: [{
-                color: "Gray",
-                size: "9",
-                quantity: 10
+        //     variants: [{
+        //         color: "Blue",
+        //         size: "M",
+        //         quantity: 5
+        //     }, {
+        //         color: "Blue",
+        //         size: "L",
+        //         quantity: 3
+        //     }],
 
-            }, {
-                color: "Black",
-                size: "10",
-                quantity: 22
-            }],
-            visible: true
-        }, {
-            id: 5,
-            name: "Smart Watch Pro",
-            sku: "SWP-005",
+        //     visible: true
+        // }, {
+        //     id: 3,
+        //     name: "Designer Handbag",
+        //     sku: "DHB-003",
+        //     category: "accessories",
+        //     price: 299.99,
+        //     stock: 0,
+        //     lowStockThreshold: 5,
+        //     lastUpdated: "2025-08-12",
+        //     image: "👜",
 
-            category: "electronics",
-            price: 249.99,
-            stock: 18,
-            lowStockThreshold: 10,
-            lastUpdated: "2025-08-14",
-            image: "⌚",
-            variants: [{
-                color: "Silver",
-                size: "Standard",
-                quantity: 18
+        //     variants: [{
+        //         color: "Red",
+        //         size: "Standard",
+        //         quantity: 0
+        //     }],
+        //     visible: true
+        // }, {
+        //     id: 4,
+        //     name: "Athletic Running Shoes",
+        //     sku: "ARS-004",
+        //     category:
+        //         "clothing",
+        //     price: 120.00,
+        //     stock: 32,
+        //     lowStockThreshold: 12,
+        //     lastUpdated: "2025-08-15",
+        //     image: "👟",
+        //     variants: [{
+        //         color: "Gray",
+        //         size: "9",
+        //         quantity: 10
 
-            }],
-            visible: true
-        }, {
-            id: 6,
-            name: "Cotton T-Shirt",
-            sku: "CTS-006",
-            category: "clothing",
-            price: 25.99,
-            stock: 5,
-            lowStockThreshold: 20,
-            lastUpdated: "2025-08-11",
-            image: "👕",
+        //     }, {
+        //         color: "Black",
+        //         size: "10",
+        //         quantity: 22
+        //     }],
+        //     visible: true
+        // }, {
+        //     id: 5,
+        //     name: "Smart Watch Pro",
+        //     sku: "SWP-005",
 
-            variants: [{
-                color: "White",
-                size: "S",
-                quantity: 2
-            }, {
-                color: "White",
-                size: "M",
-                quantity: 3
+        //     category: "electronics",
+        //     price: 249.99,
+        //     stock: 18,
+        //     lowStockThreshold: 10,
+        //     lastUpdated: "2025-08-14",
+        //     image: "⌚",
+        //     variants: [{
+        //         color: "Silver",
+        //         size: "Standard",
+        //         quantity: 18
 
-            }],
-            visible: true
-        }, {
-            id: 7,
-            name: "Ceramic Plant Pot",
-            sku: "CPP-007",
-            category: "home",
-            price: 34.99,
-            stock: 22,
-            lowStockThreshold: 8,
-            lastUpdated: "2025-08-13",
-            image: "🪴",
+        //     }],
+        //     visible: true
+        // }, {
+        //     id: 6,
+        //     name: "Cotton T-Shirt",
+        //     sku: "CTS-006",
+        //     category: "clothing",
+        //     price: 25.99,
+        //     stock: 5,
+        //     lowStockThreshold: 20,
+        //     lastUpdated: "2025-08-11",
+        //     image: "👕",
 
-            variants: [{
-                color: "Terracotta",
-                size: "Large",
-                quantity: 22
-            }],
-            visible: true
-        }, {
-            id: 8,
-            name: "Leather Wallet",
-            sku: "LW-008",
+        //     variants: [{
+        //         color: "White",
+        //         size: "S",
+        //         quantity: 2
+        //     }, {
+        //         color: "White",
+        //         size: "M",
+        //         quantity: 3
 
-            category: "accessories",
-            price: 65.00,
-            stock: 0,
-            lowStockThreshold: 10,
-            lastUpdated: "2025-08-10",
-            image: "👛",
-            variants: [{
-                color: "Brown",
-                size: "Standard",
-                quantity: 0
+        //     }],
+        //     visible: true
+        // }, {
+        //     id: 7,
+        //     name: "Ceramic Plant Pot",
+        //     sku: "CPP-007",
+        //     category: "home",
+        //     price: 34.99,
+        //     stock: 22,
+        //     lowStockThreshold: 8,
+        //     lastUpdated: "2025-08-13",
+        //     image: "🪴",
 
-            }],
-            visible: true
-        }];
+        //     variants: [{
+        //         color: "Terracotta",
+        //         size: "Large",
+        //         quantity: 22
+        //     }],
+        //     visible: true
+        // }, {
+        //     id: 8,
+        //     name: "Leather Wallet",
+        //     sku: "LW-008",
+
+        //     category: "accessories",
+        //     price: 65.00,
+        //     stock: 0,
+        //     lowStockThreshold: 10,
+        //     lastUpdated: "2025-08-10",
+        //     image: "👛",
+        //     variants: [{
+        //         color: "Brown",
+        //         size: "Standard",
+        //         quantity: 0
+
+        //     }],
+        //     visible: true
+        // }];
         // Arrays for dropdown options
         const allowedSizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
         const validColors = [
@@ -1469,7 +1499,7 @@
                     <div class="product-details">
                         <div class="product-name">${product.name}</div>
   
-                        <div class="product-sku">SKU: ${product.sku}</div>
+                        <div class="product-sku">${product.sku}</div>
                     </div>
                 </div>
             </td>
@@ -1484,14 +1514,14 @@
             <td>
                 <div class="actions">
      
-                    <button class="action-btn edit" onclick="editProduct(${product.id})" title="Edit Product">
+                    <button class="action-btn edit" onclick="editProduct('${product.id}')" title="Edit Product">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-btn toggle ${toggleClass}" onclick="toggleProduct(${product.id})" title="${toggleTitle}">
+                    <button class="action-btn toggle ${toggleClass}" onclick="toggleProduct('${product.id}')" title="${toggleTitle}">
          
                          <i class="fas ${toggleIcon}"></i>
                     </button>
-                    <button class="action-btn delete" onclick="deleteProduct(${product.id})" title="Delete Product">
+                    <button class="action-btn delete" onclick="deleteProduct('${product.id}')" title="Delete Product">
                         <i class="fas fa-trash"></i>
             
                 </button>
@@ -1528,7 +1558,7 @@
         }
 
         function filterInventory() {
-            const searchInput = document.getElementById('searchInput').value || document.getElementById('searchInputControls').value;
+            const searchInput = document.getElementById('searchInputControls').value;
             const searchTerm = searchInput.toLowerCase();
             const categoryFilter = document.getElementById('categoryFilter').value;
             const stockFilter = document.getElementById('stockFilter').value;
@@ -1568,7 +1598,7 @@
             document.getElementById('productModal').classList.add('active');
         }
 
-        function closeProductModal() {
+        window.closeProductModal = function closeProductModal() {
             document.getElementById('productModal').classList.remove('active');
             document.getElementById('productForm').reset();
             document.getElementById('variantsTableBody').innerHTML = '';
@@ -1578,15 +1608,14 @@
             document.getElementById('saveButtonText').textContent = 'Save Product';
         }
 
-        function openAddProductModal() {
-            closeProductModal();
-            addVariantRow();
-            openProductModal();
+        window.openAddProductModal = function openAddProductModal() {
+            window.location.href = "SelleraAddProduct.html"
         }
 
         function handleProductSubmit(event) {
             event.preventDefault();
             const productData = getFormData();
+            const productInDB = currentUser.products.find(p => p.id === editingProductId);
             if (!productData) {
                 showNotification('Please fill all required fields.', 'error');
                 return;
@@ -1597,37 +1626,70 @@
                 const index = inventoryData.findIndex(p => p.id === editingProductId);
                 if (index !== -1) {
                     const newStock = productData.variants.reduce((sum, v) => sum + v.quantity, 0);
-                    inventoryData[index] = {
-                        ...inventoryData[index],
-                        ...productData,
-                        stock: newStock,
-                        lastUpdated: new Date().toISOString().slice(0, 10)
-                    };
-                    showNotification('Product updated successfully!', 'success');
-                }
-            } else {
-                // Add new product
-                const newProduct = {
-                    id: inventoryData.length ?
-                        Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
-                    ...productData,
-                    image: productData.name.charAt(0), // Simple placeholder
-                    lastUpdated: new Date().toISOString().slice(0, 10),
-                    visible: true
-                };
-                inventoryData.push(newProduct);
-                showNotification('Product added successfully!', 'success');
-            }
+                    // [{
+                    //     id: 1,
+                    //     name: "Wireless Bluetooth Headphones",
+                    //     sku: "WBH-001",
+                    //     category: "electronics",
+                    //     price: 79.99,
+                    //     stock: 65,
+                    //     lowStockThreshold: 10,
+                    //     lastUpdated: "2025-08-14",
+                    //     image: "🎧",
+                    //     variants: [{
 
-            renderInventoryTable();
-            updateStats();
-            closeProductModal();
+                    //         color: "Black",
+                    //         size: "One Size",
+                    //         quantity: 45
+                    //     }, {
+                    //         color: "White",
+                    //         size: "One Size",
+                    //         quantity: 20
+                    //     }],
+
+                    //     visible: true
+                    // }, {
+                    inventoryData[index].name = productData.name;
+                    inventoryData[index].price = productData.price;
+                    inventoryData[index].variants = productData.variants;
+                    inventoryData[index].lastUpdated = new Date().toISOString().slice(0, 10);
+                    inventoryData[index].stock = newStock;
+                    inventoryData[index].category=productData.category;
+               
+                console.log(productData);
+                console.log(newStock)
+                productInDB.name = productData.name;
+                productInDB.price = productData.price;
+                productInDB.salePrice = productData.salePrice;
+                productInDB.category = productData.category;
+                productInDB.stock = productData.variants
+                currentUser.updateProduct(editingProductId, productInDB)
+                showNotification('Product updated successfully!', 'success');
+            }
+        } else {
+            // Add new product
+            const newProduct = {
+                id: inventoryData.length ?
+                    Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
+                ...productData,
+                image: productData.name.charAt(0), // Simple placeholder
+                lastUpdated: new Date().toISOString().slice(0, 10),
+                visible: true
+            };
+            inventoryData.push(newProduct);
+            showNotification('Product added successfully!', 'success');
+        }
+
+        renderInventoryTable();
+        updateStats();
+        closeProductModal();
         }
 
         function getFormData() {
             const productName = document.getElementById('productName').value;
             const productCategory = document.getElementById('productCategory').value;
             const productPrice = parseFloat(document.getElementById('productPrice').value);
+            const productSalePrice = parseFloat(document.getElementById('productSalePrice').value) || null;
             const lowStockThreshold = parseInt(document.getElementById('lowStockThreshold').value);
             if (!productName || !productCategory || isNaN(productPrice) || isNaN(lowStockThreshold)) {
                 return null;
@@ -1659,6 +1721,7 @@
                 sku: 'SKU-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
                 category: productCategory,
                 price: productPrice,
+                salePrice: productSalePrice,
                 lowStockThreshold: lowStockThreshold,
                 stock: totalStock,
                 variants: variants
@@ -1699,17 +1762,17 @@
             recalculateVariantStock();
         }
 
-        function removeVariantRow(button) {
+        window.removeVariantRow = function removeVariantRow(button) {
             const row = button.closest('tr');
             row.remove();
             recalculateVariantStock();
         }
 
-        function updateVariantData(input) {
+        window.updateVariantData = function updateVariantData(input) {
             recalculateVariantStock();
         }
 
-        function recalculateVariantStock() {
+        window.recalculateVariantStock = function recalculateVariantStock() {
             const variantRows = document.querySelectorAll('#variantsTableBody tr');
             let totalStock = 0;
             variantRows.forEach(row => {
@@ -1721,10 +1784,12 @@
             // The total stock is handled when the form is submitted
         }
 
-        function editProduct(productId) {
+        window.editProduct = function editProduct(productId) {
             openProductModal();
             const product = inventoryData.find(p => p.id === productId);
-            if (!product) return;
+            const productInDB = currentUser.products.find(p => p.id === productId);
+            //console.log(productInDB)
+            if (!product || !productInDB) return;
             editingProductId = productId;
             document.getElementById('modalTitle').textContent = 'Edit Product';
             document.getElementById('saveButtonText').textContent = 'Save Changes';
@@ -1732,6 +1797,11 @@
             document.getElementById('productName').value = product.name;
             document.getElementById('productCategory').value = product.category;
             document.getElementById('productPrice').value = product.price;
+            document.getElementById('productSalePrice').value = productInDB.salePrice || ""
+            setInterval(() => {
+                document.getElementById('productSalePrice').max = document.getElementById('productPrice').value;
+            }, 10)
+            //document.getElementById('productSalePrice').max = document.getElementById('productPrice').value;
             document.getElementById('lowStockThreshold').value = product.lowStockThreshold;
             const variantsTableBody = document.getElementById('variantsTableBody');
             variantsTableBody.innerHTML = '';
@@ -1748,20 +1818,27 @@
             }
         }
 
-        function deleteProduct(productId) {
+        window.deleteProduct = function deleteProduct(productId) {
             if (confirm("Are you sure you want to delete this product?")) {
                 inventoryData = inventoryData.filter(p => p.id !== productId);
                 filteredData = filteredData.filter(p => p.id !== productId);
+                currentUser.removeProduct(productId)
                 renderInventoryTable();
                 updateStats();
                 showNotification('Product deleted successfully!', 'success');
             }
         }
 
-        function toggleProduct(productId) {
+        window.toggleProduct = function toggleProduct(productId) {
             const product = inventoryData.find(p => p.id === productId);
-            if (product) {
+            const productIndex = currentUser.products.findIndex(p => p.id === productId);
+            if (product && productIndex !== -1) {
                 product.visible = !product.visible;
+                if (product.visible) {
+                    currentUser.showProduct(productId);
+                } else {
+                    currentUser.hideProduct(productId);
+                }
                 showNotification(`Product visibility changed.`, 'info');
             }
             renderInventoryTable();

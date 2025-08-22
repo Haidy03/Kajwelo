@@ -88,7 +88,7 @@ export class Seller extends User {
     this.products.forEach(product => {
       if (product.id === productId) {
         result = product.show();
-        User.updateInDB(this)
+        User.updateCurrentUser(this)
       }
     })
     return result;
@@ -99,7 +99,7 @@ export class Seller extends User {
     this.products.forEach(product => {
       if (product.id === productId) {
         result = product.hide();
-        User.updateInDB(this)
+        User.updateCurrentUser(this)
       }
     })
     return result;
