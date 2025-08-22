@@ -112,7 +112,7 @@
                 Elegant dress for every occasion
               </p>
               <div class="d-flex justify-content-center">
-                <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+                <a href="#" class="btn btn-primary shop-btn" >Shop Now</a>
               </div>
             </div>
           </div>
@@ -203,7 +203,8 @@
             event.preventDefault();
             const card = this.closest(".card");
             const categoryId = card.getAttribute("data-id");
-            window.location.href = `/Pages/displayProductsWomen.html?category=${categoryId}`;
+            localStorage.setItem("initialFilter",JSON.stringify({by:"subcategory",value:categoryId}));
+            window.location.href = `/Pages/productWithFilteration.html?category=${categoryId}`;
           });
         });
       });

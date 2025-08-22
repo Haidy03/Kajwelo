@@ -101,7 +101,7 @@
             <div class="card-body">
               <h5 class="card-title">Suits</h5>
               <p class="card-text">Elegant suits for every occasion</p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="suits">Shop Now</a>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
             <div class="card-body">
               <h5 class="card-title">Shirts</h5>
               <p class="card-text">Awesome shirts for every day</p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="shirts">Shop Now</a>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@
             <div class="card-body">
               <h5 class="card-title">Trousers</h5>
               <p class="card-text">Comfortable trousers for your style</p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="trousers">Shop Now</a>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
             <div class="card-body">
               <h5 class="card-title">Polo Shirts</h5>
               <p class="card-text">The perfect polo shirt for any occasion</p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="poloshirts">Shop Now</a>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@
               <p class="card-text">
                 Comfortable t-shirts to complete your outfit.
               </p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="t-shirts">Shop Now</a>
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@
             <div class="card-body">
               <h5 class="card-title">Shorts</h5>
               <p class="card-text">Comfortable shorts for casual look.</p>
-              <a href="#" class="btn btn-primary shop-btn">Shop Now</a>
+              <a href="#" class="btn btn-primary shop-btn" id="shorts">Shop Now</a>
             </div>
           </div>
         </div>
@@ -180,7 +180,8 @@
             event.preventDefault();
             const card = this.closest(".card");
             const categoryId = card.getAttribute("data-id");
-            window.location.href = `/Pages/displayProductsMen.html?category=${categoryId}`;
+            localStorage.setItem("initialFilter",JSON.stringify({by:"subcategory",value:categoryId}));
+            window.location.href = `/Pages/productWithFilteration.html?category=${categoryId}`;
           });
         });
       });
