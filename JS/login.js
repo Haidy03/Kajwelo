@@ -221,8 +221,8 @@ document.getElementById('signupBrandOwner').addEventListener('submit', (e) => {
     const result = Auth.register(formData);
     if(!result.success) alert(result.message)
     if (result) {
-        Auth.login(formData.email, formData.password);
-        window.location.href = "./Pages/sellerdashboard.html"
+        //Auth.login(formData.email, formData.password);
+        window.location.href = "/login.html"
     } else {
         alert(result.message);
     }
@@ -266,8 +266,8 @@ document.getElementById('signupCustomer').addEventListener('submit', (e) => {
     const result = Auth.register(formData);
     if(!result.success) alert(result.message)
     if (result) {
-        Auth.login(formData.email, formData.password);
-        window.location.href = "FinalHomePage.html"
+        //Auth.login(formData.email, formData.password);
+        window.location.href = "/login.html"
     } else {
         alert(result.message);
     }

@@ -566,11 +566,11 @@
                 left: 0;
                 position: fixed;
             }
-            
+
             .main-content {
                 margin-left: var(--sidebar-width);
             }
-            
+
             .menu-toggle {
                 display: none;
             }
@@ -605,7 +605,7 @@
             <div class="sidebar-logo">Kajwelo</div>
             <div class="sidebar-subtitle">Seller Portal</div>
         </div>
-        
+
         <ul class="sidebar-menu">
             <li>
                 <button class="sidebar-link" onclick="gotoDashboard()">
@@ -664,7 +664,7 @@
         </ul>
 
         <div>
-            <button class="sidebar-link" id="logoutBtn" >
+            <button class="sidebar-link" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
@@ -684,13 +684,13 @@
                 </button>
                 <h1 class="page-title">Messages</h1>
             </div>
-            
+
             <div class="topbar-right">
                 <button class="notification-btn">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">5</span>
                 </button>
-                
+
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span></span>
@@ -763,15 +763,7 @@
             initializeSearch();
             renderChats();
 
-            // periodic refresh for chats/messages (less frequent to avoid interrupting typing)
-            if (refreshTimer) clearInterval(refreshTimer);
-            refreshTimer = setInterval(() => {
-                // Only refresh if user is not actively typing
-                const messageInput = document.getElementById('messageInput');
-                if (!messageInput || !messageInput.matches(':focus')) {
-                    refreshChats();
-                }
-            }, 5000); // Increased to 5 seconds to be less intrusive
+
         }
 
         // Load chats data from current user
@@ -802,10 +794,12 @@
                 loadChatsData();
                 updateNotificationBadge();
                 renderChats();
-                
+                console.log('Chats refreshed');
+                console.log(activeChatId)
                 // if an active chat is open, only add new messages instead of re-rendering everything
                 if (activeChatId) {
                     const chat = getChatByParticipant(activeChatId);
+                    console.log(chat)
                     if (chat) {
                         addNewMessagesToChat(chat);
                     }
@@ -817,7 +811,9 @@
 
         // Add only new messages to the chat view without re-rendering everything
         function addNewMessagesToChat(chat) {
+            
             const messagesContainer = document.getElementById('messagesContainer');
+
             if (!messagesContainer) return;
 
             const totalMessages = chat.messages.length;
@@ -825,11 +821,11 @@
             // Only add messages that haven't been displayed yet
             if (totalMessages > initialMessageCount) {
                 const newMessages = chat.messages.slice(initialMessageCount);
-                
+
                 newMessages.forEach(message => {
                     const messageTime = formatMessageTime(message.sentAt);
                     const messageClass = message.sender === currentUser.id ? 'sent' : 'received';
-                    
+
                     const messageHTML = `
                         <div class="message ${messageClass}">
                             <div>${message.content}</div>
@@ -893,7 +889,7 @@
         window.toggleSidebar = function () {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
+
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
         }
@@ -910,7 +906,7 @@
                 tab.addEventListener('click', () => {
                     filterTabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    
+
                     currentFilter = tab.dataset.filter;
                     renderChats();
                 });
@@ -919,8 +915,8 @@
 
         // Helper function to get chat by participant ID
         function getChatByParticipant(participantId) {
-            return chats.find(chat => 
-                chat.participants?.sender === participantId || 
+            return chats.find(chat =>
+                chat.participants?.sender === participantId ||
                 chat.participants?.reciever === participantId
             );
         }
@@ -982,10 +978,10 @@
                 const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
                 const timeAgo = lastMessage ? formatTimeAgo(lastMessage.sentAt) : '';
                 const unreadCount = chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
-                
+
                 return `
                     <div class="chat-item ${unreadCount > 0 ? 'unread' : ''} ${activeChatId === (chat.participants.reciever) ? 'active' : ''}" 
-                         onclick="openChat('${chat.participants.reciever}')">
+                         onclick="openChat('${chat.participants.reciever===currentUser.id ? chat.participants.sender : chat.participants.reciever}')">
                         <div class="chat-avatar">${participant ? participant.name.substring(0, 2).toUpperCase() : 'US'}</div>
                         <div class="chat-info">
                             <div class="chat-name">${participant ? participant.name : 'User'}</div>
@@ -1010,13 +1006,13 @@
         }
 
         function getParticipantFromChat(chat) {
-            const receiverId = chat.participants?.reciever;
+            const receiverId = chat.participants.reciever == currentUser.id ? chat.participants.sender : chat.participants.reciever;
             return admins.find(a => a.id === receiverId) || customers.find(c => c.id === receiverId);
         }
 
         // Open chat conversation
         window.openChat = async function (customerId) {
-            let chat = chats.find(c => c.participants.reciever === customerId);
+            let chat = chats.find(c => c.participants.reciever === customerId || c.participants.sender === customerId);
             // If no previous chat and the participant is an admin, initiate a new chat
             if (!chat) {
                 const isAdmin = admins.some(a => a.id === customerId);
@@ -1067,7 +1063,7 @@
         function renderChatView(chat) {
             const chatView = document.getElementById('chatView');
             const participant = getParticipantFromChat(chat);
-            
+
             chatView.innerHTML = `
                 <div class="chat-view-header">
                     <button class="back-btn" onclick="closeChatView()">
@@ -1097,10 +1093,10 @@
             // Auto-resize textarea
             const messageInput = document.getElementById('messageInput');
             messageInput.addEventListener('input', autoResizeTextarea);
-            
+
             // Set initial message count for tracking new messages
             initialMessageCount = chat.messages.length;
-            
+
             // Scroll to bottom
             scrollToBottom();
         }
@@ -1110,7 +1106,7 @@
             return messages.map(message => {
                 const messageTime = formatMessageTime(message.sentAt);
                 const messageClass = message.sender === currentUser.id ? 'sent' : 'received';
-                
+
                 return `
                     <div class="message ${messageClass}">
                         <div>${message.content}</div>
@@ -1123,10 +1119,10 @@
         // Send message
         window.sendMessage = function (event, customerId) {
             event.preventDefault();
-            
+
             const messageInput = document.getElementById('messageInput');
             const messageText = messageInput.value.trim();
-            
+
             if (!messageText) return;
 
             // Send message using Conversation model
@@ -1138,22 +1134,24 @@
                 messageInput.style.height = 'auto';
 
                 // Update the current chat with the new message immediately
-                const chat = chats.find(c => c.participants.reciever === customerId);
+                const chat = chats.find(c => c.participants.reciever === customerId || c.participants.sender === customerId);
+               
                 if (chat) {
                     // Add the new message to the chat
-            const newMessage = {
+                    const newMessage = {
                         sender: currentUser.id,
                         content: messageText,
                         sentAt: new Date(),
                         status: false
                     };
-            chat.messages.push(newMessage);
+                    chat.messages.push(newMessage);
 
                     // Update the chat list to show the new last message
                     renderChats();
-
+                    console.log(activeChatId,customerId)
                     // If this chat is currently open, add the message to the view without re-rendering everything
-                    if (activeChatId === customerId) {
+                    if (activeChatId === customerId || activeChatId === chat.participants.receiverId) {
+                        console.log("the message is being added ")
                         const messagesContainer = document.getElementById('messagesContainer');
                         if (messagesContainer) {
                             const messageTime = formatMessageTime(newMessage.sentAt);
@@ -1170,7 +1168,17 @@
                     }
                 }
 
-                updateNotificationBadge();
+                //updateNotificationBadge();
+                
+                // periodic refresh for chats/messages (less frequent to avoid interrupting typing)
+                // if (refreshTimer) clearInterval(refreshTimer);
+                // refreshTimer = setInterval(() => {
+                //     // Only refresh if user is not actively typing
+                //     const messageInput = document.getElementById('messageInput');
+                //     if (!messageInput || !messageInput.matches(':focus')) {
+                //         refreshChats();
+                //     }
+                // }, 10); // Increased to 5 seconds to be less intrusive
             } else {
                 alert('Failed to send message: ' + result.message);
             }
@@ -1213,7 +1221,7 @@
         // Delete chat
         window.deleteChat = async function (event, customerId) {
             event.stopPropagation();
-            
+
             if (confirm('Are you sure you want to delete this conversation?')) {
                 // Remove chat from current user's chats
                 const chatIndex = chats.findIndex(c => c.participants.reciever === customerId);
@@ -1234,9 +1242,9 @@
                             </div>
                         `;
                         activeChatId = null;
-                }
-                
-                renderChats();
+                    }
+
+                    renderChats();
                     updateNotificationBadge();
                 }
             }
@@ -1256,14 +1264,14 @@
                         return (customer && customer.name.toLowerCase().includes(query)) ||
                             (lastMessage && lastMessage.content.toLowerCase().includes(query));
                     });
-                    
+
                     const chatsList = document.getElementById('chatsList');
                     chatsList.innerHTML = filteredChats.map(chat => {
                         const customer = getCustomerFromChat(chat);
                         const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
                         const timeAgo = lastMessage ? formatTimeAgo(lastMessage.sentAt) : '';
                         const unreadCount = chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
-                        
+
                         return `
                             <div class="chat-item ${unreadCount > 0 ? 'unread' : ''} ${activeChatId === chat.participants.reciever ? 'active' : ''}" 
                                  onclick="openChat('${chat.participants.reciever}')">
@@ -1292,22 +1300,22 @@
             const now = new Date();
             const messageTime = new Date(timestamp);
             const diffInHours = Math.floor((now - messageTime) / (1000 * 60 * 60));
-            
+
             if (diffInHours < 1) return 'Just now';
             if (diffInHours < 24) return `${diffInHours}h`;
-            
+
             const diffInDays = Math.floor(diffInHours / 24);
             if (diffInDays < 7) return `${diffInDays}d`;
-            
+
             return messageTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
         function formatMessageTime(timestamp) {
             const messageTime = new Date(timestamp);
-            return messageTime.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
+            return messageTime.toLocaleTimeString('en-US', {
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: true 
+                hour12: true
             });
         }
 
@@ -1320,12 +1328,12 @@
                 const sidebar = document.getElementById('sidebar');
                 const overlay = document.getElementById('sidebarOverlay');
                 const chatList = document.getElementById('chatList');
-                
+
                 if (window.innerWidth >= 993) {
                     sidebar.classList.remove('open');
                     overlay.classList.remove('active');
                 }
-                
+
                 if (window.innerWidth > 768) {
                     chatList.classList.remove('open');
                 }
@@ -1338,18 +1346,18 @@
                 const overlay = document.getElementById('sidebarOverlay');
                 const chatList = document.getElementById('chatList');
                 const chatListToggle = document.querySelector('.chat-list-toggle');
-                
+
                 if (window.innerWidth < 993) {
-                    if (!sidebar.contains(e.target) && 
+                    if (!sidebar.contains(e.target) &&
                         !menuToggle.contains(e.target) &&
                         sidebar.classList.contains('open')) {
                         sidebar.classList.remove('open');
                         overlay.classList.remove('active');
                     }
                 }
-                
+
                 if (window.innerWidth <= 768) {
-                    if (!chatList.contains(e.target) && 
+                    if (!chatList.contains(e.target) &&
                         !chatListToggle.contains(e.target) &&
                         chatList.classList.contains('open')) {
                         chatList.classList.remove('open');
