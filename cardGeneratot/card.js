@@ -253,10 +253,8 @@ export function renderProducts(
     const ProPrice = document.createElement("div");
     ProPrice.classList.add("product-price");
 
-    const currentPriceVal =
-      product.currentprice ?? product.salePrice ?? product.price;
-    const oldPriceVal =
-      product.oldprice ?? (product.salePrice ? product.price : null);
+    const currentPriceVal = product.salePrice? product.salePrice:product.price;
+    const oldPriceVal = product.salePrice? product.price:null;
 
     const ProCurrentPrice = document.createElement("span");
     ProCurrentPrice.classList.add("current-price");

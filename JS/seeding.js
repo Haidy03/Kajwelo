@@ -122,7 +122,7 @@ export class Seeder {
                     availableSizes: availableSizes,
                     stock: stock,
                     tags: [tags[Math.floor(Math.random() * tags.length)]],
-                    image: `../assets/products/${subcategory}.jpg`,
+                    image: `../assets/products/${subcategory == "Polo Shirts" ? "Polo-Shirts" : subcategory}.jpg`,
                     isVerified: true,
                     visibility: true,
                     createdAt: new Date(),
