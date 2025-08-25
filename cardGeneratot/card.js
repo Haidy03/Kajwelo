@@ -271,6 +271,7 @@ export function renderProducts(
       : product.price;
     const oldPriceVal = product.salePrice ? product.price : null;
 
+
     const ProCurrentPrice = document.createElement("span");
     ProCurrentPrice.classList.add("current-price");
     ProCurrentPrice.textContent = currentPriceVal + " $";

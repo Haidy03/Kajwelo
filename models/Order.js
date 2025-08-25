@@ -42,81 +42,89 @@ export class Order {
         const users = Storage.get("users", []);
         const result = retrive.allValidProducts();
         const allValidProducts = result.products;
-        
+
         if (allValidProducts.length === 0) return;
-        
+
         // Create maps for O(1) lookups instead of nested loops
         const productMap = new Map();
         const sellerMap = new Map();
-        
+
         // Build product map for fast product lookups
         allValidProducts.forEach(product => {
             productMap.set(product.id, product);
         });
-        
+
         // Build seller map for fast seller lookups
         users.forEach(user => {
             if (user instanceof Seller) {
                 sellerMap.set(user.id, user);
             }
         });
-        
+
         // Process each ordered product
         this.products.forEach(orderedProduct => {
             // Find product using map (O(1) instead of O(n))
             const fullProduct = productMap.get(orderedProduct.productId);
             if (!fullProduct) return;
-            
+
             // Find seller using map (O(1) instead of O(n))
             const seller = sellerMap.get(fullProduct.sellerId);
             if (!seller) return;
-            
-            // Update seller earnings
-            seller.earnings += fullProduct.price * orderedProduct.quantity;
-            
+
+            // // Update seller earnings
+            // seller.earnings += fullProduct.price * orderedProduct.quantity;
+
             // Create seller order copy
             const sellerOrder = {
                 orderId: this.orderId,
                 customerId: this.customerId,
-                products: [...this.products],
-                totalPrice: this.totalPrice,
+                products: [],
+                totalPrice: 0,
                 status: this.status,
                 orderedAt: this.orderedAt,
                 shippingFee: this.shippingFee,
                 class: "Order"
             };
-            
+            this.products.forEach(p => {
+                const fullp=productMap.get(p.productId)
+                if (fullp.sellerId === seller.id) {
+                    sellerOrder.products.push(p)
+                }
+            });
+            sellerOrder.totalPrice = sellerOrder.products.reduce((total, p) => { total += p.quantity * fullProduct.price; return total; }, 0) + this.shippingFee;
+            seller.earnings += sellerOrder.totalPrice - this.shippingFee;
+            console.log(sellerOrder);
             // Add to seller's orders
             seller.orders.push(sellerOrder);
-            
+
             // Find and update the specific product in seller's inventory
             const sellerProduct = seller.products.find(p => p.id === fullProduct.id);
             if (sellerProduct) {
                 // Find the specific stock variant
-                const variant = sellerProduct.stock.find(v => 
+                const variant = sellerProduct.stock.find(v =>
                     v.size === orderedProduct.size && v.color === orderedProduct.color
                 );
-                
+
                 if (variant) {
                     // Update quantity
                     variant.quantity -= orderedProduct.quantity;
-                    
+
                     // Remove variant if out of stock
                     if (variant.quantity <= 0) {
-                        sellerProduct.stock = sellerProduct.stock.filter(v => 
+                        sellerProduct.stock = sellerProduct.stock.filter(v =>
                             !(v.size === variant.size && v.color === variant.color)
                         );
-                        
+
                         // Update available colors and sizes using Set for efficiency
                         const remainingColors = new Set(sellerProduct.stock.map(v => v.color));
                         const remainingSizes = new Set(sellerProduct.stock.map(v => v.size));
-                        
+
                         sellerProduct.availableColors = Array.from(remainingColors);
                         sellerProduct.availableSizes = Array.from(remainingSizes);
                     }
                 }
             }
-            
+
             // Update seller in database
             User.updateInDB(seller);
         });
