@@ -43,7 +43,8 @@ export class Customer extends User {
   }
 
   addToCart(item) {
-    if (!this.cart.includes(item)) {
+    if (!this.cart.some(product => product.id === item.id)) {
+     // alert("Item added to cart");
       this.cart.push(item);
       this.updatedAt = new Date();
       User.updateCurrentUser(this)

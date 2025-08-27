@@ -1353,15 +1353,24 @@
           const productId = this.dataset.productId
           const product = allProducts.find(p => p.id === productId);
           if (!product) return;
-
+          //console.log(product);
+          
           let loggedInUser = Auth.getCurrentUser();
           if (!loggedInUser) {
-            alert('You need to log in to add to cart!');
-            window.location.href = '/login.html';
+            const confirmed = confirm('You need to log in to add to cart! press ok to continue');
+            if (confirmed) {
+              window.location.href = '/login.html';
+            }
             return;
           }
+          //console.log(loggedInUser.cart)
           if (!Array.isArray(loggedInUser.cart)) loggedInUser.cart = [];
-          loggedInUser.addToCart(product);
+          const result =loggedInUser.addToCart(product);
+          //console.log(result)
+          if(!result.success){
+            alert(result.message);
+            return;
+          }
           localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
 
           let users = JSON.parse(localStorage.getItem('users')) || [];
