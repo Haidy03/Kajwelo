@@ -23,8 +23,11 @@ import { Storage } from "../utils/localStorageHelper.js";
 import { Seller } from "../models/Seller.js";
 import { retrive } from "../models/Filteration.js";
 import { renderProducts } from "/cardGeneratot/card.js";
+//import { Seeder } from "../JS/seeding.js"
 
 document.addEventListener("DOMContentLoaded", function () {
+
+ //Seeder.run()
     // Extract brand from URL
     const urlParams = new URLSearchParams(window.location.search);
     let brandName = decodeURIComponent(urlParams.get('brand'));

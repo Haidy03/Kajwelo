@@ -199,7 +199,19 @@ export function renderProducts(
         window.location.href = "/login.html";
         return;
       }
+
       if (!Array.isArray(loggedInUser.cart)) loggedInUser.cart = [];
+
+      // Check if product already in cart
+      const isInCart = loggedInUser.cart.some((item) => item.id === product.id);
+
+      if (isInCart) {
+        alert("Already added to cart!");
+        quickViewBtn.textContent = "Added to Cart";
+        return;
+      }
+
+      // Add product if not already in cart
       loggedInUser.cart.push(product);
 
       localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
@@ -210,6 +222,7 @@ export function renderProducts(
         localStorage.setItem("users", JSON.stringify(users));
       }
 
+      quickViewBtn.textContent = "Added to Cart";
       alert(`${product.name || product.title} added to cart!`);
     });
 
@@ -253,8 +266,11 @@ export function renderProducts(
     const ProPrice = document.createElement("div");
     ProPrice.classList.add("product-price");
 
-    const currentPriceVal = product.salePrice? product.salePrice:product.price;
-    const oldPriceVal = product.salePrice? product.price:null;
+    const currentPriceVal = product.salePrice
+      ? product.salePrice
+      : product.price;
+    const oldPriceVal = product.salePrice ? product.price : null;
+
 
     const ProCurrentPrice = document.createElement("span");
     ProCurrentPrice.classList.add("current-price");
