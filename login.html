@@ -66,13 +66,14 @@
         .confirm-code {
             background: #f8f9fa;
             border: 2px solid #667eea;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1rem;
             font-size: 1.2rem;
             font-weight: 600;
             color: #667eea;
             margin: 1rem 0;
             font-family: 'Courier New', monospace;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
         }
 
         .modal-buttons {
@@ -85,10 +86,10 @@
         .modal-btn {
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
         }
@@ -96,20 +97,24 @@
         .modal-btn-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .modal-btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
         .modal-btn-secondary {
             background: #e9ecef;
             color: #6c757d;
+            border: 2px solid #e9ecef;
         }
 
         .modal-btn-secondary:hover {
             background: #dee2e6;
+            border-color: #dee2e6;
+            transform: translateY(-1px);
         }
 
         .email-highlight {
@@ -339,6 +344,15 @@
         </div>
     </div>
 
+    <!-- Hidden Audio Elements -->
+    <audio id="loginSuccessAudio" preload="auto">
+        <source src="./kajwelo audio/kajweloo.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="signupSuccessAudio" preload="auto">
+        <source src="./kajwelo audio/oh oh oh.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Unconfirmed Account Modal -->
     <div class="modal-overlay" id="unconfirmedModal">
         <div class="modal">
@@ -398,9 +412,35 @@
             }
         });
 
+        // Audio functions
+        function playLoginSuccessAudio() {
+            const audio = document.getElementById('loginSuccessAudio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
+        function playSignupSuccessAudio() {
+            const audio = document.getElementById('signupSuccessAudio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
+        function delayedRedirect(url, delay = 3000) {
+            setTimeout(() => {
+                window.location.href = url;
+            }, delay);
+        }
+
         // Make functions globally available
         window.showUnconfirmedModal = showUnconfirmedModal;
         window.closeUnconfirmedModal = closeUnconfirmedModal;
+        window.playLoginSuccessAudio = playLoginSuccessAudio;
+        window.playSignupSuccessAudio = playSignupSuccessAudio;
+        window.delayedRedirect = delayedRedirect;
     </script>
 </body>
 

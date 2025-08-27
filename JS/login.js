@@ -161,15 +161,20 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
     }
     
     if (result.success) {
+        // Play login success audio
+        if (typeof playLoginSuccessAudio === 'function') {
+            playLoginSuccessAudio();
+        }
+        
         const currentUser = Auth.getCurrentUser();
         if (currentUser instanceof Customer) {
-            window.location.href = "FinalHomePage.html"
+            delayedRedirect("FinalHomePage.html", 3000);
         }
         else if (currentUser instanceof Seller) {
-            window.location.href = "./Pages/sellerdashboard.html"
+            delayedRedirect("./Pages/sellerdashboard.html", 0);
         }
         else if (currentUser instanceof Admin) {
-            window.location.href = "./AdminDashboard/AdminDashBoard.html"
+            delayedRedirect("./AdminDashboard/AdminDashBoard.html", 0);
         }
         else {
             alert(result.message)
@@ -265,9 +270,13 @@ document.getElementById('signupCustomer').addEventListener('submit', (e) => {
     };
     const result = Auth.register(formData);
     if(!result.success) alert(result.message)
-    if (result) {
+    if (result.success) {
+        // Play signup success audio for customer
+        if (typeof playSignupSuccessAudio === 'function') {
+            playSignupSuccessAudio();
+        }
         //Auth.login(formData.email, formData.password);
-        window.location.href = "/login.html"
+        delayedRedirect("/login.html", 3000);
     } else {
         alert(result.message);
     }
