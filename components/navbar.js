@@ -49,6 +49,11 @@ export const navbar = `
         </div>
     </nav>
 
+    <!-- Hidden Logout Audio Element -->
+    <audio id="logoutAudio" preload="auto">
+        <source src="./kajwelo audio/ya3eni 3 el fa2er.mp3" type="audio/mpeg">
+    </audio>
+
 `;
 
 document.addEventListener("DOMContentLoaded", () => {

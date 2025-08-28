@@ -13,7 +13,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 20px;
             position: relative;
             overflow-x: hidden;
         }
@@ -25,10 +25,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
-                        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
-                        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
-                        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                        linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+                        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
             background-size: 60px 60px;
             background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
             animation: float 20s ease-in-out infinite;
@@ -41,16 +41,15 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            padding: 30px;
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             position: relative;
             z-index: 10;
-            max-height: 95vh;
             min-height: 70vh;
             overflow: hidden;
         }
@@ -61,52 +60,72 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #2ecc71 100%);
-            border-radius: 20px 20px 0 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #ffa726 100%);
+            border-radius: 24px 24px 0 0;
         }
 
         .logo {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .logo h1 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #2c3e50;
-            letter-spacing: -1px;
-            margin-bottom: 2px;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
         }
 
         .logo p {
-            color: #7f8c8d;
+            color: #666;
             font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { 
+                background-position: 0% 50%; 
+            }
+            50% { 
+                background-position: 100% 50%; 
+            }
         }
 
         .form-switcher {
             display: flex;
             background: #f8f9fa;
-            border-radius: 25px;
-            padding: 3px;
-            margin-bottom: 15px;
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 20px;
             position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .switch-btn {
             flex: 1;
-            padding: 6px;
+            padding: 10px 16px;
             text-align: center;
             border: none;
             background: transparent;
             cursor: pointer;
-            border-radius: 20px;
+            border-radius: 12px;
             font-weight: 600;
             transition: all 0.3s ease;
-            color: #7f8c8d;
+            color: #666;
             position: relative;
             z-index: 2;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .switch-btn.active {
@@ -115,18 +134,18 @@
 
         .switch-indicator {
             position: absolute;
-            top: 3px;
-            left: 3px;
-            width: calc(50% - 3px);
-            height: calc(100% - 6px);
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            border-radius: 20px;
+            top: 6px;
+            left: 6px;
+            width: calc(50% - 6px);
+            height: calc(100% - 12px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .switch-indicator.signup {
-            transform: translateX(calc(100% + 3px));
+            transform: translateX(calc(100% + 6px));
         }
 
         .form-container {
@@ -145,9 +164,11 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
-        #loginForm{
-            margin-top: 50px;
+
+        #loginForm {
+            margin-top: 0;
         }
+
         .form.active {
             opacity: 1;
             transform: translateX(0);
@@ -156,28 +177,29 @@
         }
 
         .form-group {
-            margin-bottom: 6px;
+            margin-bottom: 12px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             font-weight: 600;
-            color: #2c3e50;
-            font-size: 10px;
+            color: #333;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .form-input {
             width: 100%;
-            padding: 6px 10px;
-            border: 2px solid #ecf0f1;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 13px;
             transition: all 0.3s ease;
             background: white;
             outline: none;
+            font-weight: 500;
         }
 
         .password-container {
@@ -186,29 +208,30 @@
 
         .password-toggle {
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             cursor: pointer;
-            color: #7f8c8d;
-            font-size: 12px;
+            color: #666;
+            font-size: 14px;
             transition: color 0.3s ease;
+            padding: 4px;
         }
 
         .password-toggle:hover {
-            color: #e74c3c;
+            color: #667eea;
         }
 
         .form-input:focus {
-            border-color: #e74c3c;
-            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
-            transform: translateY(-2px);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
         .form-input::placeholder {
-            color: #bdc3c7;
+            color: #adb5bd;
         }
 
         .role-selection {
@@ -218,7 +241,7 @@
         .role-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 10px;
         }
 
         .role-option {
@@ -233,37 +256,38 @@
 
         .role-card {
             background: white;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            padding: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            height: 65px;
+            height: 70px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .role-card:hover {
-            border-color: #e74c3c;
+            border-color: #667eea;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
         }
 
         .role-option input[type="radio"]:checked + .role-card {
-            border-color: #e74c3c;
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .role-icon {
-            font-size: 1.2rem;
-            margin-bottom: 2px;
-            color: #e74c3c;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+            color: #667eea;
             transition: color 0.3s ease;
         }
 
@@ -272,7 +296,7 @@
         }
 
         .role-title {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -284,7 +308,7 @@
 
         .checkbox-group {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -302,41 +326,46 @@
 
         .checkbox-label {
             background: white;
-            border: 2px solid #ecf0f1;
-            border-radius: 5px;
-            padding: 4px 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
             display: block;
-            font-size: 11px;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .checkbox-label:hover {
-            border-color: #e74c3c;
+            border-color: #667eea;
             transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
         }
 
         .checkbox-item input:checked + .checkbox-label {
-            border-color: #e74c3c;
-            background: #e74c3c;
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
         }
 
         .form-btn {
             width: 100%;
-            padding: 7px;
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 5px;
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .form-btn:disabled {
@@ -348,16 +377,16 @@
 
         .form-btn:not(:disabled):hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
         .forgot-password {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .forgot-password a {
-            color: #e74c3c;
+            color: #667eea;
             text-decoration: none;
             font-weight: 500;
             font-size: 12px;
@@ -365,69 +394,73 @@
         }
 
         .forgot-password a:hover {
-            color: #c0392b;
+            color: #764ba2;
             text-decoration: underline;
         }
 
         .back-btn {
             background: transparent;
-            border: 2px solid #ecf0f1;
-            color: #7f8c8d;
-            padding: 4px 8px;
-            border-radius: 5px;
+            border: 2px solid #e9ecef;
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 500;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .back-btn:hover {
-            border-color: #bdc3c7;
-            color: #2c3e50;
+            border-color: #667eea;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
         }
 
         .phase-indicator {
             display: flex;
             justify-content: center;
-            margin-bottom: 10px;
-            gap: 4px;
+            margin-bottom: 12px;
+            gap: 6px;
         }
 
         .phase-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: #ecf0f1;
+            background: #e9ecef;
             transition: all 0.3s ease;
         }
 
         .phase-dot.active {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transform: scale(1.2);
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
         }
 
         .phase-dot.completed {
-            background: #2ecc71;
+            background: #28a745;
+            box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
         }
 
         .error-message {
-            color: #e74c3c;
+            color: #dc3545;
             font-size: 11px;
-            margin-top: 2px;
+            margin-top: 3px;
             display: none;
+            font-weight: 500;
         }
 
         /* Responsive Design */
         @media (max-width: 480px) {
             .login-container {
-                padding: 12px;
-                margin: 5px;
+                padding: 25px 20px;
+                margin: 10px;
                 max-height: 98vh;
             }
 
             .logo h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
             }
 
             .logo p {
@@ -436,38 +469,38 @@
 
             .role-options {
                 grid-template-columns: 1fr;
-                gap: 6px;
+                gap: 8px;
             }
 
             .role-card {
                 height: 60px;
-                padding: 8px;
+                padding: 10px;
             }
 
             .checkbox-group {
                 justify-content: center;
-                gap: 6px;
+                gap: 8px;
             }
 
             .form-group {
-                margin-bottom: 5px;
+                margin-bottom: 10px;
             }
 
             .form-input {
-                padding: 6px 8px;
+                padding: 8px 10px;
                 font-size: 12px;
             }
 
             .form-btn {
-                padding: 7px;
-                font-size: 12px;
+                padding: 10px;
+                font-size: 13px;
             }
         }
 
         /* Ensure forms don't exceed viewport */
         @media (max-height: 700px) {
             .logo {
-                margin-bottom: 10px;
+                margin-bottom: 15px;
             }
             
             .logo h1 {
@@ -475,36 +508,36 @@
             }
             
             .form-group {
-                margin-bottom: 4px;
+                margin-bottom: 8px;
             }
             
             .role-selection,
             .gender-selection,
             .target-audience-selection {
-                margin-bottom: 8px;
+                margin-bottom: 10px;
             }
             
             .role-card {
-                height: 80px;
-                padding: 6px;
+                height: 60px;
+                padding: 10px;
             }
             
             .role-icon {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
             
             .role-title {
-                font-size: 9px;
+                font-size: 10px;
             }
         }
 
         @media (max-height: 600px) {
             .login-container {
-                padding: 10px;
+                padding: 20px 15px;
             }
             
             .logo {
-                margin-bottom: 8px;
+                margin-bottom: 12px;
             }
             
             .logo h1 {
@@ -516,11 +549,11 @@
             }
             
             .form-switcher {
-                margin-bottom: 10px;
+                margin-bottom: 15px;
             }
             
             .form-group {
-                margin-bottom: 3px;
+                margin-bottom: 6px;
             }
             
             .role-card {
@@ -528,6 +561,6 @@
             }
             
             .phase-indicator {
-                margin-bottom: 6px;
+                margin-bottom: 8px;
             }
         }

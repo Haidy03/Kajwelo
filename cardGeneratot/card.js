@@ -1,3 +1,118 @@
+// Hidden Audio Element for Add to Cart
+let addToCartAudio = null;
+
+// Initialize audio element
+function initializeAddToCartAudio() {
+  if (!addToCartAudio) {
+    addToCartAudio = document.createElement('audio');
+    addToCartAudio.id = 'addToCartAudio';
+    addToCartAudio.preload = 'auto';
+    addToCartAudio.innerHTML = '<source src="../kajwelo audio/3ayz el bet tmot.mp3" type="audio/mpeg">';
+    document.body.appendChild(addToCartAudio);
+  }
+}
+
+// Play add to cart audio function
+function playAddToCartAudio() {
+  if (addToCartAudio) {
+    addToCartAudio.currentTime = 0;
+    addToCartAudio.play().catch(error => {
+      console.log('Audio play failed:', error);
+    });
+  }
+}
+
+// Toast notification function
+function showToast(message, type = 'success') {
+  // Remove existing toasts
+  const existingToasts = document.querySelectorAll('.toast-notification');
+  existingToasts.forEach(toast => toast.remove());
+
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = `toast-notification toast-${type}`;
+  toast.innerHTML = `
+    <div class="toast-content">
+      <span class="toast-message">${message}</span>
+      <button class="toast-close" onclick="this.parentElement.parentElement.remove()">×</button>
+    </div>
+  `;
+
+  // Add styles
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'success' ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#e74c3c'};
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    z-index: 10000;
+    max-width: 350px;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  `;
+
+  // Add toast content styles
+  const toastContent = toast.querySelector('.toast-content');
+  toastContent.style.cssText = `
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  `;
+
+  // Add close button styles
+  const closeBtn = toast.querySelector('.toast-close');
+  closeBtn.style.cssText = `
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+  `;
+
+  closeBtn.addEventListener('mouseenter', () => {
+    closeBtn.style.background = 'rgba(255,255,255,0.2)';
+  });
+
+  closeBtn.addEventListener('mouseleave', () => {
+    closeBtn.style.background = 'none';
+  });
+
+  // Add to page
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.transform = 'translateX(0)';
+  }, 100);
+
+  // Auto remove after 4 seconds
+  setTimeout(() => {
+    if (toast.parentElement) {
+      toast.style.transform = 'translateX(400px)';
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.remove();
+        }
+      }, 300);
+    }
+  }, 4000);
+}
+
 export const products = [
   {
     id: 1,
@@ -222,8 +337,28 @@ export function renderProducts(
         localStorage.setItem("users", JSON.stringify(users));
       }
 
-      quickViewBtn.textContent = "Added to Cart";
-      alert(`${product.name || product.title} added to cart!`);
+             // Play add to cart audio
+       initializeAddToCartAudio();
+       playAddToCartAudio();
+
+       quickViewBtn.textContent = "Added to Cart";
+       
+       // Roast messages for add to cart
+       const roasts = [
+         "Wow, you actually bought something! Your wallet must be crying 😭",
+         "Another impulse buy? Your bank account is having a moment of silence 💸",
+         "Congratulations! You've successfully made your future self poorer 🎉",
+         "Your shopping cart is getting fatter, just like your regrets 😂",
+         "Money well spent... said no one ever about this purchase 💀",
+         "Your cart is now heavier, and so is your financial burden 📦",
+         "Another item added! Your savings account is sending its condolences 🙏",
+         "Shopping spree continues! Your budget is having an existential crisis 😵",
+         "You really said 'treat yourself' to your bank account's face 😤",
+         "Your cart is growing faster than your self-control 🌱"
+       ];
+       
+       const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
+       showToast(randomRoast, 'success');
     });
 
     overlay.appendChild(quickViewBtn);
