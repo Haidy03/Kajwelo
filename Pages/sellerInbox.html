@@ -791,8 +791,6 @@
             }
 
             loadChatsData();
-            updateUserProfile();
-            updateNotificationBadge();
             initializeFilters();
             initializeSearch();
             renderChats();
@@ -826,7 +824,6 @@
                 currentUser = Auth.getCurrentUser();
                 if (!currentUser) return;
                 loadChatsData();
-                updateNotificationBadge();
                 renderChats();
                 console.log('Chats refreshed');
                 console.log(activeChatId)
@@ -881,32 +878,6 @@
             }
         }
 
-        // Update user profile display
-        function updateUserProfile() {
-            const userAvatar = document.querySelector('.user-avatar');
-            const userName = document.querySelector('.user-profile span');
-
-            if (userAvatar) {
-                userAvatar.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'SE';
-            }
-
-            if (userName) {
-                userName.textContent = currentUser.name || 'Seller';
-            }
-        }
-
-        // Update notification badge
-        function updateNotificationBadge() {
-            const unreadCount = chats.reduce((count, chat) => {
-                return count + chat.messages.filter(msg => !msg.status && msg.sender !== currentUser.id).length;
-            }, 0);
-
-            const notificationBadge = document.querySelector('.notification-badge');
-            if (notificationBadge) {
-                notificationBadge.textContent = unreadCount;
-                notificationBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
-            }
-        }
 
         // Navigation functions
         window.gotoDashboard = function () { window.location.href = "sellerdashboard.html"; }
@@ -1085,7 +1056,6 @@
 
             renderChatView(chat);
             renderChats(); // Re-render to update unread status
-            updateNotificationBadge();
 
             // Close chat list on mobile
             if (window.innerWidth <= 768) {
@@ -1202,17 +1172,6 @@
                     }
                 }
 
-                //updateNotificationBadge();
-
-                // periodic refresh for chats/messages (less frequent to avoid interrupting typing)
-                // if (refreshTimer) clearInterval(refreshTimer);
-                // refreshTimer = setInterval(() => {
-                //     // Only refresh if user is not actively typing
-                //     const messageInput = document.getElementById('messageInput');
-                //     if (!messageInput || !messageInput.matches(':focus')) {
-                //         refreshChats();
-                //     }
-                // }, 10); // Increased to 5 seconds to be less intrusive
             } else {
                 showToast('Failed to send message: ' + result.message, 'error');
             }
@@ -1279,7 +1238,6 @@
                     }
 
                     renderChats();
-                    updateNotificationBadge();
                 }
             });
         }
