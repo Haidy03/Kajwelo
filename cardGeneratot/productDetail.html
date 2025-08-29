@@ -230,7 +230,7 @@
         // message button checks sellerId on original (keeps original structure)
         messageBtn.addEventListener("click", function () {
           if (!original) {
-            alert("No selected product found. Please select a product first.");
+            showToast("No selected product found. Please select a product first.", 'error');
             return;
           }
           const sellerId =
@@ -238,7 +238,7 @@
             (original.seller && original.seller.id) ??
             null;
           if (!sellerId) {
-            alert("Seller ID not found on this product.");
+            showToast("Seller ID not found on this product.", 'error');
             return;
           }
           // keep previous behaviour: open chat page
@@ -263,8 +263,10 @@
         wishlistBtn.addEventListener("click", function () {
           let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
           if (!loggedInUser) {
-            alert("You need to log in to use wishlist!");
-            window.location.href = "/login.html";
+            showToast("Please log in to use the wishlist!", 'error');
+            setTimeout(() => {
+              window.location.href = "/login.html";
+            }, 2000);
             return;
           }
           if (!Array.isArray(loggedInUser.wishlist)) {
@@ -312,8 +314,10 @@
         addCartBtn.addEventListener("click", function () {
           let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
           if (!loggedInUser) {
-            alert("You need to log in to use the cart!");
-            window.location.href = "/login.html";
+            showToast("Please log in to use the cart!", 'error');
+            setTimeout(() => {
+              window.location.href = "/login.html";
+            }, 2000);
             return;
           }
           if (!Array.isArray(loggedInUser.cart)) {

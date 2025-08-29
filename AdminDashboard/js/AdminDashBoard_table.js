@@ -758,7 +758,7 @@ function markAsRead(id) {
 }
 
 function deleteItem(id) {
-    if (confirm('Are you sure you want to delete this item?')) {
+    showConfirmModal('Are you sure you want to delete this item?', () => {
         const index = dataStore[appState.currentSection].findIndex(item => item.id === id);
         if (index !== -1) {
             // If deleting a category, also delete all products with this category
@@ -778,7 +778,7 @@ function deleteItem(id) {
             // Show success message
             showToast('Item deleted successfully', 'success');
         }
-    }
+    });
 }
 
 function resetSellerPassword(id) {

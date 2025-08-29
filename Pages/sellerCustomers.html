@@ -8,7 +8,7 @@
     <title>Kajwelo - Customers</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -35,6 +35,44 @@
             line-height: 1.6;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f6f7fa, #b99ad7, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .logo p {
+            color: #e5e5e5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+ @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -505,11 +543,11 @@
                 left: 0;
                 position: fixed;
             }
-            
+
             .main-content {
                 margin-left: var(--sidebar-width);
             }
-            
+
             .menu-toggle {
                 display: none;
             }
@@ -652,10 +690,12 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-            <div class="sidebar-logo">Kajwelo</div>
-            <div class="sidebar-subtitle">Seller Portal</div>
+           <div class="logo">
+                <h1>Kajwelo</h1>
+                <p>Seller Portal</p>
+            </div>
         </div>
-        
+
         <ul class="sidebar-menu">
             <li>
                 <button class="sidebar-link" id="DashBtn" onclick="gotodashboard()">
@@ -706,7 +746,7 @@
                 </button>
             </li>
 
-             <li>
+            <li>
                 <button class="sidebar-link" onclick="gotoInbox()">
                     <i class="fa-solid fa-inbox"></i>
                     <span>Inbox</span>
@@ -720,7 +760,7 @@
                 <span>LOG OUT</span>
             </button>
         </div>
-        
+
     </aside>
 
     <!-- Main Content -->
@@ -733,17 +773,11 @@
                 </button>
                 <h1 class="page-title">Customers</h1>
             </div>
-            
+
             <div class="topbar-right">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">0</span>
-                </button>
-                
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span></span>
-                    
                 </div>
             </div>
         </header>
@@ -855,7 +889,7 @@
         import { Storage } from "../utils/localStorageHelper.js";
         import { Customer } from "../models/Customer.js";
         import { Order } from "../models/Order.js";
-
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
         // Global variables
         let customers = [];
         let customersId = [];
@@ -938,7 +972,7 @@
                 return 'active';
             } else if (customer.totalOrders > 0) {
                 return 'inactive';
-                } else {
+            } else {
                 return 'pending';
             }
         }
@@ -975,9 +1009,9 @@
 
             // Update stats cards
             document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalCustomers.toLocaleString();
-           // document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = activeCustomers.toLocaleString();
-           // document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = newThisMonth.toLocaleString();
-           // document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = inactiveCustomers.toLocaleString();
+            // document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = activeCustomers.toLocaleString();
+            // document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = newThisMonth.toLocaleString();
+            // document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = inactiveCustomers.toLocaleString();
 
 
 
@@ -1261,7 +1295,7 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const body = document.body;
-            
+
             if (window.innerWidth >= 993) {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('active');
@@ -1277,8 +1311,8 @@
 
         // iPad detection
         function isiPad() {
-            return navigator.userAgent.match(/(iPad)/) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            return navigator.userAgent.match(/(iPad)/) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         }
 
         if (isiPad()) {

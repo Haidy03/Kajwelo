@@ -33,6 +33,44 @@
             line-height: 1.6;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f6f7fa, #b99ad7, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .logo p {
+            color: #e5e5e5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+ @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -969,8 +1007,10 @@
 
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-            <div class="sidebar-logo">Kajwelo</div>
-            <div class="sidebar-subtitle">Seller Portal</div>
+            <div class="logo">
+                <h1>Kajwelo</h1>
+                <p>Seller Portal</p>
+            </div>
         </div>
 
 
@@ -1012,14 +1052,9 @@
                 <h1 class="page-title">Inventory Management</h1>
             </div>
             <div class="topbar-right">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge"></span>
-                </button>
                 <div class="user-profile">
                     <div class="user-avatar"></div>
-                    <span class="hide-mobile"></span>
-
+                    <span></span>
                 </div>
             </div>
         </header>
@@ -1209,6 +1244,7 @@
         import { Storage } from "../utils/localStorageHelper.js";
         import { Seller } from "../models/Seller.js";
         import { Product } from "../models/Product.js";
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
 
         const currentUser = Auth.getCurrentUser();
 
@@ -1654,35 +1690,35 @@
                     inventoryData[index].variants = productData.variants;
                     inventoryData[index].lastUpdated = new Date().toISOString().slice(0, 10);
                     inventoryData[index].stock = newStock;
-                    inventoryData[index].category=productData.category;
-               
-                console.log(productData);
-                console.log(newStock)
-                productInDB.name = productData.name;
-                productInDB.price = productData.price;
-                productInDB.salePrice = productData.salePrice;
-                productInDB.category = productData.category;
-                productInDB.stock = productData.variants
-                currentUser.updateProduct(editingProductId, productInDB)
-                showNotification('Product updated successfully!', 'success');
-            }
-        } else {
-            // Add new product
-            const newProduct = {
-                id: inventoryData.length ?
-                    Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
-                ...productData,
-                image: productData.name.charAt(0), // Simple placeholder
-                lastUpdated: new Date().toISOString().slice(0, 10),
-                visible: true
-            };
-            inventoryData.push(newProduct);
-            showNotification('Product added successfully!', 'success');
-        }
+                    inventoryData[index].category = productData.category;
 
-        renderInventoryTable();
-        updateStats();
-        closeProductModal();
+                    console.log(productData);
+                    console.log(newStock)
+                    productInDB.name = productData.name;
+                    productInDB.price = productData.price;
+                    productInDB.salePrice = productData.salePrice;
+                    productInDB.category = productData.category;
+                    productInDB.stock = productData.variants
+                    currentUser.updateProduct(editingProductId, productInDB)
+                    showNotification('Product updated successfully!', 'success');
+                }
+            } else {
+                // Add new product
+                const newProduct = {
+                    id: inventoryData.length ?
+                        Math.max(...inventoryData.map(p => p.id)) + 1 : 1,
+                    ...productData,
+                    image: productData.name.charAt(0), // Simple placeholder
+                    lastUpdated: new Date().toISOString().slice(0, 10),
+                    visible: true
+                };
+                inventoryData.push(newProduct);
+                showNotification('Product added successfully!', 'success');
+            }
+
+            renderInventoryTable();
+            updateStats();
+            closeProductModal();
         }
 
         function getFormData() {
@@ -1737,8 +1773,7 @@
             <td>
                 <select class="form-input-variant" onchange="updateVariantData(this)" data-variant-type="color" required>
                     <option value="">Select Color</option>
-                    ${validColors.map(c => `<option value="${c}" ${c === color ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
-        
+                    ${validColors.map(c => `<option value="${c}" ${c.toLocaleLowerCase() === color.toLocaleLowerCase() ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
                 </select>
             </td>
             <td>
@@ -1810,6 +1845,7 @@
             if (product.variants && product.variants.length > 0) {
                 product.variants.forEach(variant => {
                     // Pass the color and size to the function
+
                     addVariantRow(variant.color, variant.size, variant.quantity);
                 });
             } else {
@@ -1819,14 +1855,14 @@
         }
 
         window.deleteProduct = function deleteProduct(productId) {
-            if (confirm("Are you sure you want to delete this product?")) {
+            showConfirmModal("Are you sure you want to delete this product?", () => {
                 inventoryData = inventoryData.filter(p => p.id !== productId);
                 filteredData = filteredData.filter(p => p.id !== productId);
                 currentUser.removeProduct(productId)
                 renderInventoryTable();
                 updateStats();
                 showNotification('Product deleted successfully!', 'success');
-            }
+            });
         }
 
         window.toggleProduct = function toggleProduct(productId) {

@@ -8,6 +8,7 @@
     <title>Kajwelo - Add Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="../JS/sellerOnly.js"></script>
     <style>
         * {
             margin: 0;
@@ -46,6 +47,44 @@
             line-height: 1.6;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f6f7fa, #b99ad7, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .logo p {
+            color: #e5e5e5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+ @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -788,8 +827,10 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-            <div class="sidebar-logo">Kajwelo</div>
-            <div class="sidebar-subtitle">Seller Portal</div>
+            <div class="logo">
+                <h1>Kajwelo</h1>
+                <p>Seller Portal</p>
+            </div>
         </div>
 
         <ul class="sidebar-menu">
@@ -850,8 +891,8 @@
         </ul>
 
         <div>
-            <button class="sidebar-link">
-                <i class="fa-solid fa-right-from-bracket" id="logoutBtn"></i>
+            <button class="sidebar-link" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
         </div>
@@ -869,11 +910,6 @@
             </div>
 
             <div class="topbar-right">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">5</span>
-                </button>
-
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span></span>
@@ -1010,78 +1046,45 @@
             </form>
         </div>
     </main>
-    <script type="module" src="../JS/sellerOnly.js"></script>
-    <script>
-        function gotoproducts() {
-            window.location.href = "SelleraAddProduct.html";
-        }
 
-        function gotoOrders() {
-            window.location.href = "sellerOrders.html";
-        }
 
-        function gotoanalytics() {
-            window.location.href = "SellerAnalytics.html";
-        }
-
-        function gotoCustomers() {
-            window.location.href = "sellerCustomers.html";
-        }
-
-        function gotoInventory() {
-            window.location.href = "SellerInventory.html";
-        }
-
-        function gotoPending() {
-            window.location.href = "sellerPending.html";
-        }
-
-        function gotoSettings() {
-            window.location.href = "SellerSettings.html";
-        }
-
-        function gotoInbox() {
-            window.location.href = "sellerInbox.html";
-        }
-
-    </script>
     <script type="module">
         import { Product } from "../models/Product.js";
         import { Auth } from "../utils/auth.js";
         import { Seller } from "../models/Seller.js"
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
 
+        window.gotoproducts = function () {
+            window.location.href = "SelleraAddProduct.html";
+        };
 
-        // window.gotoproducts = function () {
-        //     window.location.href = "SelleraAddProduct.html";
-        // };
+        window.gotoOrders = function () {
+            window.location.href = "sellerOrders.html";
+        };
 
-        // window.gotoOrders = function () {
-        //     window.location.href = "sellerOrders.html";
-        // };
+        window.gotoanalytics = function () {
+            window.location.href = "SellerAnalytics.html";
+        };
 
-        // window.gotoanalytics = function () {
-        //     window.location.href = "SellerAnalytics.html";
-        // };
+        window.gotoCustomers = function () {
+            window.location.href = "sellerCustomers.html";
+        };
 
-        // window.gotoCustomers = function () {
-        //     window.location.href = "sellerCustomers.html";
-        // };
+        window.gotoInventory = function () {
+            window.location.href = "SellerInventory.html";
+        };
 
-        // window.gotoInventory = function () {
-        //     window.location.href = "SellerInventory.html";
-        // };
+        window.gotoPending = function () {
+            window.location.href = "sellerPending.html";
+        };
 
-        // window.gotoPending = function () {
-        //     window.location.href = "sellerPending.html";
-        // };
+        window.gotoSettings = function () {
+            window.location.href = "SellerSettings.html";
+        };
 
-        // window.gotoSettings = function () {
-        //     window.location.href = "SellerSettings.html";
-        // };
-
-        // window.gotoInbox = function () {
-        //     window.location.href = "sellerInbox.html";
-        // };
+        window.gotoInbox = function () {
+            window.location.href = "sellerInbox.html";
+        };
 
 
         const currentUser = Auth.getCurrentUser();
@@ -1105,6 +1108,7 @@
 
         // Initialize the form - wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function () {
+
             // Check if elements exist before initializing
             if (document.getElementById('imageUploadContainer')) {
                 initializeImageUpload();
@@ -1141,13 +1145,22 @@
 
         // Navigation functions
         function gotodashboard() {
-            if (hasUnsavedChanges() && !confirm('Are you sure you want to leave? Any unsaved changes will be lost.')) {
+            if (hasUnsavedChanges()) {
+                showConfirmModal('Are you sure you want to leave? Any unsaved changes will be lost.', () => {
+                    // Allow navigation
+                    window.location.href = "sellerdashboard.html";
+                }, () => {
+                    // Cancel navigation
+                    event.preventDefault();
+                    return false;
+                });
+                return false;
                 return;
             }
             window.location.href = "sellerdashboard.html";
         }
 
-        window.gotodashboard=gotodashboard;
+        window.gotodashboard = gotodashboard;
 
         // Check if form has unsaved changes
         function hasUnsavedChanges() {
@@ -1321,7 +1334,7 @@
 
             // FIXED: Always check minimum requirement and show alert
             if (stockEntries.length <= 1) {
-                alert('You must have at least one stock variant.');
+                showToast('You must have at least one stock variant.', 'error');
                 return;
             }
 
@@ -1467,7 +1480,7 @@
                     };
                     reader.readAsDataURL(file);
                 } else if (file.size > 10 * 1024 * 1024) {
-                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+                    showToast(`File ${file.name} is too large. Maximum size is 10MB.`, 'error');
                 }
             });
         }
@@ -1588,7 +1601,7 @@
 
                 // Validate stock entries
                 if (!validateStockEntries()) {
-                    alert('Please add at least one valid stock variant with size, color, and quantity.');
+                    showToast('Please add at least one valid stock variant with size, color, and quantity.', 'error');
                     const stockGrid = document.getElementById('stockItemsContainer');
                     if (stockGrid) {
                         stockGrid.scrollIntoView({ behavior: 'smooth' });
@@ -1623,7 +1636,7 @@
             // Validate required fields
             if (!formData.get('name') || !formData.get('description') || !formData.get('price') ||
                 !formData.get('category') || !formData.get('subcategory')) {
-                alert('Please fill in all required fields.');
+                showToast('Please fill in all required fields.', 'error');
                 return;
             }
 
@@ -1632,12 +1645,12 @@
             const salePrice = formData.get('salePrice') ? parseFloat(formData.get('salePrice')) : null;
 
             if (isNaN(price) || price < 0) {
-                alert('Please enter a valid base price.');
+                showToast('Please enter a valid base price.', 'error');
                 return;
             }
 
             if (salePrice !== null && (isNaN(salePrice) || salePrice < 0)) {
-                alert('Please enter a valid sale price.');
+                showToast('Please enter a valid sale price.', 'error');
                 return;
             }
 
@@ -1656,7 +1669,7 @@
 
             // Validate stock entries
             if (!validateStockEntries()) {
-                alert('Please add at least one valid stock variant with size, color, and quantity.');
+                showToast('Please add at least one valid stock variant with size, color, and quantity.', 'error');
                 const stockGrid = document.getElementById('stockItemsContainer');
                 if (stockGrid) {
                     stockGrid.scrollIntoView({ behavior: 'smooth' });
@@ -1702,14 +1715,14 @@
                     if (res.success) {
                         console.log(res.message)
                     } else {
-                        alert(res.message)
+                        showToast(res.message, 'error');
                     }
 
-                    if (confirm('Product added! Would you like to add another product?')) {
+                    showConfirmModal('Product added! Would you like to add another product?', () => {
                         resetForm();
-                    } else {
+                    }, () => {
                         gotodashboard();
-                    }
+                    });
 
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
@@ -1753,7 +1766,7 @@
 
                     // Only restore if less than 1 hour old
                     if (timeDiff < 3600000) {
-                        if (confirm('Found auto-saved data from your last session. Would you like to restore it?')) {
+                        showConfirmModal('Found auto-saved data from your last session. Would you like to restore it?', () => {
                             // Restore form data
                             Object.entries(data.formData || {}).forEach(([key, value]) => {
                                 const input = document.querySelector(`[name="${key}"]`);
@@ -1790,7 +1803,7 @@
                             }
 
                             console.log('Auto-saved data restored');
-                        }
+                        });
                     }
                 } catch (e) {
                     console.error('Error loading auto-saved data:', e);
@@ -1864,6 +1877,7 @@
             document.addEventListener('touchstart', function () { }, { passive: true });
         }
     </script>
+
 </body>
 
 </html>

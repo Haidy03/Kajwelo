@@ -48,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         if (paymentMethod === 'creditCard') {
-            alert('Processing credit card payment...');
+            showInfoToast('Processing credit card payment...');
         } else {
-            alert('Redirecting to PayPal...');
+            showInfoToast('Redirecting to PayPal...');
         }
     });
 

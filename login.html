@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kajwelo - Login & Signup</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
     <link rel="stylesheet" href="./CSS/login.css">
     <style>
         /* Modal Styles */
@@ -141,7 +141,7 @@
             <form class="form active" id="loginForm">
                 <div class="form-group">
                     <label class="form-label" for="loginEmail">Email Address</label>
-                    <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email" required>
+                    <input type="text" id="loginEmail" class="form-input" placeholder="Enter your email"  >
                     <div class="error-message" id="loginEmailError"></div>
                 </div>
 
@@ -149,7 +149,7 @@
                     <label class="form-label" for="loginPassword">Password</label>
                     <div class="password-container">
                         <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password"
-                            required>
+                             >
                         <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
                             <i class="fas fa-eye" id="loginPasswordIcon"></i>
                         </button>
@@ -206,30 +206,33 @@
 
                 <div class="form-group">
                     <label class="form-label" for="brandName">Name</label>
-                    <input type="text" id="brandName" class="form-input" placeholder="Enter your full name" required>
+                    <input type="text" id="brandName" class="form-input" placeholder="Enter your full name"  >
+                    <div class="error-message" id="brandNameError"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="brandEmail">Email</label>
-                    <input type="email" id="brandEmail" class="form-input" placeholder="Enter your email" required>
+                    <input  type="text" id="brandEmail" class="form-input" placeholder="Enter your email"  >
+                    <div class="error-message" id="brandEmailError"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="brandPassword">Password</label>
                     <div class="password-container">
                         <input type="password" id="brandPassword" class="form-input" placeholder="Create password"
-                            required>
+                             >
                         <button type="button" class="password-toggle" onclick="togglePassword('brandPassword')">
                             <i class="fas fa-eye" id="brandPasswordIcon"></i>
                         </button>
                     </div>
+                    <div class="error-message" id="brandPasswordError"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="brandConfirmPassword">Confirm Password</label>
                     <div class="password-container">
                         <input type="password" id="brandConfirmPassword" class="form-input"
-                            placeholder="Confirm password" required>
+                            placeholder="Confirm password"  >
                         <button type="button" class="password-toggle" onclick="togglePassword('brandConfirmPassword')">
                             <i class="fas fa-eye" id="brandConfirmPasswordIcon"></i>
                         </button>
@@ -240,7 +243,8 @@
                 <div class="form-group">
                     <label class="form-label" for="brandNameField">Brand Name</label>
                     <input type="text" id="brandNameField" class="form-input" placeholder="Enter your brand name"
-                        required>
+                         >
+                    <div class="error-message" id="brandNameFieldError"></div>
                 </div>
 
                 <div class="form-group">
@@ -251,6 +255,7 @@
                 <div class="form-group">
                     <label class="form-label" for="brandPhone">Phone (Optional)</label>
                     <input type="tel" id="brandPhone" class="form-input" placeholder="Enter your phone number">
+                    <div class="error-message" id="brandPhoneError"></div>
                 </div>
 
                 <div class="target-audience-selection">
@@ -282,30 +287,34 @@
 
                 <div class="form-group">
                     <label class="form-label" for="customerName">Name</label>
-                    <input type="text" id="customerName" class="form-input" placeholder="Enter your full name" required>
+                    <input type="text" id="customerName" class="form-input" placeholder="Enter your full name"  >
+                <div class="error-message" id="customerNameError">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="customerEmail">Email</label>
-                    <input type="email" id="customerEmail" class="form-input" placeholder="Enter your email" required>
+                    <input  type="text" id="customerEmail" class="form-input" placeholder="Enter your email"  >
+                    <div class="error-message" id="customerEmailError"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="customerPassword">Password</label>
                     <div class="password-container">
                         <input type="password" id="customerPassword" class="form-input" placeholder="Create password"
-                            required>
+                             >
+                            
                         <button type="button" class="password-toggle" onclick="togglePassword('customerPassword')">
                             <i class="fas fa-eye" id="customerPasswordIcon"></i>
                         </button>
                     </div>
+                    <div class="error-message" id="customerPasswordError"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="customerConfirmPassword">Confirm Password</label>
                     <div class="password-container">
                         <input type="password" id="customerConfirmPassword" class="form-input"
-                            placeholder="Confirm password" required>
+                            placeholder="Confirm password"  >
                         <button type="button" class="password-toggle"
                             onclick="togglePassword('customerConfirmPassword')">
                             <i class="fas fa-eye" id="customerConfirmPasswordIcon"></i>
@@ -337,6 +346,7 @@
                 <div class="form-group">
                     <label class="form-label" for="customerPhone">Phone (Optional)</label>
                     <input type="tel" id="customerPhone" class="form-input" placeholder="Enter your phone number">
+                    <div class="error-message" id="customerPhoneError"></div>
                 </div>
 
                 <button type="submit" class="form-btn">Create Customer Account</button>
@@ -344,14 +354,7 @@
         </div>
     </div>
 
-    <!-- Hidden Audio Elements -->
-    <audio id="loginSuccessAudio" preload="auto">
-        <source src="./kajwelo audio/kajweloo.mp3" type="audio/mpeg">
-    </audio>
     
-    <audio id="signupSuccessAudio" preload="auto">
-        <source src="./kajwelo audio/oh oh oh.mp3" type="audio/mpeg">
-    </audio>
 
     <!-- Unconfirmed Account Modal -->
     <div class="modal-overlay" id="unconfirmedModal">
@@ -412,35 +415,10 @@
             }
         });
 
-        // Audio functions
-        function playLoginSuccessAudio() {
-            const audio = document.getElementById('loginSuccessAudio');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play();
-            }
-        }
-
-        function playSignupSuccessAudio() {
-            const audio = document.getElementById('signupSuccessAudio');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play();
-            }
-        }
-
-        function delayedRedirect(url, delay = 3000) {
-            setTimeout(() => {
-                window.location.href = url;
-            }, delay);
-        }
 
         // Make functions globally available
         window.showUnconfirmedModal = showUnconfirmedModal;
         window.closeUnconfirmedModal = closeUnconfirmedModal;
-        window.playLoginSuccessAudio = playLoginSuccessAudio;
-        window.playSignupSuccessAudio = playSignupSuccessAudio;
-        window.delayedRedirect = delayedRedirect;
     </script>
 </body>
 

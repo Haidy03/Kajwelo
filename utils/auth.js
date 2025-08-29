@@ -54,7 +54,7 @@ export class Auth {
     let previousUsers = Storage.get("previousUsers", [])
     if (suspendedUsers.includes(formData.email)) return { success: false, message: "account is suspended" };
     if (previousUsers.includes(formData.email)) {
-      alert("email was a previous user");
+      console.log("email was a previous user");
       previousUsers = previousUsers.filter(u => u !== formData.email);
       Storage.set("previousUsers", previousUsers);
     }

@@ -36,6 +36,45 @@
             line-height: 1.6;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f6f7fa, #b99ad7, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .logo p {
+            color: #e5e5e5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+         @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -795,8 +834,10 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-            <div class="sidebar-logo">Kajwelo</div>
-            <div class="sidebar-subtitle">Seller Portal</div>
+            <div class="logo">
+                <h1>Kajwelo</h1>
+                <p>Seller Portal</p>
+            </div>
         </div>
         
         <ul class="sidebar-menu">
@@ -878,15 +919,9 @@
             </div>
             
             <div class="topbar-right">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">5</span>
-                </button>
-                
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span></span>
-                   
                 </div>
             </div>
         </header>
@@ -1042,6 +1077,7 @@
         import { Customer } from "../models/Customer.js";
         import { Order } from "../models/Order.js";
         import { User } from "../models/User.js";
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
 
         // Global variables
         let orders = [];
@@ -1571,16 +1607,18 @@
         }
 
         window.acceptOrder = function (orderId) {
-            const orderGroup = orders.find(o => o.orderId === orderId);
+            const orderGroup = orders.find(o => o.orderId === orderId && o.status !== "Shipped" && o.status !== "Delivered" && o.status !== "Cancelled");
             if (orderGroup) {
                 const orderCount = orderGroup.orders.length;
                 const message = orderCount > 1 
                     ? `Are you sure you want to accept ${orderCount} orders with ID ${orderId}? This will update all orders to "Shipped".`
                     : `Are you sure you want to accept order ${orderId}? This will update the status to "Shipped".`;
                 
-                if (confirm(message)) {
+                showConfirmModal(message, () => {
                     updateOrderStatus(orderId, "Shipped");
-                }
+                });
+            }else {
+                showToast('Order cannot be accepted. It may have already been processed.', 'error');
             }
         }
 
@@ -1717,7 +1755,7 @@
                 // Find the order group
                 const orderGroup = orders.find(o => o.orderId === orderId);
                 if (!orderGroup) {
-                    alert('Order not found!');
+                    showToast('Order not found!', 'error');
                     return;
                 }
 
@@ -1752,10 +1790,10 @@
                 const message = orderCount > 1 
                     ? `${orderCount} orders with ID ${orderId} have been ${newStatus.toLowerCase()} successfully!`
                     : `Order ${orderId} has been ${newStatus.toLowerCase()} successfully!`;
-                alert(message);
+                showToast(message, 'success');
             } catch (error) {
                 console.error('Error updating order status:', error);
-                alert('Error updating order status. Please try again.');
+                showToast('Error updating order status. Please try again.', 'error');
             }
         }
 

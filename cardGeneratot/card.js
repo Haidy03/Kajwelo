@@ -1,27 +1,3 @@
-// Hidden Audio Element for Add to Cart
-let addToCartAudio = null;
-
-// Initialize audio element
-function initializeAddToCartAudio() {
-  if (!addToCartAudio) {
-    addToCartAudio = document.createElement('audio');
-    addToCartAudio.id = 'addToCartAudio';
-    addToCartAudio.preload = 'auto';
-    addToCartAudio.innerHTML = '<source src="../kajwelo audio/3ayz el bet tmot.mp3" type="audio/mpeg">';
-    document.body.appendChild(addToCartAudio);
-  }
-}
-
-// Play add to cart audio function
-function playAddToCartAudio() {
-  if (addToCartAudio) {
-    addToCartAudio.currentTime = 0;
-    addToCartAudio.play().catch(error => {
-      console.log('Audio play failed:', error);
-    });
-  }
-}
-
 // Toast notification function
 function showToast(message, type = 'success') {
   // Remove existing toasts
@@ -113,95 +89,6 @@ function showToast(message, type = 'success') {
   }, 4000);
 }
 
-export const products = [
-  {
-    id: 1,
-    title: "Summer Maxi Dress",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "7c22390e-d8e2-45dc-9a1d-e51e062284b3",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Nike",
-  },
-  {
-    id: 2,
-    title: "Silk Blouse",
-    currentprice: 200,
-    oldprice: 400,
-    sellerId: "217edb04-89b6-4074-8af7-823f3c77c061",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "LC",
-  },
-  {
-    id: 3,
-    title: "Evening Cocktail Dress",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "3d1a1067-e8c2-40b8-8036-8a5d8984c35e",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Defacto",
-  },
-  {
-    id: 4,
-    title: "Chiffon Blouse",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "53b16c84-cd03-4deb-bda8-221ef0f5db6f",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Adidas",
-  },
-  {
-    id: 5,
-    title: "Floral Wrap Dress",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "7c22390e-d8e2-45dc-9a1d-e51e062284b3",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Nike",
-  },
-  {
-    id: 6,
-    title: "Lace Detail Blouse",
-    currentprice: 300,
-    oldprice: 400,
-    sellerId: "217edb04-89b6-4074-8af7-823f3c77c061",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "LC",
-  },
-  {
-    id: 7,
-    title: "Vintage Midi Dress",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "3d1a1067-e8c2-40b8-8036-8a5d8984c35e",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Defacto",
-  },
-  {
-    id: 8,
-    title: "Striped Cotton Blouse",
-    currentprice: 300,
-    oldprice: 400,
-
-    sellerId: "53b16c84-cd03-4deb-bda8-221ef0f5db6f",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9VFELQHCzhK8Gpsw7rO7ZX3xkdLgEslcVQ&s",
-    brand: "Adidas",
-  },
-];
-
 //window.products = products;
 
 function getSellerNameById(sellerId) {
@@ -274,8 +161,10 @@ export function renderProducts(
       event.stopPropagation();
       let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
-        alert("You need to log in to use wishlist!");
-        window.location.href = "/login.html";
+        showToast("Please log in to use the wishlist!", 'error');
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 1000);
         return;
       }
       if (!Array.isArray(loggedInUser.wishlist)) loggedInUser.wishlist = [];
@@ -310,8 +199,10 @@ export function renderProducts(
       event.stopPropagation();
       let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
-        alert("You need to log in to add to cart!");
-        window.location.href = "/login.html";
+        showToast("Please log in to add items to your cart!", 'error');
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 2000);
         return;
       }
 
@@ -321,7 +212,7 @@ export function renderProducts(
       const isInCart = loggedInUser.cart.some((item) => item.id === product.id);
 
       if (isInCart) {
-        alert("Already added to cart!");
+        showToast("This item is already in your cart!", 'warning');
         quickViewBtn.textContent = "Added to Cart";
         return;
       }
@@ -336,10 +227,6 @@ export function renderProducts(
         users[userIndex] = loggedInUser;
         localStorage.setItem("users", JSON.stringify(users));
       }
-
-             // Play add to cart audio
-       initializeAddToCartAudio();
-       playAddToCartAudio();
 
        quickViewBtn.textContent = "Added to Cart";
        

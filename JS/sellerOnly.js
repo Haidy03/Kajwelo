@@ -8,6 +8,6 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     Auth.logout();
 })
 
-document.querySelector(".user-avatar").textContent = currentUser.name.split(" ")[0][0] + currentUser.name.split(" ")[1][0];
+document.querySelector(".user-avatar").textContent = currentUser.name.split(" ").length > 1 ? currentUser.name.split(" ")[0][0] + currentUser.name.split(" ")[1][0] : currentUser.name.split(" ")[0][0];
 
-document.querySelector(".user-profile>span").textContent = currentUser.name
+document.querySelector(".user-profile>span").textContent = currentUser.name;

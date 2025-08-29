@@ -34,6 +34,44 @@
             line-height: 1.6;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f6f7fa, #b99ad7, #ffa726, #ec407a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .logo p {
+            color: #e5e5e5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+ @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -710,7 +748,7 @@
             .analytics-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .analytics-card {
                 padding: 1rem;
             }
@@ -735,8 +773,10 @@
 
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-            <div class="sidebar-logo">Kajwelo</div>
-            <div class="sidebar-subtitle">Seller Portal</div>
+            <div class="logo">
+                <h1>Kajwelo</h1>
+                <p>Seller Portal</p>
+            </div>
         </div>
 
         <ul class="sidebar-menu">
@@ -775,14 +815,9 @@
                 <h1 class="page-title">Seller Analytics</h1>
             </div>
             <div class="topbar-right">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
                 <div class="user-profile">
                     <div class="user-avatar"></div>
                     <span></span>
-
                 </div>
             </div>
         </div>
@@ -874,7 +909,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card">
                         <div class="analytics-title">Product Performance</div>
                         <div class="analytics-content">
@@ -892,7 +927,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card">
                         <div class="analytics-title">Order Analytics</div>
                         <div class="analytics-content">
@@ -944,7 +979,7 @@
         import { Order } from "../models/Order.js";
         import { Product } from "../models/Product.js";
         import { retrive } from "../models/Filteration.js";
-
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
         // Global variables
         let currentUser = null;
         let orders = [];
@@ -995,10 +1030,10 @@
         function updateStats() {
             // Calculate total sales
             const totalSales = orders.reduce((sum, order) => sum + order.totalPrice, 0);
-            
+
             // Calculate total orders
             const totalOrders = orders.length;
-            
+
             // Calculate average order value
             const avgOrderValue = totalOrders > 0 ? (totalSales / totalOrders).toFixed(2) : 0;
 
@@ -1022,7 +1057,7 @@
             // Find top product by revenue
             const topProduct = Object.entries(productSales)
                 .sort(([, a], [, b]) => b.revenue - a.revenue)[0];
-            
+
             let topProductName = 'No Sales';
             if (topProduct) {
                 const foundProduct = products.find(p => p.id === topProduct[0]);
@@ -1159,7 +1194,7 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function(value) {
+                                callback: function (value) {
                                     return '$' + value.toFixed(0);
                                 }
                             }
@@ -1321,7 +1356,7 @@
             // Calculate revenue trends for last 6 months
             const monthlyRevenue = {};
             const currentDate = new Date();
-            
+
             // Initialize last 6 months with 0 revenue
             for (let i = 5; i >= 0; i--) {
                 const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
@@ -1371,7 +1406,7 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function(value) {
+                                callback: function (value) {
                                     return '$' + value.toFixed(0);
                                 }
                             }
@@ -1446,7 +1481,7 @@
         window.addEventListener('resize', function () {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
+
             if (window.innerWidth >= 993) {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('active');
