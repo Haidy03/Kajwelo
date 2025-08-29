@@ -2,6 +2,7 @@ import { Auth } from "../utils/auth.js";
 import { Admin } from "../models/Admin.js";
 import { Seller } from "../models/Seller.js";
 import { Customer } from "../models/Customer.js";
+import { showErrorToast, showSuccessToast, showInfoToast } from "../utils/toastModal.js";
 
 const current = Auth.getCurrentUser();
 if (current instanceof Customer) {
@@ -133,17 +134,129 @@ document.getElementById('customerConfirmPassword').addEventListener('input', () 
     validatePasswordMatch('customerPassword', 'customerConfirmPassword', 'customerPasswordMatchError');
 });
 
-// Form submissions
+
+document.getElementById('loginEmail').addEventListener("focusout", () => {
+    const email = document.getElementById('loginEmail').value;
+    document.getElementById('loginEmailError').style.display = email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) ? 'none' : 'block';
+    document.getElementById('loginEmailError').textContent = 'Please enter a valid email address';
+});
+
+document.getElementById('brandName').addEventListener("focusout", () => {
+    const name = document.getElementById('brandName').value;
+    document.getElementById('brandNameError').style.display = name.match(/^[a-z]+(?: [A-Z][a-z]+)?$/) ? 'none' : 'block';
+    document.getElementById('brandNameError').textContent = 'Please enter your name only alphabetic characters';
+});
+
+document.getElementById('brandEmail').addEventListener("focusout", () => {
+    const email = document.getElementById('brandEmail').value;
+    document.getElementById('brandEmailError').style.display = email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) ? 'none' : 'block';
+    document.getElementById('brandEmailError').textContent = 'Please enter a valid email address';
+});
+
+
+document.getElementById('brandPassword').addEventListener("focusout", () => {
+    const password = document.getElementById('brandPassword').value;
+    document.getElementById('brandPasswordError').style.display = password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) ? 'none' : 'block';
+    document.getElementById('brandPasswordError').textContent = 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character';
+});
+
+document.getElementById('brandNameField').addEventListener("focusout", () => {
+    const brandName = document.getElementById('brandNameField').value;
+    document.getElementById('brandNameFieldError').style.display = brandName.match(/^[A-Za-z0-9]+(?:[ -][A-Za-z0-9]+)*$/) ? 'none' : 'block';
+    document.getElementById('brandNameFieldError').textContent = 'Please enter a valid brand name';
+});
+
+document.getElementById('brandPhone').addEventListener("focusout", () => {
+    const phone = document.getElementById('brandPhone').value;
+    document.getElementById('brandPhoneError').style.display = phone.match(/^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{3,4}[-.\s]?\d{4}$/) ? 'none' : 'block';
+    document.getElementById('brandPhoneError').textContent = 'Please enter a valid phone number';
+});
+
+
+document.getElementById('customerName').addEventListener("focusout", () => {
+    const name = document.getElementById('customerName').value;
+    document.getElementById('customerNameError').style.display = name.match(/^[a-z]+(?: [A-Z][a-z]+)?$/) ? 'none' : 'block';
+    document.getElementById('customerNameError').textContent = 'Please enter your name only alphabetic characters';
+});
+
+document.getElementById('customerEmail').addEventListener("focusout", () => {
+    const email = document.getElementById('customerEmail').value;
+    document.getElementById('customerEmailError').style.display = email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) ? 'none' : 'block';
+    document.getElementById('customerEmailError').textContent = 'Please enter a valid email address';
+});
+
+
+document.getElementById('customerPassword').addEventListener("focusout", () => {
+    const password = document.getElementById('customerPassword').value;
+    document.getElementById('customerPasswordError').style.display = password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) ? 'none' : 'block';
+    document.getElementById('customerPasswordError').textContent = 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character';
+});
+
+document.getElementById('customerPhone').addEventListener("focusout", () => {
+    const phone = document.getElementById('customerPhone').value;
+    document.getElementById('customerPhoneError').style.display = phone.match(/^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{3,4}[-.\s]?\d{4}$/) ? 'none' : 'block';
+    document.getElementById('customerPhoneError').textContent = 'Please enter a valid phone number';
+});
+
+// Utility: Validate a field by regex, show error if invalid
+function validateField(id, regex, errorMsg) {
+    const value = document.getElementById(id).value;
+    const errorElement = document.getElementById(id + 'Error');
+    if (!regex.test(value)) {
+        errorElement.style.display = 'block';
+        errorElement.textContent = errorMsg;
+        return false;
+    } else {
+        errorElement.style.display = 'none';
+        return true;
+    }
+}
+
+// Validate all login fields
+function validateLoginForm() {
+    let valid = true;
+    valid &= validateField('loginEmail', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address');
+    // Add more login field validations if needed
+    return !!valid;
+}
+
+// Validate all seller signup fields
+function validateBrandOwnerForm() {
+    let valid = true;
+    valid &= validateField('brandName', /^[a-z]+(?: [A-Z][a-z]+)?$/, 'Please enter your name only alphabetic characters');
+    valid &= validateField('brandEmail', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address');
+    valid &= validateField('brandPassword', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character');
+    valid &= validateField('brandNameField', /^[A-Za-z0-9]+(?:[ -][A-Za-z0-9]+)*$/, 'Please enter a valid brand name');
+    valid &= validateField('brandPhone', /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{3,4}[-.\s]?\d{4}$/, 'Please enter a valid phone number');
+    // Add more if needed
+    return !!valid;
+}
+
+// Validate all customer signup fields
+function validateCustomerForm() {
+    let valid = true;
+    valid &= validateField('customerName', /^[a-z]+(?: [A-Z][a-z]+)?$/, 'Please enter your name only alphabetic characters');
+    valid &= validateField('customerEmail', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address');
+    valid &= validateField('customerPassword', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character');
+    valid &= validateField('customerPhone', /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{3,4}[-.\s]?\d{4}$/, 'Please enter a valid phone number');
+    // Add more if needed
+    return !!valid;
+}
 
 // LOGIN
 document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
 
+    if (!validateLoginForm()) {
+        showErrorToast('Please fix the highlighted errors before submitting.');
+        return;
+    }
+
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
     if (!email || !password) {
-        alert('Please fill in all required fields');
+        showErrorToast('Please fill in all required fields');
         return;
     }
     
@@ -153,31 +266,28 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
         if (result.message === 'account_not_confirmed') {
             // Show modal for unconfirmed account
             showUnconfirmedModal(result.email, result.confirmCode);
+            
         } else {
-            // Show other error messages as alerts
-            alert(result.message);
+            // Show other error messages as toasts
+            showErrorToast(result.message);
         }
         return;
     }
     
     if (result.success) {
-        // Play login success audio
-        if (typeof playLoginSuccessAudio === 'function') {
-            playLoginSuccessAudio();
-        }
         
         const currentUser = Auth.getCurrentUser();
         if (currentUser instanceof Customer) {
-            delayedRedirect("FinalHomePage.html", 3000);
+            window.location.href = "FinalHomePage.html";
         }
         else if (currentUser instanceof Seller) {
-            delayedRedirect("./Pages/sellerdashboard.html", 0);
+            window.location.href = "./Pages/sellerdashboard.html";
         }
         else if (currentUser instanceof Admin) {
-            delayedRedirect("./AdminDashboard/AdminDashBoard.html", 0);
+            window.location.href = "./AdminDashboard/AdminDashBoard.html";
         }
         else {
-            alert(result.message)
+            showErrorToast(result.message);
             //window.location.href = "accessDeniedPage.html"
         }
     }
@@ -186,6 +296,11 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
 // SIGN UP AS A SELLER FORM
 document.getElementById('signupBrandOwner').addEventListener('submit', (e) => {
     e.preventDefault();
+
+    if (!validateBrandOwnerForm() || !validatePasswordMatch('brandPassword', 'brandConfirmPassword', 'brandPasswordMatchError')) {
+        showErrorToast('Please fix the highlighted errors before submitting.');
+        return;
+    }
 
     const name = document.getElementById('brandName').value;
     const email = document.getElementById('brandEmail').value;
@@ -224,12 +339,17 @@ document.getElementById('signupBrandOwner').addEventListener('submit', (e) => {
         targetAudience
     };
     const result = Auth.register(formData);
-    if(!result.success) alert(result.message)
-    if (result) {
-        //Auth.login(formData.email, formData.password);
-        window.location.href = "/login.html"
+    if(!result.success) {
+        showErrorToast(result.message);
+        return;
+    }
+    if (result.success) {
+        showSuccessToast('Brand Owner registration successful! Redirecting to login...');
+        setTimeout(() => {
+            window.location.href = "/login.html";
+        }, 2000);
     } else {
-        alert(result.message);
+        showErrorToast(result.message);
     }
 
     // console.log('Brand Owner Registration Data:', formData);
@@ -239,6 +359,11 @@ document.getElementById('signupBrandOwner').addEventListener('submit', (e) => {
 // SIGN UP AS A CUSTOMER FORM
 document.getElementById('signupCustomer').addEventListener('submit', (e) => {
     e.preventDefault();
+
+    if (!validateCustomerForm() || !validatePasswordMatch('customerPassword', 'customerConfirmPassword', 'customerPasswordMatchError')) {
+        showErrorToast('Please fix the highlighted errors before submitting.');
+        return;
+    }
 
     const name = document.getElementById('customerName').value;
     const email = document.getElementById('customerEmail').value;
@@ -269,16 +394,19 @@ document.getElementById('signupCustomer').addEventListener('submit', (e) => {
         phone
     };
     const result = Auth.register(formData);
-    if(!result.success) alert(result.message)
+    if(!result.success) {
+        showErrorToast(result.message);
+        return;
+    }
     if (result.success) {
         // Play signup success audio for customer
         if (typeof playSignupSuccessAudio === 'function') {
             playSignupSuccessAudio();
         }
-        //Auth.login(formData.email, formData.password);
-        delayedRedirect("/login.html", 3000);
+        showSuccessToast('Customer registration successful! Redirecting to login...');
+        window.location.href = "/login.html";
     } else {
-        alert(result.message);
+        showErrorToast(result.message);
     }
 
 });
@@ -309,5 +437,5 @@ document.querySelectorAll('input[name="targetAudience"]').forEach(checkbox => {
 // Forgot password functionality
 document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
     e.preventDefault();
-    alert('Forgot password functionality would be implemented here');
+    showInfoToast('Forgot password functionality would be implemented here');
 });

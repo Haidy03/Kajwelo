@@ -552,7 +552,7 @@
                     item.quantity++;
                     this.updateUI();
                 } else {
-                    alert("Cannot add more than available stock");
+                    showToast("Cannot add more than available stock", 'warning');
                 }
             },
 
@@ -562,12 +562,10 @@
                     item.quantity--;
                     this.updateUI();
                 } else if (item && item.quantity === 1) {
-                    if (confirm("Remove this item from your cart?")) {
+                    showConfirmModal("Remove this item from your cart?", () => {
                         this.removeItem(itemId);
-
                         currentUser.removeFromCart(item);
-
-                    }
+                    });
                 }
             },
 

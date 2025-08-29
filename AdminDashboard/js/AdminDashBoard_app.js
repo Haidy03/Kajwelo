@@ -179,7 +179,7 @@ function bulkDeleteItems() {
     if (appState.selectedItems.size === 0) return;
 
     const itemCount = appState.selectedItems.size;
-    if (confirm(`Are you sure you want to delete ${itemCount} selected item(s)?`)) {
+    showConfirmModal(`Are you sure you want to delete ${itemCount} selected item(s)?`, () => {
         // Convert Set to Array and sort in descending order to avoid index issues
         const idsToDelete = Array.from(appState.selectedItems).sort((a, b) => b - a);
 
@@ -201,7 +201,7 @@ function bulkDeleteItems() {
         updateBulkActionsVisibility();
 
         showToast(`${itemCount} item(s) deleted successfully`, 'success');
-    }
+    });
 }
 
 // Navigation to seller-specific products/categories

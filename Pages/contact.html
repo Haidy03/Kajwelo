@@ -282,7 +282,7 @@
         const text = chatInput.value.trim();
         if (!text) return;
         if (!selectedAdminId) {
-          alert("Choose an admin to send the message to.");
+          showToast("Choose an admin to send the message to.", 'warning');
           return;
         }
 
@@ -290,7 +290,7 @@
         const res = Conversation.send(text, selectedAdminId);
 
         if (res && res.success === false) {
-          alert(res.message || "Failed to send message");
+          showToast(res.message || "Failed to send message", 'error');
           return;
         }
 

@@ -1471,21 +1471,21 @@
           //console.log(product);
           
           let loggedInUser = Auth.getCurrentUser();
-                     if (!loggedInUser) {
+          if (!loggedInUser) {
              showToast('Please log in to add items to your cart!', 'error');
              setTimeout(() => {
-               window.location.href = '/login.html';
+              window.location.href = '/login.html';
              }, 2000);
-             return;
-           }
+            return;
+          }
           //console.log(loggedInUser.cart)
           if (!Array.isArray(loggedInUser.cart)) loggedInUser.cart = [];
           const result =loggedInUser.addToCart(product);
           //console.log(result)
-                     if(!result.success){
+          if(!result.success){
              showToast(result.message, 'error');
-             return;
-           }
+            return;
+          }
           localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
 
           let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -1538,28 +1538,28 @@
           const product = allProducts.find(p => p.id === productId);
           if (!product) return;
 
-                     let loggedInUser = Auth.getCurrentUser();
-           if (!loggedInUser) {
+          let loggedInUser = Auth.getCurrentUser();
+          if (!loggedInUser) {
              showToast('Please log in to use the wishlist!', 'error');
              setTimeout(() => {
-               window.location.href = '/login.html';
+            window.location.href = '/login.html';
              }, 2000);
-             return;
-           }
+            return;
+          }
           if (!Array.isArray(loggedInUser.wishlist)) loggedInUser.wishlist = [];
 
-                     const existingIndex = loggedInUser.wishlist.findIndex(item => item.id === productId);
-           if (existingIndex === -1) {
-             loggedInUser.addToWishlist(product);
-             this.innerHTML = '❤';
-             this.classList.add('active');
+          const existingIndex = loggedInUser.wishlist.findIndex(item => item.id === productId);
+          if (existingIndex === -1) {
+            loggedInUser.addToWishlist(product);
+            this.innerHTML = '❤';
+            this.classList.add('active');
              showToast(`${product.name} added to wishlist! 💕`, 'success');
-           } else {
-             loggedInUser.wishlist.splice(existingIndex, 1);
-             this.innerHTML = '♡';
-             this.classList.remove('active');
+          } else {
+            loggedInUser.wishlist.splice(existingIndex, 1);
+            this.innerHTML = '♡';
+            this.classList.remove('active');
              showToast(`${product.name} removed from wishlist! 💔`, 'success');
-           }
+          }
 
           localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
           let users = JSON.parse(localStorage.getItem('users')) || [];

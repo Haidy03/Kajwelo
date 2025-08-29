@@ -43,16 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginBtn.style.display = "none";
     logoutBtn.addEventListener("click", () => {
-      const logoutAudio = document.getElementById("logoutAudio");
-      if (logoutAudio) {
-        logoutAudio.currentTime = 0;
-        logoutAudio.play();
-      }
-      setTimeout(() => {
-        Auth.logout()
-        // Redirect to login page
-        window.location.href = "/login.html";
-      }, 2500); // Wait 2 seconds for audio to play before redirecting
+
+      Auth.logout()
+      // Redirect to login page
+      window.location.href = "/login.html";
 
     });
 

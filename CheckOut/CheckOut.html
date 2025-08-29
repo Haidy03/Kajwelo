@@ -453,7 +453,7 @@
                     if(res.success){
                         continue;
                     }else{
-                        alert(res.message);
+                        showToast(res.message, 'error');
                         return;
                     }
                    
@@ -465,9 +465,12 @@
 
                 // Clear the order from localStorage
                 Storage.remove("order");
-
+                showToast('Order placed successfully!', 'success');
                 // Redirect to confirmation page or home page
-                window.location.href = "../FinalHomePage.html";
+                setInterval(() => {
+                    window.location.href = "../FinalHomePage.html";
+                }, 1000);
+                
             }
         });
     </script>

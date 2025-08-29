@@ -49,11 +49,6 @@ export const navbar = `
         </div>
     </nav>
 
-    <!-- Hidden Logout Audio Element -->
-    <audio id="logoutAudio" preload="auto">
-        <source src="./kajwelo audio/ya3eni 3 el fa2er.mp3" type="audio/mpeg">
-    </audio>
-
 `;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -78,8 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (localStorage.getItem("loggedInUser")) {
         location.href = "/cardGeneratot/wishlist.html";
       } else {
-        alert("You have to sign in first");
-        location.href = "/login.html";
+        showToast("Please sign in to access wishlist", 'error');
+        setTimeout(() => {
+          location.href = "/login.html";
+        }, 2000);
       }
     });
   }
@@ -92,8 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (localStorage.getItem("loggedInUser")) {
         location.href = "/Pages/contact.html";
       } else {
-        alert("You have to sign in first");
-        location.href = "/login.html";
+        showToast("Please sign in to access contact page", 'error');
+        setTimeout(() => {
+          location.href = "/login.html";
+        }, 2000);
       }
     });
   }
