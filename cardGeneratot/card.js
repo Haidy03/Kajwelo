@@ -296,7 +296,7 @@ export function renderProducts(
 
     const ProCurrentPrice = document.createElement("span");
     ProCurrentPrice.classList.add("current-price");
-    ProCurrentPrice.textContent = currentPriceVal + " $";
+    ProCurrentPrice.textContent = currentPriceVal + " EGP";
 
     ProPrice.appendChild(ProCurrentPrice);
 
