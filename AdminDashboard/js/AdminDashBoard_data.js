@@ -51,8 +51,8 @@
 
     sellers.forEach(s => {
       (s.products || []).forEach(p => {
-        // Only include verified products
-        if (p.isVerified) {
+        // Include products from verified sellers, regardless of product verification status
+        if (s.isVerified) {
           const stock = computeStockCount(p);
           let status = "active";
           if (stock === 0) status = "inactive";
@@ -68,7 +68,7 @@
             status, // UI stock/status
             description: p.description || "",
             sellerId: s.id,
-            isVerified: true, // All displayed products are verified
+            isVerified: p.isVerified === true, // Show actual verification status
           });
         }
       });
@@ -106,17 +106,17 @@
     }));
 
     // Sellers table light projection
-    // Filter to only verified sellers (isVerified = true)
-    const verifiedSellers = sellers.filter(s => s.isVerified);
-    const sellersTable = verifiedSellers.map(s => ({
+    // Include all sellers, not just verified ones
+    const sellersTable = sellers.map(s => ({
         id: s.id,
         name: s.name || s.brandName || "Seller",
         email: s.email,
         phone: s.phone || "",
         address: s.businessAddress || s.address || "",
-        status: "active", // Verified sellers are always active
+        status: s.isVerified ? "active" : "inactive", // Show actual verification status
         joinDate: (s.createdAt ? new Date(s.createdAt).toISOString().slice(0, 10) : ""),
         rating: Number(s.rating) || 4.5,
+        isVerified: s.isVerified === true, // Include actual verification status
     }));
 
     // Customers table light projection
@@ -160,19 +160,22 @@
           entityId: s.id,
         });
       }
-    });
-
-    products.forEach(p => {
-      if (!p.isVerified) {
-        verificationRequests.push({
-          id: vrId++,
-          title: "Product Verification",
-          message: `Product ${p.name} needs verification`,
-          date: new Date().toISOString().slice(0, 10),
-          status: "unverified",
-          type: "product",
-          entityId: p.id,
-          sellerId: p.sellerId,
+      
+      // Check for unverified products from verified sellers
+      if (s.isVerified && Array.isArray(s.products)) {
+        s.products.forEach(p => {
+          if (!p.isVerified) {
+            verificationRequests.push({
+              id: vrId++,
+              title: "Product Verification",
+              message: `Product ${p.name} needs verification`,
+              date: new Date().toISOString().slice(0, 10),
+              status: "unverified",
+              type: "product",
+              entityId: p.id,
+              sellerId: s.id,
+            });
+          }
         });
       }
     });
