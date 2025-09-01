@@ -242,6 +242,19 @@ function bulkDelete(section, ids) {
       case "inbox":
         res = deleteInboxById(id);
         break;
+      case "verificationRequests":
+        // Handle verification requests deletion
+        const vr = (window.dataStore?.verificationRequests || []).find(r => String(r.id) === String(id));
+        if (vr) {
+          if (vr.type === 'seller') {
+            res = deleteUserById(vr.entityId);
+          } else if (vr.type === 'product') {
+            res = deleteProductById(vr.entityId);
+          }
+        } else {
+          res = { success: false };
+        }
+        break;
       default:
         res = { success: false };
     }

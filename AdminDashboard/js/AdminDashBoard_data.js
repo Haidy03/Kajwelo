@@ -46,13 +46,13 @@
     const customers = users.filter(u => (u.role || "").toLowerCase() === "customer");
     const admins = users.filter(u => (u.role || "").toLowerCase() === "admin" || (u.role || "") === "Admin");
 
-    // Flatten products from sellers, filtering only verified products (isVerified = true)
+    // Flatten products from sellers, filtering only verified products (isVerified = true) from verified sellers
     const products = [];
 
     sellers.forEach(s => {
       (s.products || []).forEach(p => {
-        // Include products from verified sellers, regardless of product verification status
-        if (s.isVerified) {
+        // Include only verified products from verified sellers
+        if (s.isVerified && p.isVerified) {
           const stock = computeStockCount(p);
           let status = "active";
           if (stock === 0) status = "inactive";
@@ -134,15 +134,18 @@
     }));
 
     // Admins table light projection
-    const adminsTable = admins.map(a => ({
-      id: a.id,
-      name: a.name || "Admin",
-      email: a.email,
-      role: adminLevelToLabel(Number(a.adminLevel) || 1),
-      password: "********", // hide actual stored value (may be encoded)
-      status: a.isConfirmed === false ? "inactive" : "active",
-      lastLogin: a.lastLogin || new Date().toISOString().slice(0, 10),
-    }));
+    const currentUserId = currentUser?.id;
+    const adminsTable = admins
+      .filter(a => String(a.id) !== String(currentUserId)) // Exclude current logged-in admin
+      .map(a => ({
+        id: a.id,
+        name: a.name || "Admin",
+        email: a.email,
+        role: adminLevelToLabel(Number(a.adminLevel) || 1),
+        password: "********", // hide actual stored value (may be encoded)
+        status: a.isConfirmed === false ? "inactive" : "active",
+        lastLogin: a.lastLogin || new Date().toISOString().slice(0, 10),
+      }));
 
     // Verification requests derived from unverified sellers/products
     let vrId = 1;
