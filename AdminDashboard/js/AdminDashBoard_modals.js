@@ -19,6 +19,29 @@ function setupModalEventListeners() {
 
     // Send message button
     document.getElementById('sendSellerMessageBtn')?.addEventListener('click', sendMessage);
+    
+    // Password visibility toggle
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.toggle-password')) {
+            togglePasswordVisibility(e);
+        }
+    });
+}
+
+function togglePasswordVisibility(e) {
+    const toggleButton = e.target.closest('.toggle-password');
+    const passwordInput = toggleButton.closest('.input-group').querySelector('input');
+    const icon = toggleButton.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
 }
 
 // Open add/edit modal with appropriate form
@@ -244,7 +267,7 @@ function generateFormHTML(section, item = null) {
                     <div class="col-md-6">
                         <label for="itemEmail" class="form-label">Email</label>
                         <input type="email" class="form-control" id="itemEmail" required>
-                        <div class="invalid-feedback">Please enter a valid email</div>
+                        <div class="invalid-feedback">Email must contain @domain.extension format with at least 2 characters in the extension</div>
                     </div>
                 </div>
                 
@@ -259,8 +282,13 @@ function generateFormHTML(section, item = null) {
                     </div>
                     <div class="col-md-6">
                         <label for="itemPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="itemPassword" required minlength="6">
-                        <div class="invalid-feedback">Password must be at least 6 characters</div>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="itemPassword" required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">Password must contain at least 8 characters with: uppercase letter, lowercase letter, number, and special character (@$!%*?&)</div>
                     </div>
                 </div>
             `;
@@ -490,21 +518,88 @@ function populateFormFields(item) {
 // Save item (add or edit)
 function saveItem() {
     const form = document.getElementById('itemForm');
+    let isFormValid = true;
 
-    // Validate form
-    if (!form.checkValidity()) {
-        form.classList.add('was-validated');
-        return;
+    // Reset previous validation states
+    form.classList.remove('was-validated');
+    const invalidFields = form.querySelectorAll('.is-invalid');
+    invalidFields.forEach(field => {
+        field.classList.remove('is-invalid');
+    });
+    
+    // Additional validation for admins section to match specified patterns
+    if (appState.currentSection === 'admins') {
+        const adminEmail = document.getElementById('itemEmail').value;
+        const adminPassword = document.getElementById('itemPassword').value;
+        const emailField = document.getElementById('itemEmail');
+        const passwordField = document.getElementById('itemPassword');
+
+        // Validate email with specified pattern
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(adminEmail)) {
+            emailField.setCustomValidity('Email must contain username@domain.extension format with at least 2 characters in the extension');
+            emailField.classList.add('is-invalid');
+            isFormValid = false;
+            
+            // Ensure the invalid-feedback message is visible
+            const feedback = emailField.parentNode.querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.style.display = 'block';
+            }
+        } else {
+            emailField.setCustomValidity('');
+            emailField.classList.remove('is-invalid');
+            
+            // Hide the feedback when valid
+            const feedback = emailField.parentNode.querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.style.display = '';
+            }
+        }
+
+        // Validate password with specified pattern
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(adminPassword)) {
+            passwordField.setCustomValidity('Password must contain at least 8 characters with: uppercase letter, lowercase letter, number, and special character (@$!%*?&)');
+            passwordField.classList.add('is-invalid');
+            isFormValid = false;
+            
+            // Ensure the invalid-feedback message is visible
+            const feedback = passwordField.parentNode.parentNode.querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.style.display = 'block';
+            }
+        } else {
+            passwordField.setCustomValidity('');
+            passwordField.classList.remove('is-invalid');
+            
+            // Hide the feedback when valid
+            const feedback = passwordField.parentNode.parentNode.querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.style.display = '';
+            }
+        }
     }
 
+    // Check default form validity if not admin section or admin validation passed
+    if (!form.checkValidity() || !isFormValid) {
+        form.classList.add('was-validated');
+        showToast('Please fix the form errors before submitting', 'error');
+
+        // Add a small delay to ensure DOM updates properly with validation messages
+        setTimeout(() => {
+            // Any additional DOM manipulation can be done here if needed
+        }, 10);
+
+        return;
+    }
+    
+    // If we get here, form is valid
     const isEditing = appState.editingItem !== null;
     const itemId = isEditing ? appState.editingItem.id : generateId(appState.currentSection);
-
-    // Build item data based on section
     const itemData = buildItemData(itemId);
-
+    
     if (isEditing) {
-        // For now, keep inline updates for view layer only
         const index = dataStore[appState.currentSection].findIndex(item => item.id === itemId);
         if (index !== -1) {
             dataStore[appState.currentSection][index] = itemData;
@@ -529,23 +624,23 @@ function saveItem() {
                 res = window.AdminOps.addCategory(itemData);
                 break;
             default:
-                // Fallback to in-memory add
                 dataStore[appState.currentSection].push(itemData);
                 res = { success: true };
         }
+        
         if (res?.success) {
             showToast('Item added successfully', 'success');
         } else {
             showToast(res?.message || 'Failed to add item', 'error');
         }
     }
-
+    
     // Close modal and refresh table
     itemModal.hide();
-    // Hard reload to rebuild dataStore from localStorage for correctness
     window.location.reload();
-
+    
     // Reset form
+    form.reset();
     form.classList.remove('was-validated');
 }
 
