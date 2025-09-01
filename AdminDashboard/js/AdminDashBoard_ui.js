@@ -135,12 +135,12 @@ function renderDashboard() {
             </div>
             <div class="row quick-access g-3">
                 <div class="col-12 col-md-6 col-lg-3">
-                    <button class="btn btn-primary w-100" data-section="sellers">
+                    <button class="btn btn-primary w-100" data-section="sellers" ${window.adminAccess?.level === 1 ? 'disabled' : ''}>
                         <i class="fas fa-user-tie me-2"></i>Manage Sellers
                     </button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <button class="btn btn-success w-100" data-section="customers">
+                    <button class="btn btn-success w-100" data-section="customers" ${window.adminAccess?.level === 1 ? 'disabled' : ''}>
                         <i class="fas fa-users me-2"></i>View Customers
                     </button>
                 </div>
