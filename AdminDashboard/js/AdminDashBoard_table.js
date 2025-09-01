@@ -7,7 +7,6 @@ function renderTableHeaders(section) {
             { field: 'subcategory', label: 'Subcategory' },
             { field: 'price', label: 'Price' },
             { field: 'stock', label: 'Stock' },
-            { field: 'status', label: 'Status' },
             { field: 'sellerName', label: 'Seller' },
             { field: 'actions', label: 'Actions' }
         ],
@@ -15,7 +14,6 @@ function renderTableHeaders(section) {
             { field: 'name', label: 'Category Name' },
             { field: 'description', label: 'Description' },
             { field: 'productCount', label: 'Products' },
-            { field: 'status', label: 'Status' },
             { field: 'actions', label: 'Actions' }
         ],
         'customers': [
@@ -40,7 +38,6 @@ function renderTableHeaders(section) {
             { field: 'title', label: 'Request Type' },
             { field: 'message', label: 'Details' },
             { field: 'date', label: 'Date' },
-            { field: 'status', label: 'Status' },
             { field: 'actions', label: 'Actions' }
         ],
         'sellers': [
@@ -54,7 +51,6 @@ function renderTableHeaders(section) {
             { field: 'email', label: 'Email' },
             { field: 'role', label: 'Role' },
             { field: 'password', label: 'Password' },
-            { field: 'status', label: 'Status' },
             { field: 'actions', label: 'Actions' }
         ],
         'inbox': [
@@ -66,7 +62,13 @@ function renderTableHeaders(section) {
         ]
     };
 
-    let html = '<tr><th width="40"><input type="checkbox" class="form-check-input select-all" id="selectAll"></th>';
+    // Add selection column for all sections except categories
+    let html = '';
+    if (section !== 'categories') {
+        html = '<tr><th width="40"><input type="checkbox" class="form-check-input select-all" id="selectAll"></th>';
+    } else {
+        html = '<tr>';
+    }
 
     headers[section].forEach(header => {
         const isActive = appState.currentSort.field === header.field;
@@ -90,24 +92,27 @@ function renderTableHeaders(section) {
         });
     });
 
-    // Add event listener for select all checkbox
-    document.getElementById('selectAll')?.addEventListener('change', (e) => {
-        appState.selectAll = e.target.checked;
-        const checkboxes = document.querySelectorAll('.select-item');
+    // Add event listener for select all checkbox only if it exists (not for categories)
+    const selectAllCheckbox = document.getElementById('selectAll');
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e) => {
+            appState.selectAll = e.target.checked;
+            const checkboxes = document.querySelectorAll('.select-item');
 
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = appState.selectAll;
-            const id = checkbox.dataset.id;
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = appState.selectAll;
+                const id = checkbox.dataset.id;
 
-            if (appState.selectAll) {
-                appState.selectedItems.add(id);
-            } else {
-                appState.selectedItems.delete(id);
-            }
+                if (appState.selectAll) {
+                    appState.selectedItems.add(id);
+                } else {
+                    appState.selectedItems.delete(id);
+                }
+            });
+
+            updateSelectedCount();
         });
-
-        updateSelectedCount();
-    });
+    }
 
     // Render section-specific filter and action buttons
     renderSectionButtons(section);
@@ -163,23 +168,25 @@ function renderSectionButtons(section) {
         ]
     };
 
-    // Update filter dropdown
-    if (filters[section]) {
+    // Update filter dropdown if it exists
+    if (filterDropdown && filters[section]) {
         filterDropdown.innerHTML = filters[section]
             .map(filter => `<li><a class="dropdown-item filter-option" href="#" data-filter="${filter.value}">${filter.label}</a></li>`)
             .join('');
     }
 
-    // Add filter event listeners
-    document.querySelectorAll('.filter-option').forEach(option => {
-        option.addEventListener('click', (e) => {
-            e.preventDefault();
-            appState.currentFilter = option.dataset.filter;
-            appState.currentPage = 1;
-            renderTable();
-            updatePagination();
+    // Add filter event listeners if filterDropdown exists
+    if (filterDropdown && filters[section]) {
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                appState.currentFilter = option.dataset.filter;
+                appState.currentPage = 1;
+                renderTable();
+                updatePagination();
+            });
         });
-    });
+    }
 
     // Update add button text
     const buttonText = {
@@ -320,105 +327,7 @@ function renderTable() {
     tableBody.innerHTML = '';
 
     paginatedData.forEach(item => {
-        const row = document.createElement('tr');
-        row.dataset.id = item.id;
-
-        const isSelected = appState.selectedItems.has(item.id);
-        let rowHtml = `
-            <td>
-                <input type="checkbox" class="form-check-input select-item" data-id="${item.id}" ${isSelected ? 'checked' : ''}>
-            </td>
-        `;
-
-        // Section-specific columns
-        if (appState.currentSection === 'products') {
-            rowHtml += `
-                <td>${item.name}</td>
-                <td><button class="btn btn-link p-0 category-link" data-name="${item.category}" title="View Category"><span class="badge bg-secondary">${item.category}</span></button></td>
-                <td>${item.subcategory ? `<button class="btn btn-link p-0 subcategory-link" data-name="${item.subcategory}" title="View Subcategory"><span class="badge bg-light text-dark">${item.subcategory}</span></button>` : '-'}</td>
-                <td><strong>${item.price.toFixed(2)}</strong></td>
-                <td>${item.stock}</td>
-                <td>${getVerificationBadge(!!item.isVerified)}</td>
-                <td><span class="badge bg-light text-dark">${item.sellerName || getSellerNameById(item.sellerId)}</span></td>
-            `;
-        } else if (appState.currentSection === 'categories') {
-            const truncatedDesc = item.description.length > 50 ?
-                item.description.substring(0, 50) + '...' : item.description;
-            rowHtml += `
-                <td><strong>${item.name}</strong></td>
-                <td>${truncatedDesc}</td>
-                <td><span class="badge bg-primary">${dataStore.products.filter(p => p.category === item.name).length}</span></td>
-                <td>${getStatusBadge(item)}</td>
-            `;
-        } else if (appState.currentSection === 'customers') {
-            rowHtml += `
-                <td><strong>${item.name}</strong></td>
-                <td>${item.email}</td>
-                <td>${item.phone}</td>
-                <td><span class="badge bg-info">${item.orders}</span></td>
-                <td><strong>$${item.totalSpent.toFixed(2)}</strong></td>
-                <td>${getStatusBadge(item)}</td>
-            `;
-        } else if (appState.currentSection === 'sales') {
-            rowHtml += `
-                <td><strong>#${item.id}</strong></td>
-                <td>${new Date(item.date).toLocaleDateString()}</td>
-                <td>${item.customer}</td>
-                <td><strong>$${item.amount.toFixed(2)}</strong></td>
-                <td>${getStatusBadge(item)}</td>
-                <td><span class="badge bg-secondary">${item.items}</span></td>
-            `;
-        } else if (appState.currentSection === 'verificationRequests') {
-            const truncatedMsg = item.message.length > 60 ?
-                item.message.substring(0, 60) + '...' : item.message;
-            rowHtml += `
-                <td><strong>${item.title}</strong></td>
-                <td>${truncatedMsg}</td>
-                <td>${new Date(item.date).toLocaleDateString()}</td>
-                <td>${getStatusBadge(item)}</td>
-            `;
-        } else if (appState.currentSection === 'sellers') {
-            rowHtml += `
-                <td><strong>${item.name}</strong></td>
-                <td>${item.email}</td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary view-products" data-id="${item.id}">
-                        <i class="fas fa-box me-1"></i>View (${getProductsBySeller(item.id).length})
-                    </button>
-                </td>
-            `;
-        } else if (appState.currentSection === 'admins') {
-            rowHtml += `
-                <td><strong>${item.name}</strong></td>
-                <td>${item.email}</td>
-                <td><span class="badge bg-warning">${item.role}</span></td>
-                <td>
-                    <div class="password-field">
-                        <span class="password-dots">••••••••</span>
-                        <span class="password-text" style="display:none">${item.password}</span>
-                        <button class="btn btn-sm btn-outline-secondary toggle-password ms-2" title="Show/Hide">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </td>
-                <td>${getStatusBadge(item)}</td>
-            `;
-        } else if (appState.currentSection === 'inbox') {
-            const truncatedMsg = item.message.length > 60 ?
-                item.message.substring(0, 60) + '...' : item.message;
-            rowHtml += `
-                <td><strong>${item.subject}</strong></td>
-                <td>${item.sender}</td>
-                <td>${new Date(item.date).toLocaleDateString()}</td>
-                <td>${getStatusBadge(item)}</td>
-            `;
-        }
-
-        // Action buttons
-        rowHtml += `<td>${getActionButtons(appState.currentSection, item)}</td>`;
-
-        row.innerHTML = rowHtml;
-        tableBody.appendChild(row);
+        renderTableRow(item);
     });
 
     // Add event listeners
@@ -434,6 +343,117 @@ function renderTable() {
     }
 }
 
+function renderTableRow(item) {
+    const section = appState.currentSection;
+    
+    // Base row with selection checkbox
+    let rowHtml = '';
+    
+    // Add selection checkbox for all sections except categories
+    if (section !== 'categories') {
+        const isSelected = appState.selectedItems.has(item.id);
+        rowHtml += `
+            <td>
+                <input type="checkbox" class="form-check-input select-item" data-id="${item.id}" ${isSelected ? 'checked' : ''}>
+            </td>
+        `;
+    } // For categories, do not add selection checkbox
+    
+    // Section-specific columns
+    if (appState.currentSection === 'products') {
+        rowHtml += `
+            <td>${item.name}</td>
+            <td><button class="btn btn-link p-0 category-link" data-name="${item.category}" title="View Category"><span class="badge bg-secondary">${item.category}</span></button></td>
+            <td>${item.subcategory ? `<button class="btn btn-link p-0 subcategory-link" data-name="${item.subcategory}" title="View Subcategory"><span class="badge bg-light text-dark">${item.subcategory}</span></button>` : '-'}</td>
+            <td><strong>EGP ${item.price.toFixed(2)}</strong></td>
+            <td>${item.stock}</td>
+            <td><span class="badge bg-light text-dark">${item.sellerName || getSellerNameById(item.sellerId)}</span></td>
+        `;
+    } else if (appState.currentSection === 'categories') {
+        const truncatedDesc = item.description.length > 50 ?
+            item.description.substring(0, 50) + '...' : item.description;
+        rowHtml += `
+            <td><strong>${item.name}</strong></td>
+            <td>${truncatedDesc}</td>
+            <td><span class="badge bg-primary">${dataStore.products.filter(p => p.category === item.name).length}</span></td>
+        `;
+    } else if (appState.currentSection === 'customers') {
+        rowHtml += `
+            <td><strong>${item.name}</strong></td>
+            <td>${item.email}</td>
+            <td>${item.phone}</td>
+            <td><span class="badge bg-info">${item.orders}</span></td>
+            <td><strong>EGP ${item.totalSpent.toFixed(2)}</strong></td>
+            <td>${getStatusBadge({status: item.status})}</td>
+        `;
+    } else if (appState.currentSection === 'sales') {
+        rowHtml += `
+            <td><strong>#${item.id}</strong></td>
+            <td>${new Date(item.date).toLocaleDateString()}</td>
+            <td>${item.customer}</td>
+            <td><strong>EGP ${item.amount.toFixed(2)}</strong></td>
+            <td>${getStatusBadge(item)}</td>
+            <td><span class="badge bg-secondary">${item.items}</span></td>
+        `;
+    } else if (appState.currentSection === 'verificationRequests') {
+        const truncatedMsg = item.message.length > 60 ?
+            item.message.substring(0, 60) + '...' : item.message;
+        rowHtml += `
+            <td><strong>${item.title}</strong></td>
+            <td>${truncatedMsg}</td>
+            <td>${new Date(item.date).toLocaleDateString()}</td>
+        `;
+    } else if (appState.currentSection === 'sellers') {
+        rowHtml += `
+            <td><strong>${item.name}</strong></td>
+            <td>${item.email}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary view-products" data-id="${item.id}">
+                    <i class="fas fa-box me-1"></i>View (${getProductsBySeller(item.id).length})
+                </button>
+            </td>
+        `;
+    } else if (appState.currentSection === 'admins') {
+        rowHtml += `
+            <td><strong>${item.name}</strong></td>
+            <td>${item.email}</td>
+            <td><span class="badge bg-warning">${item.role}</span></td>
+            <td>
+                <div class="password-field">
+                    <span class="password-dots">••••••••</span>
+                    <span class="password-text" style="display:none">${item.password}</span>
+                    <button class="btn btn-sm btn-outline-secondary toggle-password ms-2" title="Show/Hide">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+    } else if (appState.currentSection === 'inbox') {
+        const truncatedMsg = item.message.length > 60 ?
+            item.message.substring(0, 60) + '...' : item.message;
+        rowHtml += `
+            <td><strong>${item.subject}</strong></td>
+            <td>${item.sender}</td>
+            <td>${new Date(item.date).toLocaleDateString()}</td>
+            <td>${getStatusBadge(item)}</td>
+        `;
+    }
+    
+    // Action buttons
+    rowHtml += `<td>${getActionButtons(appState.currentSection, item)}</td>`;
+
+    const row = document.createElement('tr');
+    row.dataset.id = item.id;
+    
+    // For categories, add a class to indicate no selection
+    if (section === 'categories') {
+        row.classList.add('no-select');
+    }
+    
+    row.innerHTML = rowHtml;
+    document.getElementById('tableBody').appendChild(row);
+}
+
 // Get action buttons for each section
 function getActionButtons(section, item) {
     if (section === 'products') {
@@ -441,9 +461,6 @@ function getActionButtons(section, item) {
             <div class="btn-group" role="group">
                 <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
                     <i class="fas fa-eye"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-${item.isVerified ? 'success' : 'secondary'} action-btn toggle-verify-product" data-id="${item.id}" title="Toggle Verification">
-                    <i class="fas fa-toggle-${item.isVerified ? 'on' : 'off'}"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
                     <i class="fas fa-trash"></i>
@@ -474,6 +491,9 @@ function getActionButtons(section, item) {
                 <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
                     <i class="fas fa-eye"></i>
                 </button>
+                <button class="btn btn-sm btn-outline-success action-btn message-user" data-id="${item.id}" title="Send Message">
+                    <i class="fas fa-comment"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-info action-btn reset-customer" data-id="${item.id}" title="Reset Password (123456)">
                     <i class="fas fa-unlock"></i>
                 </button>
@@ -486,27 +506,22 @@ function getActionButtons(section, item) {
             </div>
         `;
     } else if (section === 'categories') {
+        // Modified to remove delete button for categories
         return `
             <div class="btn-group" role="group">
-                <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
-                    <i class="fas fa-eye"></i>
-                </button>
                 <button class="btn btn-sm btn-outline-info action-btn view-category-products" data-id="${item.id}" data-name="${item.name}" title="View Products">
                     <i class="fas fa-box-open"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
-                    <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
     } else if (section === 'sellers') {
         return `
             <div class="btn-group" role="group">
-                <button class="btn btn-sm btn-outline-${item.status === 'active' ? 'success' : 'secondary'} action-btn toggle-verify-seller" data-id="${item.id}" title="Toggle Verification">
-                    <i class="fas fa-toggle-${item.status === 'active' ? 'on' : 'off'}"></i>
+                <button class="btn btn-sm btn-outline-primary action-btn view-item" data-id="${item.id}" title="View Details">
+                    <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-warning action-btn contact-seller" data-id="${item.id}" title="Contact">
-                    <i class="fas fa-envelope"></i>
+                <button class="btn btn-sm btn-outline-success action-btn message-user" data-id="${item.id}" title="Send Message">
+                    <i class="fas fa-comment"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-secondary action-btn reset-password" data-id="${item.id}" title="Reset Password (123456)">
                     <i class="fas fa-key"></i>
@@ -517,37 +532,40 @@ function getActionButtons(section, item) {
             </div>
         `;
     } else if (section === 'verificationRequests') {
-        if (item.status === 'unverified') {
-            return `
-                <div class="btn-group" role="group">
-                    <button class="btn btn-sm btn-outline-primary action-btn view-details" data-id="${item.id}" title="View Details">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-        } else {
-            return `
-                <div class="btn-group" role="group">
-                    <button class="btn btn-sm btn-outline-primary action-btn view-details" data-id="${item.id}" title="View Details">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-        }
+            if (item.status === 'unverified') {
+                return `
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-success action-btn verify-btn" data-id="${item.id}" title="Verify">
+                            <i class="fas fa-check"></i> Verify
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary action-btn view-details" data-id="${item.id}" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-secondary verify-btn" data-id="${item.id}" title="Verified" disabled>
+                            <i class="fas fa-check"></i> Verified
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary action-btn view-details" data-id="${item.id}" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }
     } else if (section === 'sales') {
         return `
             <div class="btn-group" role="group">
-                <button class="btn btn-sm btn-outline-primary action-btn view-order" data-id="${item.id}" title="View Order">
-                    <i class="fas fa-receipt"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-info action-btn print-invoice" data-id="${item.id}" title="Print Invoice">
-                    <i class="fas fa-print"></i>
+                <button class="btn btn-sm btn-outline-danger action-btn delete-item" data-id="${item.id}" title="Delete">
+                    <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
@@ -666,28 +684,46 @@ function handleActionClick(e) {
     const action = button.classList.contains('view-item') ? 'view' :
             button.classList.contains('delete-item') ? 'delete' :
                 button.classList.contains('contact-seller') ? 'contact' :
-                    button.classList.contains('reset-password') ? 'reset-password' :
-                        button.classList.contains('view-category-products') ? 'view-category-products' :
-                            button.classList.contains('view-order') ? 'view-order' :
-                                button.classList.contains('print-invoice') ? 'print-invoice' :
-                                    button.classList.contains('mark-read') ? 'mark-read' :
-                                        button.classList.contains('toggle-status') ? 'toggle-status' :
-                                            button.classList.contains('view-details') ? 'view-details' :
-                                                button.classList.contains('reset-customer') ? 'reset-customer' :
-                                                    button.classList.contains('change-admin-password') ? 'change-admin-password' :
-                                                        button.classList.contains('change-admin-role') ? 'change-admin-role' :
-                                                            button.classList.contains('toggle-verify-product') ? 'toggle-verify-product' :
-                                                                button.classList.contains('toggle-verify-seller') ? 'toggle-verify-seller' : null;
+                    button.classList.contains('message-user') ? 'message-user' :
+                        button.classList.contains('reset-password') ? 'reset-password' :
+                            button.classList.contains('view-category-products') ? 'view-category-products' :
+                                button.classList.contains('view-order') ? 'view-order' :
+                                    button.classList.contains('print-invoice') ? 'print-invoice' :
+                                        button.classList.contains('mark-read') ? 'mark-read' :
+                                            button.classList.contains('toggle-status') ? 'toggle-status' :
+                                                button.classList.contains('view-details') ? 'view-details' :
+                                                    button.classList.contains('reset-customer') ? 'reset-customer' :
+                                                        button.classList.contains('change-admin-password') ? 'change-admin-password' :
+                                                            button.classList.contains('change-admin-role') ? 'change-admin-role' :
+                                                                button.classList.contains('toggle-verify-product') ? 'toggle-verify-product' :
+                                                                    button.classList.contains('toggle-verify-seller') ? 'toggle-verify-seller' : null;
 
     switch (action) {
         case 'view':
-            viewItem(id);
+            // Special handling for seller section
+            if (appState.currentSection === 'sellers') {
+                showSellerDetails(id);
+            } else if (appState.currentSection === 'verificationRequests' && 
+                      dataStore.verificationRequests.find(r => String(r.id) === String(id))?.type === 'seller') {
+                // For verification requests that are for sellers, show seller details
+                const request = dataStore.verificationRequests.find(r => String(r.id) === String(id));
+                showSellerDetails(request.entityId);
+            } else {
+                viewItem(id);
+            }
             break;
-                case 'delete':
+        case 'view-details':
+            // For verification requests, show specific details
+            viewVerificationDetails(id);
+            break;
+        case 'delete':
             deleteItem(id);
             break;
         case 'contact':
             openMessageSellerModal(id);
+            break;
+        case 'message-user':
+            openMessageUserModal(id);
             break;
         case 'view-order':
             viewOrder(id);
@@ -698,7 +734,7 @@ function handleActionClick(e) {
         case 'reset-password':
             resetSellerPassword(id);
             break;
-                        case 'reset-customer':
+        case 'reset-customer':
             resetCustomerPassword(id);
             break;
         case 'change-admin-password':
@@ -725,6 +761,12 @@ function handleActionClick(e) {
         case 'view-details':
             viewVerificationDetails(id);
             break;
+        // Fix: ensure verify button in verificationRequests calls verifyItem
+        case null:
+            if (button.classList.contains('verify-btn')) {
+                verifyItem(id);
+            }
+            break;
     }
 }
 
@@ -737,13 +779,142 @@ function viewItem(id) {
     showItemModal('View Details', getItemDetailsHTML(item));
 }
 
+// Show seller details from localStorage
+function showSellerDetails(id) {
+    try {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const seller = users.find(u => String(u.id) === String(id) && (u.role || '').toLowerCase() === 'seller');
+        if (!seller) {
+            showToast('Seller not found', 'error');
+            return;
+        }
+
+        // Calculate earnings from orders
+        let earnings = 0;
+        let totalOrders = 0;
+        
+        if (seller.orders && Array.isArray(seller.orders)) {
+            totalOrders = seller.orders.length;
+            seller.orders.forEach(order => {
+                if (order.totalPrice) {
+                    earnings += parseFloat(order.totalPrice);
+                }
+            });
+        } else if (seller.orderHistory && Array.isArray(seller.orderHistory)) {
+            totalOrders = seller.orderHistory.length;
+            seller.orderHistory.forEach(order => {
+                if (order.totalPrice) {
+                    earnings += parseFloat(order.totalPrice);
+                }
+            });
+        }
+
+        // Format join date
+        let joinDate = 'N/A';
+        if (seller.createdAt) {
+            try {
+                joinDate = new Date(seller.createdAt).toLocaleDateString();
+            } catch (e) {
+                joinDate = seller.createdAt;
+            }
+        }
+
+        const content = `
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Seller Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Name:</strong> ${seller.name || 'N/A'}</p>
+                                        <p><strong>Email:</strong> ${seller.email || 'N/A'}</p>
+                                        <p><strong>Phone:</strong> ${seller.phone || seller.contactInfo || 'N/A'}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Company/Brand:</strong> ${seller.company || seller.brandName || seller.businessName || 'N/A'}</p>
+                                        <p><strong>Address:</strong> ${seller.businessAddress || seller.address || 'N/A'}</p>
+                                        <p><strong>Status:</strong> ${seller.isVerified ? 'Verified' : 'Not Verified'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Account Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Join Date:</strong> ${joinDate}</p>
+                                        <p><strong>Products Count:</strong> ${seller.products ? seller.products.length : 0}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Total Orders:</strong> ${totalOrders}</p>
+                                        <p><strong>Total Earnings:</strong> ${earnings.toFixed(2)} EGP</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        showItemModal('Seller Details', content);
+    } catch (e) {
+        showToast('Error loading seller details', 'error');
+        console.error(e);
+    }
+}
+
 function verifyItem(id) {
     const request = dataStore.verificationRequests.find(r => r.id === id);
-    if (request) {
-        request.status = 'verified';
-        renderTable();
-        updateBadges();
-        showToast('Request verified successfully', 'success');
+    if (request && request.status !== 'verified') {
+        let res = { success: false };
+        if (request.type === 'seller') {
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            let seller = users.find(u => String(u.id) === String(request.entityId) && (u.role || '').toLowerCase() === 'seller');
+            if (seller) {
+                seller.isVerified = true;
+                localStorage.setItem('users', JSON.stringify(users));
+                res.success = true;
+                // Also update sellers section in dataStore
+                let sellerObj = (dataStore.sellers || []).find(s => String(s.id) === String(request.entityId));
+                if (sellerObj) sellerObj.isVerified = true;
+            }
+        } else if (request.type === 'product') {
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            for (let s of users) {
+                if ((s.role || '').toLowerCase() === 'seller' && Array.isArray(s.products)) {
+                    let prod = s.products.find(p => String(p.id) === String(request.entityId));
+                    if (prod) {
+                        prod.isVerified = true;
+                        localStorage.setItem('users', JSON.stringify(users));
+                        res.success = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (res.success) {
+            // Set status to verified before removing
+            if (request) request.status = 'verified';
+            let idx = dataStore.verificationRequests.findIndex(r => r.id === id);
+            if (idx !== -1) dataStore.verificationRequests.splice(idx, 1);
+            let requests = JSON.parse(localStorage.getItem('verificationRequests') || '[]');
+            requests = requests.filter(r => String(r.id) !== String(id));
+            localStorage.setItem('verificationRequests', JSON.stringify(requests));
+            updateBadges();
+            showToast('Request verified successfully', 'success');
+        } else {
+            showToast(res.message || 'Failed to verify', 'error');
+        }
+        window.location.reload();
     }
 }
 
@@ -754,56 +925,99 @@ function markAsRead(id) {
         renderTable();
         updateBadges();
         showToast('Message marked as read', 'success');
+        
+        // Also update the badge display immediately
+        const unreadMessages = dataStore.inbox.filter(m => m.status === 'unread').length;
+        const inboxBadge = document.getElementById('inboxBadge');
+        if (inboxBadge) {
+            if (unreadMessages > 0) {
+                inboxBadge.textContent = unreadMessages;
+                inboxBadge.style.display = 'inline-block';
+            } else {
+                inboxBadge.style.display = 'none';
+            }
+        }
     }
 }
 
 function deleteItem(id) {
-    showConfirmModal('Are you sure you want to delete this item?', () => {
-        const index = dataStore[appState.currentSection].findIndex(item => item.id === id);
+    // Prevent deletion of categories
+    if (appState.currentSection === 'categories') {
+        showToast('Deleting categories is not allowed', 'error');
+        return;
+    }
+    
+    if (confirm('Are you sure you want to delete this item?')) {
+        const section = appState.currentSection;
+        const index = dataStore[section].findIndex(item => item.id === id);
         if (index !== -1) {
-            // If deleting a category, also delete all products with this category
-            if (appState.currentSection === 'categories') {
-                const categoryName = dataStore.categories[index].name;
-                const beforeCount = dataStore.products.length;
-                dataStore.products = dataStore.products.filter(p => p.category !== categoryName);
-                const removed = beforeCount - dataStore.products.length;
-                showToast(`Deleted ${removed} product(s) belonging to category "${categoryName}"`, 'info');
+            let deletionSuccess = true;
+            let errorMessage = '';
+            
+            if (section === 'sellers' && window.AdminOps) {
+                const seller = dataStore.sellers[index];
+                const res = window.AdminOps.deleteUserById(seller.id);
+                if (res.success) {
+                    showToast('Seller suspended and removed from active users', 'success');
+                } else {
+                    showToast(res.message || 'Failed to suspend seller', 'error');
+                    deletionSuccess = false;
+                }
             }
-
-            dataStore[appState.currentSection].splice(index, 1);
-            renderTable();
-            updatePagination();
-            updateBadges();
-
-            // Show success message
-            showToast('Item deleted successfully', 'success');
+            if (section === 'products' && window.AdminOps) {
+                const product = dataStore.products[index];
+                const res = window.AdminOps.deleteProductById(product.id);
+                if (res.success) {
+                    showToast('Product deleted from seller', 'success');
+                } else {
+                    showToast(res.message || 'Failed to delete product', 'error');
+                    deletionSuccess = false;
+                }
+            }
+            if ((section === 'customers' || section === 'admins') && window.AdminOps) {
+                const user = dataStore[section][index];
+                const res = window.AdminOps.deleteUserById(user.id);
+                if (res.success) {
+                    showToast('User deleted', 'success');
+                } else {
+                    showToast(res.message || 'Failed to delete user', 'error');
+                    deletionSuccess = false;
+                }
+            }
+            if (section === 'verificationRequests') {
+                let requests = JSON.parse(localStorage.getItem('verificationRequests') || '[]');
+                requests = requests.filter(r => String(r.id) !== String(id));
+                localStorage.setItem('verificationRequests', JSON.stringify(requests));
+            }
+            
+            // Only proceed with deletion if AdminOps was successful
+            if (deletionSuccess) {
+                // Remove item from dataStore
+                dataStore[section].splice(index, 1);
+                
+                // Re-render table and update UI
+                renderTable();
+                updatePagination();
+                updateBadges();
+                showToast('Item deleted successfully', 'success');
+            }
+        } else {
+            showToast('Item not found', 'error');
         }
-    });
+    }
 }
 
 function resetSellerPassword(id) {
-    if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
-    const res = window.AdminOps.resetSellerPassword(id, '123456');
-    if (res && res.success) {
+    try {
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        let seller = users.find(u => String(u.id) === String(id) && (u.role || '').toLowerCase() === 'seller');
+        if (!seller) { showToast('Seller not found', 'error'); return; }
+        seller.password = encodeUnicode('123456');
+        localStorage.setItem('users', JSON.stringify(users));
         showToast('Seller password has been reset to 123456', 'success');
-    } else {
-        showToast(res?.message || 'Failed to reset password', 'error');
-    }
+    } catch(e) { showToast('Failed to reset password', 'error'); }
 }
 
-function toggleSellerVerification(id) {
-    if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
-    const s = (dataStore.sellers||[]).find(x => String(x.id) === String(id));
-    if (!s) { showToast('Seller not found', 'error'); return; }
-    const next = !(s.status === 'active');
-    const res = window.AdminOps.setSellerVerification(id, next);
-    if (res && res.success) {
-        showToast(`Seller ${next ? 'verified' : 'unverified'} successfully`, 'success');
-        window.location.reload();
-    } else {
-        showToast(res?.message || 'Failed to update verification', 'error');
-    }
-}
 
 function verifySellerDirect(id) {
     if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
@@ -817,29 +1031,31 @@ function verifySellerDirect(id) {
 }
 
 function toggleProductVerification(id) {
-    if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
-    const p = (dataStore.products||[]).find(x => String(x.id) === String(id));
-    if (!p) { showToast('Product not found', 'error'); return; }
-    const next = !p.isVerified;
-    const res = window.AdminOps.setProductVerification(p.sellerId, p.id, next);
-    if (res && res.success) {
-        showToast(`Product ${next ? 'verified' : 'unverified'} successfully`, 'success');
-        window.location.reload();
-    } else {
-        showToast(res?.message || 'Failed to update verification', 'error');
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let productFound = false;
+    // Update product verification in users (seller's products)
+    for (let s of users) {
+        if ((s.role || '').toLowerCase() === 'seller' && Array.isArray(s.products)) {
+            let prod = s.products.find(p => String(p.id) === String(id));
+            if (prod) {
+                prod.isVerified = !prod.isVerified;
+                productFound = true;
+                break;
+            }
+        }
     }
-}
-
-function verifyProductDirect(id) {
-    if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
-    const p = (dataStore.products||[]).find(x => String(x.id) === String(id));
-    if (!p) { showToast('Product not found', 'error'); return; }
-    const res = window.AdminOps.verifyProduct(p.sellerId, p.id);
-    if (res && res.success) {
-        showToast('Product verified successfully', 'success');
-        window.location.reload();
+    if (productFound) {
+        localStorage.setItem('users', JSON.stringify(users));
+        // Also update in dataStore.products
+        let prodStore = (dataStore.products || []).find(p => String(p.id) === String(id));
+        if (prodStore) {
+            prodStore.isVerified = !prodStore.isVerified;
+        }
+        showToast('Product verification status toggled', 'success');
+        renderTable();
+        updateBadges();
     } else {
-        showToast(res?.message || 'Failed to verify product', 'error');
+        showToast('Product not found', 'error');
     }
 }
 
@@ -943,14 +1159,13 @@ function changeAdminRole(id) {
 }
 
 function toggleCustomerStatus(id) {
-    if (!window.AdminOps) { showToast('Operation not available', 'error'); return; }
-    const res = window.AdminOps.toggleCustomerActive(id);
-    if (res && res.success) {
-        showToast(`Customer ${res.isConfirmed ? 'activated' : 'deactivated'} successfully`, 'success');
-        window.location.reload();
-    } else {
-        showToast(res?.message || 'Failed to update customer status', 'error');
-    }
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let customer = users.find(u => String(u.id) === String(id) && (u.role || '').toLowerCase() === 'customer');
+    if (!customer) { showToast('Customer not found', 'error'); return; }
+    customer.isConfirmed = !customer.isConfirmed;
+    localStorage.setItem('users', JSON.stringify(users));
+    showToast(`Customer ${customer.isConfirmed ? 'activated' : 'deactivated'} successfully`, 'success');
+    window.location.reload();
 }
 
 function viewVerificationDetails(id) {
@@ -966,7 +1181,7 @@ function viewVerificationDetails(id) {
                     <h6>Product</h6>
                     <p><strong>Name:</strong> ${product?.name || 'N/A'}</p>
                     <p><strong>Category:</strong> ${product?.category || 'N/A'}</p>
-                    <p><strong>Price:</strong> ${product ? product.price.toFixed(2) : 'N/A'}</p>
+                    <p><strong>Price:</strong> ${product ? 'EGP ' + product.price.toFixed(2) : 'N/A'}</p>
                     <p><strong>Stock:</strong> ${product?.stock ?? 'N/A'}</p>
                     <p><strong>Verified:</strong> ${product?.isVerified ? 'Yes' : 'No'}</p>
                 </div>
@@ -974,24 +1189,14 @@ function viewVerificationDetails(id) {
                     <h6>Seller</h6>
                     <p><strong>Name:</strong> ${seller?.name || 'N/A'}</p>
                     <p><strong>Email:</strong> ${seller?.email || 'N/A'}</p>
-                    <p><strong>Status:</strong> ${seller ? (seller.status || (seller.isVerified ? 'active' : 'inactive')) : 'N/A'}</p>
+                    <p><strong>Status:</strong> ${seller ? (seller.status || (seller.isVerified ? 'Verified' : 'Not Verified')) : 'N/A'}</p>
                 </div>
             </div>
         `;
         showItemModal('Product Verification Details', content);
     } else if (req.type === 'seller') {
-        const seller = (dataStore.sellers || []).find(s => String(s.id) === String(req.entityId));
-        const content = `
-            <div class="row">
-                <div class="col-md-12">
-                    <h6>Seller</h6>
-                    <p><strong>Name:</strong> ${seller?.name || 'N/A'}</p>
-                    <p><strong>Email:</strong> ${seller?.email || 'N/A'}</p>
-                    <p><strong>Status:</strong> ${seller ? (seller.status || (seller.isVerified ? 'active' : 'inactive')) : 'N/A'}</p>
-                </div>
-            </div>
-        `;
-        showItemModal('Seller Verification Details', content);
+        // Show detailed seller information when viewing seller verification details
+        showSellerDetails(req.entityId);
     } else {
         viewItem(id);
     }
@@ -1109,19 +1314,18 @@ function printInvoice(id) {
 
 // Helper functions
 function getItemDetailsHTML(item) {
-    if (appState.currentSection === 'products') {
-        return `
-            <div class="row">
-                <div class="col-md-12">
-                    <p><strong>Product Name:</strong> ${item.name}</p>
-                    <p><strong>Category:</strong> ${item.category}</p>
-                    <p><strong>Price:</strong> ${item.price.toFixed(2)}</p>
-                    <p><strong>Stock:</strong> ${item.stock}</p>
-                    <p><strong>Status:</strong> ${getVerificationBadge(!!item.isVerified)}</p>
-                    <p><strong>Description:</strong> ${item.description || 'No description available'}</p>
+        if (appState.currentSection === 'products') {
+            return `
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Product Name:</strong> ${item.name}</p>
+                        <p><strong>Category:</strong> ${item.category}</p>
+                        <p><strong>Price:</strong> EGP ${item.price.toFixed(2)}</p>
+                        <p><strong>Stock:</strong> ${item.stock}</p>
+                        <p><strong>Description:</strong> ${item.description || 'No description available'}</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
     } else if (appState.currentSection === 'categories') {
         return `
             <div class="row">
@@ -1134,20 +1338,91 @@ function getItemDetailsHTML(item) {
             </div>
         `;
     } else if (appState.currentSection === 'customers') {
+        // Get real customer data from localStorage
+        let customerData = null;
+        try {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            customerData = users.find(u => String(u.id) === String(item.id) && (u.role || '').toLowerCase() === 'customer');
+        } catch (e) {
+            console.error('Error fetching customer data from localStorage:', e);
+        }
+
+        // Use localStorage data if available, otherwise fallback to item data
+        const name = customerData?.name || item.name || 'N/A';
+        const email = customerData?.email || item.email || 'N/A';
+        const phone = customerData?.phone || customerData?.contactInfo || item.phone || 'N/A';
+        const address = customerData?.address || 'N/A';
+        const gender = customerData?.gender || 'N/A';
+        const status = customerData?.isConfirmed ? 'Active' : 'Inactive';
+        const joinDate = customerData?.createdAt ? new Date(customerData.createdAt).toLocaleDateString() : 'N/A';
+        
+        // Calculate order statistics from localStorage data
+        let totalOrders = 0;
+        let totalSpent = 0;
+        let averageOrder = 0;
+        
+        if (customerData?.orderHistory && Array.isArray(customerData.orderHistory)) {
+            totalOrders = customerData.orderHistory.length;
+            customerData.orderHistory.forEach(order => {
+                if (order.totalPrice) {
+                    totalSpent += parseFloat(order.totalPrice);
+                }
+            });
+            averageOrder = totalOrders > 0 ? (totalSpent / totalOrders) : 0;
+        } else {
+            // Fallback to item data
+            totalOrders = item.orders || 0;
+            totalSpent = item.totalSpent || 0;
+            averageOrder = totalOrders > 0 ? (totalSpent / totalOrders) : 0;
+        }
+
         return `
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>Customer Information</h6>
-                    <p><strong>Name:</strong> ${item.name}</p>
-                    <p><strong>Email:</strong> ${item.email}</p>
-                    <p><strong>Phone:</strong> ${item.phone}</p>
-                    <p><strong>Status:</strong> ${getStatusBadge(item)}</p>
-                </div>
-                <div class="col-md-6">
-                    <h6>Order Statistics</h6>
-                    <p><strong>Total Orders:</strong> ${item.orders}</p>
-                    <p><strong>Total Spent:</strong> ${item.totalSpent.toFixed(2)}</p>
-                    <p><strong>Average Order:</strong> ${(item.totalSpent / item.orders).toFixed(2)}</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Customer Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Name:</strong> ${name}</p>
+                                        <p><strong>Email:</strong> ${email}</p>
+                                        <p><strong>Phone:</strong> ${phone}</p>
+                                        <p><strong>Gender:</strong> ${gender}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Address:</strong> ${address}</p>
+                                        <p><strong>Status:</strong> ${status}</p>
+                                        <p><strong>Join Date:</strong> ${joinDate}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Order Statistics</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <h3>${totalOrders}</h3>
+                                        <p>Total Orders</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <h3>${totalSpent.toFixed(2)} EGP</h3>
+                                        <p>Total Spent</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <h3>${averageOrder.toFixed(2)} EGP</h3>
+                                        <p>Average Order</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -1204,12 +1479,12 @@ function showItemModal(title, content) {
 
     // Create modal
     const modalHTML = `
-        <div class="modal fade" id="itemViewModal" tabindex="-1">
+        <div class="modal fade" id="itemViewModal" tabindex="-1" aria-labelledby="itemViewModalLabel" role="dialog" aria-modal="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">${title}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title" id="itemViewModalLabel">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         ${content}
@@ -1223,11 +1498,12 @@ function showItemModal(title, content) {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    const modal = new bootstrap.Modal(document.getElementById('itemViewModal'));
+    const modalElement = document.getElementById('itemViewModal');
+    const modal = new bootstrap.Modal(modalElement);
     modal.show();
 
     // Remove modal from DOM when hidden
-    document.getElementById('itemViewModal').addEventListener('hidden.bs.modal', function () {
+    modalElement.addEventListener('hidden.bs.modal', function () {
         this.remove();
     });
 }
@@ -1385,4 +1661,60 @@ function viewSellerProducts(seller) {
 function viewSellerCategories(seller) {
     // Redirect to Categories section filtered by this seller
     navigateToSellerItems(seller.id, 'categories');
+}
+
+// Open message user modal for chat
+function openMessageUserModal(userId) {
+    // Try to find the user in the data store
+    let user = dataStore.customers.find(c => c.id === userId) || 
+               dataStore.sellers.find(s => s.id === userId);
+
+    if (!user) {
+        showToast('User not found', 'error');
+        return;
+    }
+
+    // Check if the openMessageModal function exists and use it
+    if (typeof window.openMessageModal === 'function') {
+        window.openMessageModal(userId, user.name);
+    } else {
+        // Fallback to the inbox section and open chat with the user
+        loadSection('inbox');
+        
+        // Wait a bit for the inbox section to load, then open chat
+        setTimeout(() => {
+            if (typeof window.AdminChat !== 'undefined' && typeof window.AdminChat.openModal === 'function') {
+                window.AdminChat.openModal(userId, user.name);
+            } else if (typeof window.openChatModal === 'function') {
+                window.openChatModal(userId, user.name);
+            } else {
+                showToast('Chat system not ready. Please refresh the page.', 'error');
+            }
+        }, 500);
+    }
+}
+
+function getCustomerColumns() {
+    return [
+        { key: 'id', label: 'ID', sortable: true },
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'email', label: 'Email', sortable: true },
+        { key: 'phone', label: 'Phone', sortable: false },
+        { key: 'orders', label: 'Orders', sortable: true },
+        { key: 'totalSpent', label: 'Total Spent', sortable: true, formatter: (value) => `${Number(value).toFixed(2)} EGP` },
+        { key: 'status', label: 'Status', sortable: true, formatter: (value) => getStatusBadge({status: value}) },
+        { key: 'joinDate', label: 'Join Date', sortable: true },
+        { key: 'actions', label: 'Actions', sortable: false }
+    ];
+}
+
+function getAdminColumns() {
+    return [
+        { key: 'id', label: 'ID', sortable: true },
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'email', label: 'Email', sortable: true },
+        { key: 'role', label: 'Role', sortable: true },
+        { key: 'lastLogin', label: 'Last Login', sortable: true },
+        { key: 'actions', label: 'Actions', sortable: false }
+    ];
 }

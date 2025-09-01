@@ -11,7 +11,6 @@ function updateSectionTitle(section) {
         'admins': 'Admins',
         'settings': 'Settings',
         'analysis': 'Analysis',
-        'profile': 'Profile'
     };
 
     const icons = {
@@ -116,7 +115,7 @@ function renderDashboard() {
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <div class="card stat-card bg-info text-white">
+                    <div class="card stat-card bg-secondary text-white">
                         <div class="card-body">
                             <h5 class="card-title">Products</h5>
                             <h2 class="card-text">${stats.totalProducts}</h2>
@@ -136,8 +135,8 @@ function renderDashboard() {
             </div>
             <div class="row quick-access g-3">
                 <div class="col-12 col-md-6 col-lg-3">
-                    <button class="btn btn-primary w-100" data-section="products">
-                        <i class="fas fa-box-open me-2"></i>Manage Products
+                    <button class="btn btn-primary w-100" data-section="sellers">
+                        <i class="fas fa-user-tie me-2"></i>Manage Sellers
                     </button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
@@ -146,13 +145,13 @@ function renderDashboard() {
                     </button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <button class="btn btn-info w-100" data-section="sellers">
-                        <i class="fas fa-user-tie me-2"></i>Manage Sellers
+                    <button class="btn btn-secondary w-100" data-section="products">
+                        <i class="fas fa-box-open me-2"></i>Manage Products
                     </button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <button class="btn btn-warning w-100" data-section="categories">
-                        <i class="fas fa-tags me-2"></i>Manage Categories
+                        <i class="fas fa-tags me-2"></i>View Categories
                     </button>
                 </div>
             </div>
@@ -209,9 +208,9 @@ function renderSettings() {
                         </div>
                         
                         <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
+                            <label for="adminNewPassword" class="form-label">New Password</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="newPassword" 
+                                <input type="password" class="form-control" id="adminNewPassword" 
                                        minlength="6" placeholder="Enter new password">
                                 <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword">
                                     <i class="fas fa-eye"></i>
@@ -255,4 +254,122 @@ function renderSettings() {
     `;
 
     setupSettingsForm();
+}
+
+// Show admin chat section
+function showAdminChat() {
+    // ...existing code...
+    
+    // Hide other sections first
+    document.getElementById('comingSoonContainer').style.display = 'none';
+    document.getElementById('dataTableCard').style.display = 'none';
+    
+    // Show chat section
+    document.getElementById('adminChatSection').style.display = 'block';
+    
+    // Try to load chat list
+    if (typeof window.loadAdminChatList === 'function') {
+    // ...existing code...
+        window.loadAdminChatList();
+    } else if (typeof window.AdminChat !== 'undefined' && typeof window.AdminChat.loadChatList === 'function') {
+    // ...existing code...
+        window.AdminChat.loadChatList();
+    } else {
+        console.error('Chat functions not available');
+        // Show error message
+        const chatList = document.getElementById('adminChatList');
+        if (chatList) {
+            chatList.innerHTML = `
+                <li class="list-group-item text-center text-danger">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <p class="mb-0">Chat system not available</p>
+                    <small>Please refresh the page and try again</small>
+                </li>
+            `;
+        }
+    }
+}
+
+// Fallback function for when chat module is not available
+function showChatFallback() {
+    document.getElementById('comingSoonContainer').innerHTML = `
+        <div class="text-center p-5">
+            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">Chat System Loading...</h4>
+            <p class="text-muted">The admin chat system is initializing. Please wait a moment.</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-primary" onclick="location.reload()">
+                    <i class="fas fa-redo me-2"></i>Refresh Page
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Show coming soon content
+function showComingSoon(section) {
+    // Hide all other sections first
+    document.getElementById('comingSoonContainer').style.display = 'block';
+    document.getElementById('dataTableCard').style.display = 'none';
+    document.getElementById('adminChatSection').style.display = 'none';
+    
+    const container = document.getElementById('comingSoonContainer');
+    
+    if (section === 'analysis') {
+        container.innerHTML = `
+            <div class="text-center p-5" style="margin-top: 100px;">
+                <h1 style="font-size: 4rem; font-weight: bold; color: #6c757d;">Coming Soon</h1>
+                <h2 style="font-size: 2rem; color: #adb5bd; margin-top: 20px;">This Page will be available soon</h2>
+                <p style="font-size: 1.2rem; color: #ced4da; margin-top: 20px;">
+                    We're working hard to bring you an amazing experience. Please check back later.
+                </p>
+                <div style="margin-top: 30px;">
+                    <i class="fas fa-tools fa-5x text-muted"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <div class="text-center p-5">
+                <i class="fas fa-tools fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">${section.charAt(0).toUpperCase() + section.slice(1)} Section</h4>
+                <p class="text-muted">This section is under development and will be available soon.</p>
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
+                </div>
+                <small class="text-muted mt-2 d-block">Development Progress: 75%</small>
+            </div>
+        `;
+    }
+}
+
+// Show data table
+function showDataTable() {
+    // Hide all other sections first
+    document.getElementById('comingSoonContainer').style.display = 'none';
+    document.getElementById('dataTableCard').style.display = 'block';
+    document.getElementById('adminChatSection').style.display = 'none';
+}
+
+// Show dashboard
+function showDashboard() {
+    // Hide all other sections first
+    document.getElementById('comingSoonContainer').style.display = 'block';
+    document.getElementById('dataTableCard').style.display = 'none';
+    document.getElementById('adminChatSection').style.display = 'none';
+    
+    renderDashboard();
+}
+
+// Show settings
+function showSettings() {
+    // Hide all other sections first
+    document.getElementById('comingSoonContainer').style.display = 'block';
+    document.getElementById('dataTableCard').style.display = 'none';
+    document.getElementById('adminChatSection').style.display = 'none';
+    
+    renderSettings();
 }

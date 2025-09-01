@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Setup modal event listeners
     setupModalEventListeners();
+    
+    // Attach openMessageModal to window object for global access
+    window.openMessageModal = openMessageModal;
 });
 
 function setupModalEventListeners() {
@@ -15,7 +18,7 @@ function setupModalEventListeners() {
     document.getElementById('saveItemBtn')?.addEventListener('click', saveItem);
 
     // Send message button
-    document.getElementById('sendMessageBtn')?.addEventListener('click', sendMessage);
+    document.getElementById('sendSellerMessageBtn')?.addEventListener('click', sendMessage);
 }
 
 // Open add/edit modal with appropriate form
@@ -249,24 +252,16 @@ function generateFormHTML(section, item = null) {
                     <div class="col-md-6">
                         <label for="itemRole" class="form-label">Role</label>
                         <select class="form-select" id="itemRole" required>
-                            <option value="">Select Role</option>
-                            <option value="master">Master</option>
-                            <option value="super">Super</option>
-                            <option value="product">Product</option>
+                            <option value="1">Product Admin</option>
+                            <option value="2">Super Admin</option>
+                            <option value="3">Master Admin</option>
                         </select>
-                        <div class="invalid-feedback">Please select a role</div>
                     </div>
                     <div class="col-md-6">
                         <label for="itemPassword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="itemPassword" required minlength="6">
                         <div class="invalid-feedback">Password must be at least 6 characters</div>
                     </div>
-                </div>
-                
-                
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="itemStatus" checked>
-                    <label class="form-check-label" for="itemStatus">Active</label>
                 </div>
             `;
             break;
@@ -408,8 +403,6 @@ function populateFormFields(item) {
             statusField.checked = item.status === 'verified';
         } else if (appState.currentSection === 'inbox') {
             statusField.checked = item.status === 'read';
-        } else {
-            statusField.checked = item.status === 'active';
         }
     }
 
@@ -723,14 +716,79 @@ function sendMessage() {
 
     const body = document.getElementById('messageBody').value;
     const seller = appState.currentMessageSeller;
-
-    // In a real application, this would send an email or save to database
-    // For now, we'll just show success message
-
+    
+    // Hide the modal first and return focus to the main document
     messageSellerModal.hide();
-    showToast(`Message sent successfully to ${seller.name}`, 'success');
+    
+    // Fix for aria-hidden error - ensure modal is completely hidden before proceeding
+    setTimeout(() => {
+        try {
+            // Send message directly using the Conversation module
+            if (typeof Conversation !== 'undefined' && typeof Conversation.send === 'function') {
+                const result = Conversation.send(body, seller.id);
+                
+                if (result && result.success) {
+                    showToast(`Message sent successfully to ${seller.name}`, 'success');
+                    
+                    // Redirect to inbox section and open the chat
+                    if (typeof window.loadSection === 'function') {
+                        window.loadSection('inbox');
+                        
+                        // After loading the inbox, open the chat with the seller
+                        setTimeout(() => {
+                            if (typeof window.AdminChat !== 'undefined' && typeof window.AdminChat.openModal === 'function') {
+                                window.AdminChat.openModal(seller.id, seller.name);
+                                
+                                // Additional timeout to ensure the conversation is properly loaded and selected
+                                setTimeout(() => {
+                                    // Find the conversation in the chat list and simulate a click to properly open it
+                                    const chatListItems = document.querySelectorAll('#adminChatList .list-group-item');
+                                    chatListItems.forEach(item => {
+                                        const userNameElement = item.querySelector('.chat-user-name');
+                                        if (userNameElement && userNameElement.textContent === seller.name) {
+                                            // Simulate click on the conversation item to properly open it
+                                            item.click();
+                                        }
+                                    });
+                                }, 300);
+                            }
+                        }, 500);
+                    }
+                } else {
+                    showToast(`Failed to send message: ${result?.message || 'Unknown error'}`, 'error');
+                }
+            } else {
+                showToast('Chat system not available', 'error');
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            showToast(`Error sending message: ${error.message}`, 'error');
+        }
+    }, 100); // Small delay to ensure modal is completely hidden
 
     // Reset form
     form.classList.remove('was-validated');
     document.getElementById('messageBody').value = '';
+}
+
+// Open message modal for direct messaging
+function openMessageModal(userId, userName) {
+    // Set the recipient info
+    appState.currentMessageSeller = {
+        id: userId,
+        name: userName
+    };
+    
+    // Update modal title
+    document.getElementById('messageSellerTitle').textContent = `Send Message to ${userName}`;
+    
+    // Clear form
+    document.getElementById('messageBody').value = '';
+    const form = document.getElementById('messageForm');
+    if (form) {
+        form.classList.remove('was-validated');
+    }
+    
+    // Show the modal
+    messageSellerModal.show();
 }
