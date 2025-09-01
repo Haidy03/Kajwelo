@@ -80,7 +80,7 @@ function verifyProduct(sellerId, productId) {
 }
 
 function deleteProductById(productId) {
-  if (isProduct()) return { success: false, message: "forbidden" };
+  // Allow product admins to delete products (needed for deleting unverified products from verification requests)
   const users = getUsers();
   const owner = findProductOwner(users, productId);
   if (!owner) return { success: false, message: "product_not_found" };

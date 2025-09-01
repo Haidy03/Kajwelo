@@ -484,6 +484,12 @@ import { Auth } from "../utils/auth.js";
         }
       });
       if (!found) return alert('Product not found');
+      // Persist sellers to localStorage
+      if (window.Storage && typeof window.Storage.set === 'function') {
+        window.Storage.set('sellers', window.dataStore.sellers);
+      } else {
+        localStorage.setItem('sellers', JSON.stringify(window.dataStore.sellers));
+      }
       updateBadges();
       window.location.reload();
     };
