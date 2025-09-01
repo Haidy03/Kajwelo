@@ -926,8 +926,28 @@ function markAsRead(id) {
         updateBadges();
         showToast('Message marked as read', 'success');
         
-        // Also update the badge display immediately
-        const unreadMessages = dataStore.inbox.filter(m => m.status === 'unread').length;
+        // Also update the badge display immediately using consistent logic
+        let unreadMessages = 0;
+        try {
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+            if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
+                loggedInUser.chats.forEach(chat => {
+                    if (chat.messages && Array.isArray(chat.messages)) {
+                        chat.messages.forEach(message => {
+                            // Count messages with status false (unread) that are not sent by the current user
+                            if (message.status === false && message.sender !== loggedInUser.id) {
+                                unreadMessages++;
+                            }
+                        });
+                    }
+                });
+            }
+        } catch (e) {
+            console.error('Error counting unread messages:', e);
+            // Fallback to dataStore method
+            unreadMessages = dataStore.inbox.filter(m => m.status === 'unread').length;
+        }
+        
         const inboxBadge = document.getElementById('inboxBadge');
         if (inboxBadge) {
             if (unreadMessages > 0) {
@@ -1173,23 +1193,41 @@ function viewVerificationDetails(id) {
     if (!req) return;
 
     if (req.type === 'product') {
-        const product = (dataStore.products || []).find(p => String(p.id) === String(req.entityId));
-        const seller = product ? (dataStore.sellers || []).find(s => String(s.id) === String(product.sellerId)) : null;
+        // For unverified products, we need to get them directly from localStorage
+        // since dataStore only contains verified products
+        let product = null;
+        let seller = null;
+        
+        // Find the product in localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        for (const user of users) {
+            if ((user.role || '').toLowerCase() === 'seller' && Array.isArray(user.products)) {
+                const foundProduct = user.products.find(p => String(p.id) === String(req.entityId));
+                if (foundProduct) {
+                    product = foundProduct;
+                    seller = user;
+                    break;
+                }
+            }
+        }
+        
         const content = `
             <div class="row">
                 <div class="col-md-6">
                     <h6>Product</h6>
                     <p><strong>Name:</strong> ${product?.name || 'N/A'}</p>
                     <p><strong>Category:</strong> ${product?.category || 'N/A'}</p>
-                    <p><strong>Price:</strong> ${product ? 'EGP ' + product.price.toFixed(2) : 'N/A'}</p>
-                    <p><strong>Stock:</strong> ${product?.stock ?? 'N/A'}</p>
+                    <p><strong>Price:</strong> ${product ? 'EGP ' + (Number(product.price) || 0).toFixed(2) : 'N/A'}</p>
+                    <p><strong>Stock:</strong> ${product ? (Array.isArray(product.stock) ? 
+                        product.stock.reduce((sum, s) => sum + (Number(s.quantity) || 0), 0) : 
+                        Number(product.stock) || 0) : 'N/A'}</p>
                     <p><strong>Verified:</strong> ${product?.isVerified ? 'Yes' : 'No'}</p>
                 </div>
                 <div class="col-md-6">
                     <h6>Seller</h6>
-                    <p><strong>Name:</strong> ${seller?.name || 'N/A'}</p>
+                    <p><strong>Name:</strong> ${seller?.name || seller?.brandName || 'N/A'}</p>
                     <p><strong>Email:</strong> ${seller?.email || 'N/A'}</p>
-                    <p><strong>Status:</strong> ${seller ? (seller.status || (seller.isVerified ? 'Verified' : 'Not Verified')) : 'N/A'}</p>
+                    <p><strong>Status:</strong> ${seller ? (seller.isVerified ? 'Verified' : 'Not Verified') : 'N/A'}</p>
                 </div>
             </div>
         `;

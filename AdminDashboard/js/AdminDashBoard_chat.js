@@ -249,15 +249,17 @@ function updateInboxBadge() {
     const inboxBadge = document.getElementById('inboxBadge');
     if (!inboxBadge) return;
     
-    // Count messages with status false in chats of logged in user
+    // Always get unread messages from localStorage for accuracy
     let totalUnread = 0;
     try {
-        const loggedInUser = Storage.get('loggedInUser', {});
+        let loggedInUser = null;
+        try {
+            loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        } catch (e) {}
         if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
             loggedInUser.chats.forEach(chat => {
                 if (chat.messages && Array.isArray(chat.messages)) {
                     chat.messages.forEach(message => {
-                        // Count messages with status false (unread) that are not sent by the current user
                         if (message.status === false && message.sender !== loggedInUser.id) {
                             totalUnread++;
                         }

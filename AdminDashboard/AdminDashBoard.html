@@ -77,18 +77,35 @@
         <input type="search" class="form-control" id="searchInput" placeholder="Search...">
     </div>
 
-    <div class="d-flex align-items-center">
-        <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="d-none d-md-inline" id="adminUserName">Admin User</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-section="settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" id="dropdownLogoutBtn" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-            </ul>
-        </div>
-    </div>
+  <div class="d-flex align-items-center">
+    <span class="d-none d-md-inline" id="adminUserName">Admin User</span>
+  </div>
+</header>
+
+<!-- Global Dropdown Menu (toggled above all elements) -->
+<div class="dropdown position-fixed" style="top: 10px; right: 30px; z-index: 9999;">
+  <button class="btn btn-light dropdown-toggle d-flex align-items-center" id="globalDropdownToggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="d-none d-md-inline" id="globalMenuUserName">Admin User</span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><a class="dropdown-item" href="#" data-section="settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" id="dropdownLogoutBtn" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+  </ul>
+</div>
+
+<script>
+// Set logged-in user's name on the global menu button
+document.addEventListener('DOMContentLoaded', function() {
+  var loggedInUser = null;
+  try {
+    loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  } catch (e) {}
+  if (loggedInUser && loggedInUser.name) {
+    document.getElementById('globalMenuUserName').textContent = loggedInUser.name;
+  }
+});
+</script>
 </header>
 
 <div class="container-fluid p-0" id="mainWrapper">

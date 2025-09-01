@@ -176,24 +176,27 @@ function updateInboxBadgeOnNavigation() {
                     if (chat.messages && Array.isArray(chat.messages)) {
                         chat.messages.forEach(message => {
                             // Count messages with status false (unread) that are not sent by the current user
-                            if (message.status === false && message.senderId !== loggedInUser.id) {
+                            if (message.status === false && message.sender !== loggedInUser.id) {
                                 unreadMessages++;
                             }
                         });
                     }
                 });
             }
-        } catch (error) {
-            console.error('Error counting unread messages:', error);
+        } catch (e) {
+            console.error('Error counting unread messages:', e);
         }
-
-        // Update the inbox badge
+        
         const inboxBadge = document.getElementById('inboxBadge');
         if (inboxBadge) {
-            inboxBadge.textContent = unreadMessages;
-            inboxBadge.style.display = unreadMessages > 0 ? 'inline-block' : 'none';
+            if (unreadMessages > 0) {
+                inboxBadge.textContent = unreadMessages;
+                inboxBadge.style.display = 'inline-block';
+            } else {
+                inboxBadge.style.display = 'none';
+            }
         }
-    }, 100);
+    }, 300);
 }
 
 function loadSection(section, sellerId = null) {
@@ -335,7 +338,7 @@ function updateBadges() {
         }
     }
 
-    // Update inbox badge - count messages with status false in chats of logged in user
+    // Update inbox badge - count messages with status false from localStorage
     let unreadMessages = 0;
     try {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
@@ -353,10 +356,9 @@ function updateBadges() {
         }
     } catch (e) {
         console.error('Error counting unread messages:', e);
-        // Fallback to dataStore method
-        unreadMessages = dataStore.inbox.filter(m => m.status === 'unread').length;
     }
     
+    // Always use localStorage-based count, never fallback to dataStore
     appState.unreadMessages = unreadMessages;
 
     const inboxBadge = document.getElementById('inboxBadge');
@@ -372,35 +374,45 @@ function updateBadges() {
 
 // Update inbox badge immediately on load and keep it visible
 function updateInboxBadgeImmediate() {
-    // Count messages with status false in chats of logged in user
-    let unreadMessages = 0;
-    try {
-        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-        if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
-            loggedInUser.chats.forEach(chat => {
-                if (chat.messages && Array.isArray(chat.messages)) {
-                    chat.messages.forEach(message => {
-                        // Count messages with status false (unread) that are not sent by the current user
-                        if (message.status === false && message.senderId !== loggedInUser.id) {
-                            unreadMessages++;
+    // Longer delay to ensure dataStore is populated
+    setTimeout(() => {
+        try {
+            // Count messages with status false in chats of logged in user
+            let unreadMessages = 0;
+            try {
+                const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+                if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
+                    loggedInUser.chats.forEach(chat => {
+                        if (chat.messages && Array.isArray(chat.messages)) {
+                            chat.messages.forEach(message => {
+                                // Count messages with status false (unread) that are not sent by the current user
+                                if (message.status === false && message.sender !== loggedInUser.id) {
+                                    unreadMessages++;
+                                }
+                            });
                         }
                     });
                 }
-            });
+            } catch (e) {
+                console.error('Error counting unread messages:', e);
+                // Fallback to dataStore method
+                unreadMessages = dataStore.inbox ? 
+                    dataStore.inbox.filter(m => m.status === 'unread').length : 0;
+            }
+            
+            const inboxBadge = document.getElementById('inboxBadge');
+            if (inboxBadge) {
+                if (unreadMessages > 0) {
+                    inboxBadge.textContent = unreadMessages;
+                    inboxBadge.style.display = 'inline-block';
+                } else {
+                    inboxBadge.style.display = 'none';
+                }
+            }
+        } catch (e) {
+            console.error('Error updating inbox badge on load:', e);
         }
-    } catch (error) {
-        console.error('Error counting unread messages:', error);
-    }
-
-    // Update the inbox badge
-    const inboxBadge = document.getElementById('inboxBadge');
-    if (inboxBadge) {
-        inboxBadge.textContent = unreadMessages;
-        inboxBadge.style.display = unreadMessages > 0 ? 'inline-block' : 'none';
-    }
-
-    // Update every 30 seconds
-    setTimeout(updateInboxBadgeImmediate, 30000);
+    }, 1000); // Longer delay to ensure dataStore is ready
 }
 
 // Set up periodic updates to ensure badge stays visible
