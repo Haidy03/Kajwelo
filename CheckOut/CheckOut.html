@@ -289,7 +289,7 @@
         import { Storage } from "../utils/localStorageHelper.js";
         import { Auth } from "../utils/auth.js";
         import { Order } from "../models/Order.js";
-
+        import { showToast, showConfirmModal, showSuccessToast, showErrorToast, showWarningToast, showInfoToast, confirmAction } from "../utils/toastModal.js";
         Auth.apply_Autherization("customer");
         const currentUser = Auth.getCurrentUser();
         document.addEventListener('DOMContentLoaded', function () {
@@ -449,17 +449,17 @@
                 console.log('Processing order:', formData);
                 const customerOrder = new Order(formData.order.customerId)
                 for (let i = 0; i < formData.order.products.length; i++) {
-                    const res= customerOrder.addProduct(formData.order.products[i].productId,formData.order.products[i].size,formData.order.products[i].color,formData.order.products[i].quantity)
-                    if(res.success){
+                    const res = customerOrder.addProduct(formData.order.products[i].productId, formData.order.products[i].size, formData.order.products[i].color, formData.order.products[i].quantity)
+                    if (res.success) {
                         continue;
-                    }else{
+                    } else {
                         showToast(res.message, 'error');
                         return;
                     }
-                   
+
                 }
-                 currentUser.checkout(customerOrder)
-                 
+                currentUser.checkout(customerOrder)
+
                 // Show success message
                 //alert('Order placed successfully!');
 
@@ -470,7 +470,7 @@
                 setInterval(() => {
                     window.location.href = "../FinalHomePage.html";
                 }, 1000);
-                
+
             }
         });
     </script>
