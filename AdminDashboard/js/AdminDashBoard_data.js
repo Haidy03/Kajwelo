@@ -46,28 +46,31 @@
     const customers = users.filter(u => (u.role || "").toLowerCase() === "customer");
     const admins = users.filter(u => (u.role || "").toLowerCase() === "admin" || (u.role || "") === "Admin");
 
-    // Flatten products from sellers
+    // Flatten products from sellers, filtering only verified products (isVerified = true)
     const products = [];
 
     sellers.forEach(s => {
       (s.products || []).forEach(p => {
-        const stock = computeStockCount(p);
-        let status = "active";
-        if (stock === 0) status = "inactive";
-        else if (stock > 0 && stock < 10) status = "low-stock";
+        // Only include verified products
+        if (p.isVerified) {
+          const stock = computeStockCount(p);
+          let status = "active";
+          if (stock === 0) status = "inactive";
+          else if (stock > 0 && stock < 10) status = "low-stock";
 
-        products.push({
-          id: p.id,
-          name: p.name || "Unnamed Product",
-          category: p.category || "General",
-          subcategory: p.subcategory || "",
-          price: Number(p.price) || 0,
-          stock,
-          status, // UI stock/status
-          description: p.description || "",
-          sellerId: s.id,
-          isVerified: !!p.isVerified,
-        });
+          products.push({
+            id: p.id,
+            name: p.name || "Unnamed Product",
+            category: p.category || "General",
+            subcategory: p.subcategory || "",
+            price: Number(p.price) || 0,
+            stock,
+            status, // UI stock/status
+            description: p.description || "",
+            sellerId: s.id,
+            isVerified: true, // All displayed products are verified
+          });
+        }
       });
     });
 
@@ -103,15 +106,17 @@
     }));
 
     // Sellers table light projection
-    const sellersTable = sellers.map(s => ({
-      id: s.id,
-      name: s.name || s.brandName || "Seller",
-      email: s.email,
-      phone: s.phone || "",
-      address: s.businessAddress || s.address || "",
-      status: s.isVerified ? "active" : "inactive",
-      joinDate: (s.createdAt ? new Date(s.createdAt).toISOString().slice(0, 10) : ""),
-      rating: Number(s.rating) || 4.5,
+    // Filter to only verified sellers (isVerified = true)
+    const verifiedSellers = sellers.filter(s => s.isVerified);
+    const sellersTable = verifiedSellers.map(s => ({
+        id: s.id,
+        name: s.name || s.brandName || "Seller",
+        email: s.email,
+        phone: s.phone || "",
+        address: s.businessAddress || s.address || "",
+        status: "active", // Verified sellers are always active
+        joinDate: (s.createdAt ? new Date(s.createdAt).toISOString().slice(0, 10) : ""),
+        rating: Number(s.rating) || 4.5,
     }));
 
     // Customers table light projection
@@ -120,8 +125,10 @@
       name: c.name || "Customer",
       email: c.email,
       phone: c.phone || "",
-      orders: Array.isArray(c.orders) ? c.orders.length : (Number(c.orders) || 0),
-      totalSpent: Number(c.totalSpent) || 0,
+      orders: (c.orderHistory && Array.isArray(c.orderHistory)) ? c.orderHistory.length : (c.orders && Array.isArray(c.orders)) ? c.orders.length : (Number(c.orders) || 0),
+      totalSpent: c.orderHistory && Array.isArray(c.orderHistory) ? 
+        c.orderHistory.reduce((total, order) => total + (parseFloat(order.totalPrice) || 0), 0) : 
+        Number(c.totalSpent) || 0,
       status: c.isConfirmed ? "active" : "inactive",
       joinDate: (c.createdAt ? new Date(c.createdAt).toISOString().slice(0, 10) : ""),
     }));
@@ -243,9 +250,9 @@
   window.calculateDashboardStats = function calculateDashboardStats() {
     const ds = window.dataStore;
     ds.dashboardStats = {
-      totalSellers: (ds.sellers || []).length,
-      totalCustomers: (ds.customers || []).length,
-      totalProducts: (ds.products || []).length,
+      totalSellers: (ds.sellers || []).filter(s => s.status === 'active').length,
+      totalCustomers: (ds.customers || []).filter(c => c.status === 'active').length,
+      totalProducts: (ds.products || []).filter(p => p.isVerified).length,
       totalCategories: (ds.categories || []).length,
       recentOrders: (ds.sales || []).slice(0, 5),
     };

@@ -112,6 +112,14 @@ function deleteUserById(userId) {
   if (u instanceof Admin && !isMaster()) {
     return { success: false, message: "forbidden" };
   }
+  // If seller, move to suspendedUsers
+  if (u instanceof Seller) {
+    let suspendedUsers = Storage.get("suspendedUsers", []);
+    if (!suspendedUsers.includes(u.email)) {
+      suspendedUsers.push(u.email);
+      Storage.set("suspendedUsers", suspendedUsers);
+    }
+  }
   users.splice(idx, 1);
   setUsers(users);
   return { success: true };
@@ -358,4 +366,9 @@ window.AdminOps = {
   refreshData,
 };
 
+// Expose AdminOps to the window object
+window.AdminOps = AdminOps;
+
 // End of bridge module
+
+export default AdminOps;

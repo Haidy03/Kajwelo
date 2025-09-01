@@ -178,8 +178,39 @@ function validateCurrentPassword() {
         return false;
     }
 
+    // Get actual password from localStorage
+    let actualPassword = admin.password;
+    try {
+        // Get the actual admin user from localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const currentUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+        
+        // Find the admin in users array
+        const adminUser = users.find(u => u.id === admin.id && 
+            ((u.role || "").toLowerCase() === "admin" || u.role === "Admin"));
+        
+        if (adminUser) {
+            actualPassword = adminUser.password;
+        } else if (currentUser && currentUser.id === admin.id) {
+            actualPassword = currentUser.password;
+        }
+    } catch (e) {
+        console.error('Error getting actual password:', e);
+    }
+
+    // Encode the entered password to match stored encoded password
+    function encodeUnicode(str) { 
+        try { 
+            return btoa(unescape(encodeURIComponent(str))); 
+        } catch { 
+            return str; 
+        } 
+    }
+    
+    const encodedInputPassword = encodeUnicode(currentPassword.value);
+
     // Check if password is correct
-    if (currentPassword.value !== admin.password) {
+    if (encodedInputPassword !== actualPassword) {
         currentPassword.setCustomValidity("Current password is incorrect");
         currentPassword.classList.add('is-invalid');
         return false;
@@ -293,14 +324,64 @@ function saveAdminSettings() {
     const admin = dataStore.currentAdmin;
     const currentPassword = document.getElementById('currentPassword');
     const newPassword = document.getElementById('newPassword');
-
+    
+    // Get users from localStorage
+    let users = [];
+    try {
+        users = JSON.parse(localStorage.getItem('users') || '[]');
+    } catch (e) {
+        console.error('Error parsing users from localStorage:', e);
+        users = [];
+    }
+    
+    // Find the current admin in the users array
+    const adminIndex = users.findIndex(u => u.id === admin.id && 
+        ((u.role || "").toLowerCase() === "admin" || u.role === "Admin"));
+    
     // Update admin data
     admin.name = document.getElementById('adminName').value;
     admin.email = document.getElementById('adminEmail').value;
 
     // Update password if provided
     if (newPassword.value) {
-        admin.password = newPassword.value;
+        // Encode the new password before saving
+        function encodeUnicode(str) { 
+            try { 
+                return btoa(unescape(encodeURIComponent(str))); 
+            } catch { 
+                return str; 
+            } 
+        }
+        admin.password = encodeUnicode(newPassword.value);
+    }
+    
+    // Update the admin in the users array
+    if (adminIndex !== -1) {
+        users[adminIndex].name = admin.name;
+        users[adminIndex].email = admin.email;
+        if (newPassword.value) {
+            users[adminIndex].password = admin.password;
+        }
+    }
+    
+    // Save updated users array to localStorage
+    try {
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Also update the logged in user
+        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+        if (loggedInUser && loggedInUser.id === admin.id) {
+            loggedInUser.name = admin.name;
+            loggedInUser.email = admin.email;
+            if (newPassword.value) {
+                loggedInUser.password = admin.password;
+            }
+            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        }
+    } catch (e) {
+        console.error('Error saving to localStorage:', e);
+        alert('Error saving settings. Please try again.');
+        return;
     }
 
     // Show success message

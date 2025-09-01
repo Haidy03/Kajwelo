@@ -1,544 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/AdminDashBoard_styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/AdminDashBoard_styles.css">
+    <style>
+        /* Add custom styles for chat conversation text truncation */
+        .min-width-0 {
+            min-width: 0;
+        }
+        
+        .text-truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .chat-user-name {
+            max-width: 180px;
+        }
+        
+        .chat-preview {
+            max-width: 180px;
+        }
+        
+        @media (max-width: 768px) {
+            .chat-user-name {
+                max-width: 130px;
+            }
+            
+            .chat-preview {
+                max-width: 130px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .chat-user-name {
+                max-width: 100px;
+            }
+            
+            .chat-preview {
+                max-width: 100px;
+            }
+        }
+        
+        /* Ensure proper flex behavior for chat items */
+        .chat-item-content {
+            min-width: 0;
+            flex: 1;
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container-fluid" id="mainWrapper">
-    <div class="row">
-      <aside class="sidebar col-lg-2 col-md-3 d-md-flex flex-column">
-        <div class="sidebar-logo d-flex align-items-center">
-          <i class="fas fa-store me-2"></i>
-          <span class="d-none d-lg-inline">AdminPanel</span>
-        </div>
-
-        <button class="btn btn-dark mobile-menu-btn" id="sidebarToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-
-        <div class="sidebar-menu py-3">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#" data-section="dashboard">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="d-none d-lg-inline">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button"
-                data-bs-toggle="dropdown">
-                <i class="fas fa-box-open"></i>
-                <span class="d-none d-lg-inline">Products</span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" data-section="products">All Products</a></li>
-                <li><a class="dropdown-item" href="#" data-section="categories">Categories</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="sellers">
-                <i class="fas fa-user-tie"></i>
-                <span class="d-none d-lg-inline">Sellers</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="customers">
-                <i class="fas fa-users"></i>
-                <span class="d-none d-lg-inline">Customers</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="verificationRequests">
-                <i class="fas fa-check-circle"></i>
-                <span class="d-none d-lg-inline">V Requests</span>
-                <span class="badge bg-danger ms-2" id="verificationBadge">3</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="inbox">
-                <i class="fas fa-inbox"></i>
-                <span class="d-none d-lg-inline">Inbox</span>
-                <span class="badge bg-danger ms-2" id="inboxBadge">5</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="admins">
-                <i class="fas fa-user-shield"></i>
-                <span class="d-none d-lg-inline">Admins</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="analysis">
-                <i class="fas fa-chart-pie"></i>
-                <span class="d-none d-lg-inline">Analysis</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-section="settings">
-                <i class="fas fa-cog"></i>
-                <span class="d-none d-lg-inline">Settings</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="sidebar-footer p-3">
-          <a href="#" id="sidebarLogoutBtn" class="btn btn-outline-light w-100">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="d-none d-lg-inline">Log Out</span>
-          </a>
-        </div>
-      </aside>
-
-      <main class="main-content col-lg-10 col-md-9 ms-sm-auto">
-        <header class="main-header d-flex flex-wrap align-items-center justify-content-between">
-          <button class="btn btn-light me-2" id="headerSidebarToggle" aria-label="Toggle navigation">
+<!-- Main Header (Fixed) -->
+<header class="main-header d-flex flex-nowrap align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+        <button class="btn me-2" id="centeredSidebarToggle" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
-          </button>
-          <h1 class="h4 mb-0" id="sectionTitle">
+        </button>
+        <button class="btn me-2" id="dashboardRedirectBtn" aria-label="Go to Dashboard">
+            <i class="fas fa-home"></i>
+        </button>
+        <h1 class="h4 mb-0" id="sectionTitle">
             <i class="fas fa-tachometer-alt me-2"></i>
             Dashboard
-          </h1>
-
-          <div class="search-box flex-grow-1 mx-3">
-            <i class="fas fa-search"></i>
-            <input type="search" class="form-control" id="searchInput" placeholder="Search...">
-          </div>
-
-          <div class="d-flex align-items-center">
-            <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                <span class="d-none d-md-inline">Admin User</span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-section="profile"><i class="fas fa-user me-2"></i>Profile</a>
-                </li>
-                <li><a class="dropdown-item" href="#" data-section="settings"><i
-                      class="fas fa-cog me-2"></i>Settings</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" id="dropdownLogoutBtn" href="#"><i
-                      class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-              </ul>
-            </div>
-          </div>
-        </header>
-
-        <section class="p-4" id="contentSection">
-          <div class="card" id="dataTableCard" style="display: none;">
-            <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
-              <h2 class="h5 mb-0" id="tableTitle"></h2>
-              <div class="header-actions">
-                <!-- Bulk Actions -->
-                <div class="bulk-actions me-2" id="bulkActionsContainer" style="display: none;">
-                  <button class="btn btn-outline-danger btn-sm" id="bulkDeleteBtn">
-                    <i class="fas fa-trash me-1"></i>Delete Selected (<span id="selectedCount">0</span>)
-                  </button>
-                </div>
-
-                <div class="dropdown me-2">
-                  <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fas fa-filter me-2"></i>Filter
-                  </button>
-                  <ul class="dropdown-menu" id="filterDropdown"></ul>
-                </div>
-                <button class="btn btn-outline-secondary me-2" id="seeAllBtn">
-                  <i class="fas fa-eye me-2"></i>See All
-                </button>
-                <button class="btn btn-primary" id="addItemBtn">
-                  <i class="fas fa-plus me-2"></i>
-                  <span id="addButtonText">Add Item</span>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover" id="dataTable">
-                  <thead id="tableHeader"></thead>
-                  <tbody id="tableBody"></tbody>
-                </table>
-              </div>
-              <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-3" id="pagination"></ul>
-              </nav>
-            </div>
-          </div>
-
-          <div id="comingSoonContainer">
-            <!-- Content will be loaded here -->
-          </div>
-        </section>
-      </main>
+        </h1>
     </div>
-  </div>
 
-  <!-- Add/Edit Item Modal -->
-  <div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
+    <div class="search-box flex-grow-1 mx-3">
+        <i class="fas fa-search"></i>
+        <input type="search" class="form-control" id="searchInput" placeholder="Search...">
+    </div>
+
+    <div class="d-flex align-items-center">
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="d-none d-md-inline" id="adminUserName">Admin User</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" data-section="settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" id="dropdownLogoutBtn" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="container-fluid p-0" id="mainWrapper">
+    <div class="row m-0">
+        <aside class="sidebar col-lg-2 col-md-3 d-md-flex flex-column">
+            <div class="sidebar-logo d-flex align-items-center">
+                <i class="fas fa-store me-2"></i>
+                <span class="d-none d-lg-inline">AdminPanel</span>
+            </div>
+
+            <!-- Sidebar -->
+            <nav class="sidebar-menu py-3" aria-label="Main navigation">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="d-none d-lg-inline">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-box-open"></i>
+                            <span class="d-none d-lg-inline">Products</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-section="products">All Products</a></li>
+                            <li><a class="dropdown-item" href="#" data-section="categories">Categories</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="sellers">
+                            <i class="fas fa-user-tie"></i>
+                            <span class="d-none d-lg-inline">Sellers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="customers">
+                            <i class="fas fa-users"></i>
+                            <span class="d-none d-lg-inline">Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="verificationRequests">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="d-none d-lg-inline">V Requests</span>
+                            <span class="badge bg-danger ms-2" id="verificationBadge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="inbox">
+                            <i class="fas fa-inbox"></i>
+                            <span class="d-none d-lg-inline">Inbox</span>
+                            <span class="badge bg-danger ms-2" id="inboxBadge">5</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="admins">
+                            <i class="fas fa-user-shield"></i>
+                            <span class="d-none d-lg-inline">Admins</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="analysis">
+                            <i class="fas fa-chart-pie"></i>
+                            <span class="d-none d-lg-inline">Analysis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span class="d-none d-lg-inline">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Footer -->
+            <div class="sidebar-footer p-3">
+                <button id="sidebarLogoutBtn" class="btn btn-outline-danger w-100">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="d-none d-lg-inline">Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content col-lg-10 col-md-9 ms-sm-auto">
+            <!-- Content -->
+            <section class="p-4" id="contentSection">
+                <div class="card" id="dataTableCard" style="display: none;">
+                    <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+                        <h2 class="h5 mb-0" id="tableTitle"></h2>
+                        <div class="header-actions">
+                            <!-- Bulk Actions -->
+                            <div class="bulk-actions me-2" id="bulkActionsContainer" style="display: none;">
+                                <button class="btn btn-outline-danger btn-sm" id="bulkDeleteBtn">
+                                    <i class="fas fa-trash me-1"></i>Delete Selected (<span id="selectedCount">0</span>)
+                                </button>
+                            </div>
+
+                            <button class="btn btn-primary" id="addItemBtn">
+                                <i class="fas fa-plus me-2"></i>
+                                <span id="addButtonText">Add Item</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="dataTable">
+                                <thead id="tableHeader"></thead>
+                                <tbody id="tableBody"></tbody>
+                            </table>
+                        </div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mt-3" id="pagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Coming Soon -->
+                <div id="comingSoonContainer"></div>
+
+                <!-- Chat -->
+                <div id="adminChatSection" style="display: none;">
+                    <div class="row">
+                        <!-- Chat List -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-comments me-2"></i>
+                                        Conversations
+                                    </h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <ul class="list-group list-group-flush" id="adminChatList">
+                                        <!-- Chat list will be populated by JavaScript -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Display -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0" id="selectedChatTitle">Select a conversation to start chatting</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="adminChatDisplay" class="chat-box" style="height: 300px; overflow-y: auto;">
+                                        <div class="text-center text-muted mt-5">
+                                            <i class="fas fa-comments fa-3x mb-3"></i>
+                                            <p>Select a conversation from the left to start chatting</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Chat Input Section -->
+                                    <div id="adminChatInputSection" style="display: none;" class="mt-3">
+                                        <div class="input-group">
+                                            <input type="text" id="adminChatInputInline" class="form-control" placeholder="Type your message...">
+                                            <button class="btn btn-primary" id="adminSendBtnInline">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="itemModalTitle">Add Item</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalTitle">Add Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm" novalidate>
+                    <!-- Dynamic form content will be inserted here -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveItemBtn">Save</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="itemForm" novalidate>
-            <!-- Dynamic form content will be inserted here -->
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="saveItemBtn">Save</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- Message Seller Modal -->
-  <div class="modal fade" id="messageSellerModal" tabindex="-1" aria-hidden="true">
+<!-- Message Seller -->
+<div class="modal fade" id="messageSellerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="messageSellerTitle">Send Message</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="messageForm" novalidate>
-            <div class="mb-3">
-              <label for="messageSubject" class="form-label">Subject</label>
-              <input type="text" class="form-control" id="messageSubject" required>
-              <div class="invalid-feedback">Please enter a subject</div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageSellerTitle">Send Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="mb-3">
-              <label for="messageBody" class="form-label">Message</label>
-              <textarea class="form-control" id="messageBody" rows="5" required></textarea>
-              <div class="invalid-feedback">Please enter a message</div>
+            <div class="modal-body">
+                <form id="messageForm" novalidate>
+                    <div class="mb-3">
+                        <label for="messageBody" class="form-label">Message</label>
+                        <textarea class="form-control" id="messageBody" rows="5" required></textarea>
+                        <div class="invalid-feedback">Please enter a message</div>
+                    </div>
+                </form>
             </div>
-          </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="sendSellerMessageBtn">Send Message</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="sendMessageBtn">Send Message</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- Password Confirmation Modal -->
-  <div class="modal fade" id="passwordConfirmModal" tabindex="-1" aria-hidden="true">
+<!-- Password Confirm -->
+<div class="modal fade" id="passwordConfirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm Password</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="passwordConfirmForm">
-            <div class="mb-3">
-              <label for="currentPassword" class="form-label">Current Password</label>
-              <input type="password" class="form-control" id="currentPassword" required>
-              <div class="invalid-feedback">Please enter your current password</div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </form>
+            <div class="modal-body">
+                <form id="passwordConfirmForm">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                        <div class="invalid-feedback">Please enter your current password</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmPasswordBtn">Confirm</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="confirmPasswordBtn">Confirm</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- Admin Authorization Guard: redirects non-admins to accessDeniedPage.html -->
-  <script type="module">
-    import { Auth } from "../utils/auth.js";
-    import { Storage } from "../utils/localStorageHelper.js";
+<!-- Admin Chat Modal -->
+<div class="modal fade" id="adminChatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="adminChatModalTitle" class="modal-title">Chat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="adminChatBox" class="chat-box"></div>
+            </div>
+            <div class="modal-footer">
+                <input
+                    type="text"
+                    id="adminChatInput"
+                    class="form-control"
+                    placeholder="Type a message..."
+                />
+                <button id="adminSendBtn" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    // Enforce admin-only access
-    Auth.apply_Autherization("admin");
+<!-- Admin Authorization Guard: redirects non-admins to accessDeniedPage.html -->
+<script type="module">
+import { Auth } from "../utils/auth.js";
+import { Storage } from "../utils/localStorageHelper.js";
 
-    // Expose admin access level for UI/permissions logic
-    const user = Storage.get("loggedInUser");
-    const lvl = Number(user?.adminLevel) || 1; // 1: product, 2: super, 3: master
-    window.adminAccess = {
-      level: lvl,
-      isMaster: lvl === 3,
-      isSuper: lvl === 2,
-      isProduct: lvl === 1,
-    };
-  </script>
+// Enforce admin-only access
+Auth.apply_Autherization("admin");
 
-  <!-- JavaScript Files -->
-  <script src="js/AdminDashBoard_data.js"></script>
-  <script src="js/AdminDashBoard_app.js"></script>
-  <script src="js/AdminDashBoard_ui.js"></script>
-  <script src="js/AdminDashBoard_table.js"></script>
-  <script src="js/AdminDashBoard_settings.js"></script>
-  <script src="js/AdminDashBoard_modals.js"></script>
+// Expose admin access level for UI/permissions logic
+const user = Storage.get("loggedInUser");
+const lvl = Number(user?.adminLevel) || 1; // 1: product, 2: super, 3: master
+window.adminAccess = {
+  level: lvl,
+  isMaster: lvl === 3,
+  isSuper: lvl === 2,
+  isProduct: lvl === 1,
+};
+</script>
 
-  <!-- Bridge loader and adapters -->
-  <script type="module">
-    import "./js/AdminDashBoard_bridge.js";
-    import { Auth } from "../utils/auth.js";
+<!-- JavaScript Files -->
+<script src="js/AdminDashBoard_data.js"></script>
+<script src="js/AdminDashBoard_app.js"></script>
+<script src="js/AdminDashBoard_chat.js"></script>
+<script src="js/AdminDashBoard_ui.js"></script>
+<script src="js/AdminDashBoard_table.js"></script>
+<script src="js/AdminDashBoard_settings.js"></script>
+<script src="js/AdminDashBoard_modals.js"></script>
 
-    // Adapter: persist actions and enforce roles without changing external files
-    (function () {
-      function safe(fn) {
-        try { fn(); } catch (e) { console.error(e); }
+<!-- Bridge loader and adapters -->
+<script type="module">
+import "./js/AdminDashBoard_bridge.js";
+import { Auth } from "../utils/auth.js";
+
+// Adapter: persist actions and enforce roles without changing external files
+(function () {
+  function safe(fn) {
+    try { fn(); } catch (e) { console.error(e); }
+  }
+
+  // Hook table action handlers after initial render
+  document.addEventListener('DOMContentLoaded', function () {
+    // Enforce role-based access controls
+    const allowedProductAdminSections = new Set([
+      'dashboard', 'products', 'categories', 
+      'verificationRequests', 'inbox', 'settings'
+    ]);
+    
+    document.querySelectorAll('.sidebar-menu [data-section]').forEach(a => {
+      const section = a.dataset.section;
+      
+      // Product admin restrictions
+      if (window.adminAccess?.level === 1 && !allowedProductAdminSections.has(section)) {
+        a.classList.add('disabled');
       }
+      // Super admin restrictions
+      if (window.adminAccess?.level === 2 && section === 'admins') {
+        a.classList.add('disabled');
+        a.closest('li').querySelector('.dropdown-menu')?.remove();
+      }
+      // Master admin has no restrictions
+    });
 
-      // Hook table action handlers after initial render
-      document.addEventListener('DOMContentLoaded', function () {
-        // Enforce sidebar visibility by role (product admin limited)
-        const acc = window.adminAccess || { level: 1 };
-        if (acc.isProduct) {
-          const allowed = new Set(['dashboard', 'verificationRequests', 'settings']);
-          document.querySelectorAll('.sidebar-menu [data-section]')
-            .forEach(a => { if (!allowed.has(a.dataset.section)) a.classList.add('disabled'); });
-        }
+    // Remove admin management UI elements for non-master admins
+    if (window.adminAccess?.level !== 3) {
+      const adminsNavItem = document.querySelector('[data-section="admins"]');
+      if (adminsNavItem) adminsNavItem.remove();
+      document.querySelectorAll('#contentSection [data-admin-only]').forEach(el => el.remove());
+    }
 
-        // Override functions to persist changes
-        const origVerifyItem = window.verifyItem;
-        window.verifyItem = function (id) {
-          const res = window.AdminOps.verifyRequestById(id);
-          if (res?.success) {
-            // Rebuild local DS by reloading page data
-            safe(() => window.location.reload());
-          } else {
-            safe(() => showToast(res?.message || 'Verification failed', 'error'));
-          }
-        };
+    // Override functions to persist changes
+    // Toggle seller verification and create request if unverified
+    window.toggleSellerVerification = function(id) {
+      const seller = (window.dataStore?.sellers || []).find(s => String(s.id) === String(id));
+      if (!seller) return alert('Seller not found');
+      seller.isVerified = !seller.isVerified;
+      seller.status = seller.isVerified ? 'active' : 'inactive';
+      // If unverified, create a new verification request
+      if (!seller.isVerified) {
+        window.dataStore.verificationRequests = window.dataStore.verificationRequests || [];
+        window.dataStore.verificationRequests.push({
+          id: Date.now(),
+          type: 'seller',
+          entityId: seller.id,
+          status: 'unverified',
+          title: 'Seller Verification',
+          message: `Seller ${seller.name} needs verification`,
+          date: new Date().toISOString()
+        });
+      }
+      // Persist sellers to localStorage
+      if (window.Storage && typeof window.Storage.set === 'function') {
+        window.Storage.set('sellers', window.dataStore.sellers);
+      } else {
+        localStorage.setItem('sellers', JSON.stringify(window.dataStore.sellers));
+      }
+      updateBadges();
+      window.location.reload();
+    };
 
-        const origDeleteItem = window.deleteItem;
-        window.deleteItem = function (id) {
-          showConfirmModal('Are you sure you want to delete this item?', () => {
-            const section = window.appState?.currentSection;
-            let res = { success: false };
-            if (section === 'products') res = window.AdminOps.deleteProductById(id);
-            else if (section === 'categories') {
-              // Find category name in current data
-              const cat = (window.dataStore?.categories || []).find(c => c.id === id);
-              if (cat) res = window.AdminOps.deleteCategoryProducts(cat.name);
+    // Toggle product verification and create request if unverified
+    window.toggleProductVerification = function(id) {
+      let found = false;
+      (window.dataStore?.sellers || []).forEach(seller => {
+        if (Array.isArray(seller.products)) {
+          const product = seller.products.find(p => String(p.id) === String(id));
+          if (product) {
+            product.isVerified = !product.isVerified;
+            found = true;
+            // If unverified, create a new verification request
+            if (!product.isVerified) {
+              window.dataStore.verificationRequests = window.dataStore.verificationRequests || [];
+              window.dataStore.verificationRequests.push({
+                id: Date.now(),
+                type: 'product',
+                entityId: product.id,
+                status: 'unverified',
+                title: 'Product Verification',
+                message: `Product ${product.name} needs verification`,
+                date: new Date().toISOString()
+              });
             }
-            else if (section === 'sellers' || section === 'customers' || section === 'admins') res = window.AdminOps.deleteUserById(id);
-            else if (section === 'verificationRequests') {
-              const arr = window.dataStore?.verificationRequests || [];
-              const req = arr.find(r => String(r.id) === String(id));
-              if (req) {
-                let delRes = { success: false };
-                if (req.type === 'seller') {
-                  // Use Auth.deleteAccount for seller requests
-                  try {
-                    delRes = Auth.deleteAccount(req.entityId);
-                  } catch (e) {
-                    delRes = { success: false, message: e?.message || 'delete_failed' };
-                  }
-                } else if (req.type === 'product') {
-                  // Remove the product from its owner
-                  delRes = window.AdminOps.deleteProductById(req.entityId);
-                } else {
-                  delRes = { success: false, message: 'unsupported_request_type' };
-                }
+          }
+        }
+      });
+      if (!found) return alert('Product not found');
+      updateBadges();
+      window.location.reload();
+    };
+    const origVerifyItem = window.verifyItem;
+    window.verifyItem = function (id) {
+      const res = window.AdminOps.verifyRequestById(id);
+      if (res?.success) {
+        // Update data store
+        const req = (window.dataStore?.verificationRequests || []).find(r => r.id === id);
+        if (req) req.status = 'verified';
+        updateBadges();
+        window.location.reload();
+      } else {
+        safe(() => alert(res?.message || 'verify_failed'));
+      }
+    };
 
-                if (delRes?.success) {
-                  // Remove the request from the in-memory list and refresh UI
-                  const idx2 = arr.findIndex(r => String(r.id) === String(id));
-                  if (idx2 !== -1) arr.splice(idx2, 1);
-                  safe(() => { renderTable(); updatePagination(); updateBadges(); });
-                  res = { success: true };
-                } else {
-                  res = delRes;
-                }
-              } else {
-                res = { success: false, message: 'request_not_found' };
+    const origDeleteItem = window.deleteItem;
+    window.deleteItem = function (id) {
+      if (!confirm('Are you sure you want to delete this item?')) return;
+      const section = window.appState?.currentSection;
+      let res = { success: false };
+      
+      if (section === 'products') {
+        if (window.AdminOps && typeof window.AdminOps.deleteProductById === 'function') {
+          res = window.AdminOps.deleteProductById(id);
+        } else {
+          res = { success: false, message: 'AdminOps not available' };
+        }
+      } 
+      else if (section === 'categories') {
+        // Find category name in current data
+        const cat = (window.dataStore?.categories || []).find(c => c.id === id);
+        if (cat) {
+          if (window.AdminOps && typeof window.AdminOps.deleteCategoryProducts === 'function') {
+            res = window.AdminOps.deleteCategoryProducts(cat.name);
+            // Also remove the category itself from localStorage
+            if (res.success) {
+              let categories = JSON.parse(localStorage.getItem('categories') || '[]');
+              categories = categories.filter(c => String(c.id) !== String(id));
+              localStorage.setItem('categories', JSON.stringify(categories));
+              
+              // Remove from dataStore
+              const dataStore = window.dataStore;
+              const index = dataStore.categories.findIndex(item => item.id === id);
+              if (index !== -1) {
+                dataStore.categories.splice(index, 1);
               }
             }
-            else if (section === 'inbox') res = window.AdminOps.deleteInboxById(id);
-
-            if (res?.success) {
-              safe(() => window.location.reload());
-            } else {
-              safe(() => showToast(res?.message || 'Delete failed', 'error'));
+          } else {
+            res = { success: false, message: 'AdminOps not available' };
+          }
+        } else {
+          res = { success: false, message: 'Category not found' };
+        }
+      }
+      else if (section === 'sellers' || section === 'customers' || section === 'admins') {
+        if (window.AdminOps && typeof window.AdminOps.deleteUserById === 'function') {
+          res = window.AdminOps.deleteUserById(id);
+        } else {
+          res = { success: false, message: 'AdminOps not available' };
+        }
+      } 
+      else if (section === 'verificationRequests') {
+        const arr = window.dataStore?.verificationRequests || [];
+        const req = arr.find(r => String(r.id) === String(id));
+        if (req) {
+          let delRes = { success: false };
+          if (req.type === 'seller') {
+            // Use Auth.deleteAccount for seller requests
+            try {
+              delRes = Auth.deleteAccount(req.entityId);
+            } catch (e) {
+              delRes = { success: false, message: e?.message || 'delete_failed' };
             }
-          });
-        };
-
-        const origMarkAsRead = window.markAsRead;
-        window.markAsRead = function (id) {
-          const res = window.AdminOps.markInboxReadById(id);
-          if (res?.success) {
-            safe(() => window.location.reload());
+          } else if (req.type === 'product') {
+            // Remove the product from its owner
+            if (window.AdminOps && typeof window.AdminOps.deleteProductById === 'function') {
+              delRes = window.AdminOps.deleteProductById(req.entityId);
+            } else {
+              delRes = { success: false, message: 'AdminOps not available' };
+            }
           } else {
-            safe(() => showToast(res?.message || 'Mark as read failed', 'error'));
+            delRes = { success: false, message: 'unsupported_request_type' };
           }
-        };
 
-        const origReset = window.resetSellerPassword;
-        window.resetSellerPassword = function (id) {
-          const res = window.AdminOps.resetSellerPassword(id, '123456');
-          if (res?.success) {
-            safe(() => showToast('Seller password has been reset to 123456', 'success'));
+          if (delRes?.success) {
+            // Remove the request from the in-memory list and refresh UI
+            const idx2 = arr.findIndex(r => String(r.id) === String(id));
+            if (idx2 !== -1) arr.splice(idx2, 1);
+            safe(() => { renderTable(); updatePagination(); updateBadges(); });
+            res = { success: true };
           } else {
-            safe(() => showToast(res?.message || 'Reset failed', 'error'));
+            res = delRes;
           }
-        };
+        } else {
+          res = { success: false, message: 'request_not_found' };
+        }
+      }
+      else if (section === 'inbox') {
+        if (window.AdminOps && typeof window.AdminOps.deleteInboxById === 'function') {
+          res = window.AdminOps.deleteInboxById(id);
+        } else {
+          res = { success: false, message: 'AdminOps not available' };
+        }
+      }
 
-        // Role-based UI restrictions
-        if (acc.isSuper) {
-          // disable admin management buttons in Admins section at render time via CSS class
-          const style = document.createElement('style');
-          style.textContent = `
+      if (res?.success) {
+        safe(() => window.location.reload());
+      } else {
+        safe(() => alert(res?.message || 'delete_failed'));
+      }
+    };
+
+    const origMarkAsRead = window.markAsRead;
+    window.markAsRead = function (id) {
+      const res = window.AdminOps.markInboxReadById(id);
+      if (res?.success) {
+        safe(() => window.location.reload());
+      } else {
+        safe(() => alert(res?.message || 'mark_read_failed'));
+      }
+    };
+
+    const origReset = window.resetSellerPassword;
+    window.resetSellerPassword = function (id) {
+      const res = window.AdminOps.resetSellerPassword(id, '123456');
+      if (res?.success) {
+        safe(() => alert('Seller password has been reset to 123456'));
+      } else {
+        safe(() => alert(res?.message || 'reset_failed'));
+      }
+    };
+
+    // Role-based UI restrictions
+  if (window.adminAccess?.isSuper) {
+      // disable admin management buttons in Admins section at render time via CSS class
+      const style = document.createElement('style');
+      style.textContent = `
         [data-section="admins"] ~ #contentSection .delete-item,
         [data-section="admins"] ~ #contentSection .view-item,
         [data-section="admins"] ~ #contentSection #addItemBtn { pointer-events:none; opacity:0.5; }
       `;
-          // Fallback: when Admins section active, disable buttons
-          document.head.appendChild(style);
-        }
-
-        if (acc.isProduct) {
-          // Section access is already limited via sidebar; keep action buttons enabled
-        }
-        // Logout handlers
-        document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
-          e.preventDefault();
-          try { localStorage.removeItem('loggedInUser'); } catch { }
-          window.location.href = '../FinalHomePage.html';
-        });
-        document.getElementById('dropdownLogoutBtn')?.addEventListener('click', (e) => {
-          e.preventDefault();
-          try { localStorage.removeItem('loggedInUser'); } catch { }
-          window.location.href = '../FinalHomePage.html';
-        });
-      });
-    })();
-  </script>
-
-  <!-- Patches: persist bulk delete and fix settings password validation/persistence -->
-  <script type="module">
-    import { Auth } from "../utils/auth.js";
-    import { Storage } from "../utils/localStorageHelper.js";
-
-    (function () {
-      // Ensure disabled links are truly disabled
-      const style = document.createElement('style');
-      style.textContent = `
-    .sidebar-menu .nav-link.disabled { pointer-events: none; opacity: 0.5; }
-  `;
+      // Fallback: when Admins section active, disable buttons
       document.head.appendChild(style);
+    }
 
-      // Validate current password against actual stored credentials (using Auth)
-      window.validateCurrentPassword = function () {
-        const input = document.getElementById('currentPassword');
-        if (!input) return true; // no field
-        const user = Storage.get('loggedInUser');
-        if (!input.value) {
-          input.setCustomValidity("Current password is required to save any changes");
-          input.classList.add('is-invalid');
-          return false;
-        }
-        const res = Auth.login(user.email, input.value);
-        if (res && res.success) {
-          input.setCustomValidity("");
-          input.classList.remove('is-invalid');
-          return true;
-        } else {
-          input.setCustomValidity("Current password is incorrect");
-          input.classList.add('is-invalid');
-          return false;
-        }
-      };
+  if (window.adminAccess?.isProduct) {
+      // Section access is already limited via sidebar; keep action buttons enabled
+    }
+  // Logout handlers
+document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof Auth !== 'undefined' && typeof Auth.logout === 'function') {
+        Auth.logout();
+    } else {
+        // Fallback if Auth is not available
+        localStorage.removeItem("loggedInUser");
+        window.location.href = '../FinalHomePage.html';
+    }
+});
+document.getElementById('dropdownLogoutBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof Auth !== 'undefined' && typeof Auth.logout === 'function') {
+        Auth.logout();
+    } else {
+        // Fallback if Auth is not available
+        localStorage.removeItem("loggedInUser");
+        window.location.href = '../FinalHomePage.html';
+    }
+});
+  });
+})();
+</script>
 
-      // Persist settings to localStorage (users + loggedInUser)
-      window.saveAdminSettings = function () {
-        const form = document.getElementById('adminSettingsForm');
-        const nameEl = document.getElementById('adminName');
-        const emailEl = document.getElementById('adminEmail');
-        const newPassEl = document.getElementById('newPassword');
-        const confirmEl = document.getElementById('confirmNewPassword');
-        const currEl = document.getElementById('currentPassword');
+<script>
+  // Set the logged in user's name in the header
+  function setAdminUserName() {
+    try {
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+      const adminUserNameElement = document.getElementById('adminUserName');
+      if (adminUserNameElement) {
+        adminUserNameElement.textContent = loggedInUser.name || loggedInUser.email || 'Admin User';
+      }
+    } catch (e) {
+      console.error('Error setting admin user name:', e);
+    }
+  }
+  
+  // Call when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setAdminUserName);
+  } else {
+    setAdminUserName();
+  }
+</script>
 
-        if (!window.validateCurrentPassword()) {
-          form?.classList.add('was-validated');
-          return;
-        }
-
-        const users = Storage.get('users', []);
-        const logged = Storage.get('loggedInUser');
-        const idx = users.findIndex(u => u.id === logged.id);
-        if (idx === -1) {
-          showToast('Current admin not found in storage', 'error');
-          return;
-        }
-
-        users[idx].name = nameEl?.value || users[idx].name;
-        users[idx].email = emailEl?.value || users[idx].email;
-        if (newPassEl && newPassEl.value) {
-          // encode password before saving (matches how passwords are stored)
-          function encodeUnicode(str) { try { return btoa(unescape(encodeURIComponent(str))); } catch { return str; } }
-          users[idx].password = encodeUnicode(newPassEl.value);
-        }
-
-        Storage.set('users', users);
-        Storage.set('loggedInUser', users[idx]);
-
-        const container = document.querySelector('.settings-container');
-        if (container) {
-          const alertHTML = `
-        <div class="alert alert-success alert-dismissible fade show">
-          <i class="fas fa-check-circle me-2"></i>
-          Settings saved successfully!
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>`;
-          const prev = container.querySelector('.alert-success');
-          if (prev) prev.remove();
-          container.insertAdjacentHTML('afterbegin', alertHTML);
-          container.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        if (currEl) currEl.value = '';
-        if (newPassEl) newPassEl.value = '';
-        if (confirmEl) confirmEl.value = '';
-        form?.classList.remove('was-validated');
-        if (typeof window.updatePasswordStrength === 'function') window.updatePasswordStrength('');
-      };
-
-      // Persistent bulk delete
-      window.bulkDeleteItems = function () {
-        const selected = window.appState?.selectedItems || new Set();
-        if (selected.size === 0) return;
-        const count = selected.size;
-        if (!confirm(`Are you sure you want to delete ${count} selected item(s)?`)) return;
-
-        const section = window.appState.currentSection;
-        let ok = 0;
-        if (section === 'categories') {
-          const ids = Array.from(selected);
-          ids.forEach(id => {
-            const cat = (window.dataStore?.categories || []).find(c => c.id === id);
-            if (cat) {
-              const res = window.AdminOps.deleteCategoryProducts(cat.name);
-              if (res?.success) ok++;
-            }
-          });
-        } else {
-          const ids = Array.from(selected);
-          const res = window.AdminOps.bulkDelete(section, ids);
-          if (res?.success) ok = res.count;
-        }
-
-        window.location.reload();
-      };
-    })();
-  </script>
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <!-- Toast notifications will be dynamically added here -->
+    </div>
 </body>
-
 </html>
