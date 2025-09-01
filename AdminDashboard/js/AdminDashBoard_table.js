@@ -365,7 +365,7 @@ function renderTableRow(item) {
             <td>${item.name}</td>
             <td><button class="btn btn-link p-0 category-link" data-name="${item.category}" title="View Category"><span class="badge bg-secondary">${item.category}</span></button></td>
             <td>${item.subcategory ? `<button class="btn btn-link p-0 subcategory-link" data-name="${item.subcategory}" title="View Subcategory"><span class="badge bg-light text-dark">${item.subcategory}</span></button>` : '-'}</td>
-            <td><strong>EGP ${item.price.toFixed(2)}</strong></td>
+            <td><strong>$${item.price.toFixed(2)}</strong></td>
             <td>${item.stock}</td>
             <td><span class="badge bg-light text-dark">${item.sellerName || getSellerNameById(item.sellerId)}</span></td>
         `;
@@ -383,7 +383,7 @@ function renderTableRow(item) {
             <td>${item.email}</td>
             <td>${item.phone}</td>
             <td><span class="badge bg-info">${item.orders}</span></td>
-            <td><strong>EGP ${item.totalSpent.toFixed(2)}</strong></td>
+            <td><strong>$ ${item.totalSpent.toFixed(2)}</strong></td>
             <td>${getStatusBadge({status: item.status})}</td>
         `;
     } else if (appState.currentSection === 'sales') {
@@ -391,7 +391,7 @@ function renderTableRow(item) {
             <td><strong>#${item.id}</strong></td>
             <td>${new Date(item.date).toLocaleDateString()}</td>
             <td>${item.customer}</td>
-            <td><strong>EGP ${item.amount.toFixed(2)}</strong></td>
+            <td><strong>$ ${item.amount.toFixed(2)}</strong></td>
             <td>${getStatusBadge(item)}</td>
             <td><span class="badge bg-secondary">${item.items}</span></td>
         `;
@@ -855,7 +855,7 @@ function showSellerDetails(id) {
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>Total Orders:</strong> ${totalOrders}</p>
-                                        <p><strong>Total Earnings:</strong> ${earnings.toFixed(2)} EGP</p>
+                                        <p><strong>Total Earnings:</strong> ${earnings.toFixed(2)}$</p>
                                     </div>
                                 </div>
                             </div>
@@ -1217,7 +1217,7 @@ function viewVerificationDetails(id) {
                     <h6>Product</h6>
                     <p><strong>Name:</strong> ${product?.name || 'N/A'}</p>
                     <p><strong>Category:</strong> ${product?.category || 'N/A'}</p>
-                    <p><strong>Price:</strong> ${product ? 'EGP ' + (Number(product.price) || 0).toFixed(2) : 'N/A'}</p>
+                    <p><strong>Price:</strong> ${product ? '$ ' + (Number(product.price) || 0).toFixed(2) : 'N/A'}</p>
                     <p><strong>Stock:</strong> ${product ? (Array.isArray(product.stock) ? 
                         product.stock.reduce((sum, s) => sum + (Number(s.quantity) || 0), 0) : 
                         Number(product.stock) || 0) : 'N/A'}</p>
@@ -1358,7 +1358,7 @@ function getItemDetailsHTML(item) {
                     <div class="col-md-12">
                         <p><strong>Product Name:</strong> ${item.name}</p>
                         <p><strong>Category:</strong> ${item.category}</p>
-                        <p><strong>Price:</strong> EGP ${item.price.toFixed(2)}</p>
+                        <p><strong>Price:</strong> $ ${item.price.toFixed(2)}</p>
                         <p><strong>Stock:</strong> ${item.stock}</p>
                         <p><strong>Description:</strong> ${item.description || 'No description available'}</p>
                     </div>
@@ -1450,11 +1450,11 @@ function getItemDetailsHTML(item) {
                                         <p>Total Orders</p>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <h3>${totalSpent.toFixed(2)} EGP</h3>
+                                        <h3>${totalSpent.toFixed(2)}$</h3>
                                         <p>Total Spent</p>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <h3>${averageOrder.toFixed(2)} EGP</h3>
+                                        <h3>${averageOrder.toFixed(2)}$</h3>
                                         <p>Average Order</p>
                                     </div>
                                 </div>
@@ -1739,7 +1739,7 @@ function getCustomerColumns() {
         { key: 'email', label: 'Email', sortable: true },
         { key: 'phone', label: 'Phone', sortable: false },
         { key: 'orders', label: 'Orders', sortable: true },
-        { key: 'totalSpent', label: 'Total Spent', sortable: true, formatter: (value) => `${Number(value).toFixed(2)} EGP` },
+        { key: 'totalSpent', label: 'Total Spent', sortable: true, formatter: (value) => `${Number(value).toFixed(2)}$` },
         { key: 'status', label: 'Status', sortable: true, formatter: (value) => getStatusBadge({status: value}) },
         { key: 'joinDate', label: 'Join Date', sortable: true },
         { key: 'actions', label: 'Actions', sortable: false }
