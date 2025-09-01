@@ -125,3 +125,13 @@ body {
 .btn-link:hover {
   text-decoration: underline;
 }
+@media (max-width:576px) {
+
+  .main-content
+  {
+    margin-top: 50px !important;
+  }
+  div .min-vh-100 {
+    min-height: 40vh !important;
+  }
+}
