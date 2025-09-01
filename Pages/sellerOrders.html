@@ -64,7 +64,7 @@
             line-height: 1;
         }
 
-         @keyframes gradientShift {
+        @keyframes gradientShift {
 
             0%,
             100% {
@@ -75,6 +75,7 @@
                 background-position: 100% 50%;
             }
         }
+
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -448,7 +449,7 @@
         }
 
         .status-processing {
-            font-size: 0.6rem ;
+            font-size: 0.6rem;
             background: rgba(59, 130, 246, 0.1);
             color: #2563eb;
         }
@@ -642,11 +643,11 @@
                 left: 0;
                 position: fixed;
             }
-            
+
             .main-content {
                 margin-left: var(--sidebar-width);
             }
-            
+
             .menu-toggle {
                 display: none;
             }
@@ -734,7 +735,7 @@
                 padding: 0.75rem 1rem;
                 height: 60px;
             }
-            
+
             .page-title {
                 font-size: 1.25rem;
             }
@@ -840,7 +841,7 @@
                 <p>Seller Portal</p>
             </div>
         </div>
-        
+
         <ul class="sidebar-menu">
             <li>
                 <button class="sidebar-link" id="DashBtn" onclick="gotodashboard()">
@@ -898,14 +899,14 @@
             </li>
         </ul>
 
-        
+
         <div>
             <button class="sidebar-link" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>LOG OUT</span>
             </button>
         </div>
-        
+
     </aside>
 
     <!-- Main Content -->
@@ -918,7 +919,7 @@
                 </button>
                 <h1 class="page-title">Orders</h1>
             </div>
-            
+
             <div class="topbar-right">
                 <div class="user-profile">
                     <div class="user-avatar"></div>
@@ -1046,8 +1047,8 @@
                 </div>
 
 
-                    </div>
-                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Order Details Modal -->
@@ -1057,10 +1058,10 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Order Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                </div>
                 <div class="modal-body" id="orderDetailsContent">
                     <!-- Order details will be populated by JavaScript -->
-        </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="acceptOrderBtn">Accept Order</button>
@@ -1071,7 +1072,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <script type="module">
         import { Auth } from "../utils/auth.js";
         import { Storage } from "../utils/localStorageHelper.js";
@@ -1139,7 +1140,7 @@
 
         function groupOrdersByOrderId(orders) {
             const grouped = {};
-            
+
             orders.forEach(order => {
                 const orderId = order.orderId.split("-")[0]; // Get base orderId without suffix
                 if (!grouped[orderId]) {
@@ -1158,19 +1159,19 @@
                         allProducts: []
                     };
                 }
-                
+
                 grouped[orderId].orders.push(order);
                 grouped[orderId].totalPrice += order.totalPrice;
                 grouped[orderId].totalItems += order.products.length;
                 grouped[orderId].allProducts.push(...order.products);
-                
+
                 // Use the earliest date for the group
                 if (new Date(order.orderedAt) < new Date(grouped[orderId].orderedAt)) {
                     grouped[orderId].orderedAt = order.orderedAt;
                     grouped[orderId].formattedDate = order.formattedDate;
                     grouped[orderId].formattedTime = order.formattedTime;
                 }
-                
+
                 // If any order in the group is pending, show as pending
                 if (order.status === 'Pending') {
                     grouped[orderId].status = 'Pending';
@@ -1178,14 +1179,14 @@
                     grouped[orderId].displayStatus = 'Pending';
                 }
             });
-            
+
             return Object.values(grouped);
         }
 
         function getStatusClass(status) {
             switch (status) {
                 case "waiting to be Checked Out":
-                    return "pending";
+                    return "processing";
                 case "Checked Out - Waiting to be Shipped":
                     return "processing";
                 case "Shipped":
@@ -1202,7 +1203,7 @@
         function getDisplayStatus(status) {
             switch (status) {
                 case "waiting to be Checked Out":
-                    return "Pending";
+                    return "Processing";
                 case "Checked Out - Waiting to be Shipped":
                     return "Processing";
                 case "Shipped":
@@ -1267,14 +1268,14 @@
         function renderOrders() {
             // Render desktop table
             renderDesktopTable();
-            
+
             // Render mobile cards
             renderMobileCards();
         }
 
         function renderDesktopTable() {
             const tbody = document.getElementById('ordersTableBody');
-            
+
             if (filteredOrders.length === 0) {
                 tbody.innerHTML = `
                     <tr>
@@ -1340,7 +1341,7 @@
 
         function renderMobileCards() {
             const container = document.getElementById('mobileOrderCards');
-            
+
             if (filteredOrders.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -1469,7 +1470,7 @@
             // Modal accept button
             const acceptOrderBtn = document.getElementById('acceptOrderBtn');
             if (acceptOrderBtn) {
-                acceptOrderBtn.addEventListener('click', function() {
+                acceptOrderBtn.addEventListener('click', function () {
                     if (currentOrderId) {
                         acceptOrder(currentOrderId);
                         const modal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
@@ -1507,12 +1508,12 @@
                 let matches = true;
 
                 // Status filter
-                console.log( orderGroup.status);
-                if (orderGroup.status==="Checked Out - Waiting to be Shipped") {
-                    orderGroup.status="processing";
+                console.log(orderGroup.status);
+                if (orderGroup.status === "Checked Out - Waiting to be Shipped" || orderGroup.status === "waiting to be Checked Out") {
+                    orderGroup.status = "processing";
                 }
                 if (statusFilter && orderGroup.status.toLowerCase() !== statusFilter.toLowerCase()) {
-                     console.log( orderGroup.status);
+                    console.log(orderGroup.status);
                     matches = false;
                 }
 
@@ -1616,21 +1617,21 @@
             const orderGroup = orders.find(o => o.orderId === orderId && o.status !== "Shipped" && o.status !== "Delivered" && o.status !== "Cancelled");
             if (orderGroup) {
                 const orderCount = orderGroup.orders.length;
-                const message = orderCount > 1 
+                const message = orderCount > 1
                     ? `Are you sure you want to accept ${orderCount} orders with ID ${orderId}? This will update all orders to "Shipped".`
                     : `Are you sure you want to accept order ${orderId}? This will update the status to "Shipped".`;
-                
+
                 showConfirmModal(message, () => {
                     updateOrderStatus(orderId, "Shipped");
                 });
-            }else {
+            } else {
                 showToast('Order cannot be accepted. It may have already been processed.', 'error');
             }
         }
 
         function showOrderDetailsModal(orderGroup) {
             const modalContent = document.getElementById('orderDetailsContent');
-            
+
             modalContent.innerHTML = `
                 <div class="row">
                     <div class="col-md-6">
@@ -1769,7 +1770,7 @@
                 orderGroup.orders.forEach(order => {
                     // Update order in current user (seller)
                     const orderIndex = currentUser.orders.findIndex(o => o.orderId === order.orderId);
-            if (orderIndex !== -1) {
+                    if (orderIndex !== -1) {
                         currentUser.orders[orderIndex].status = newStatus;
                     }
 
@@ -1793,7 +1794,7 @@
 
                 // Show success message
                 const orderCount = orderGroup.orders.length;
-                const message = orderCount > 1 
+                const message = orderCount > 1
                     ? `${orderCount} orders with ID ${orderId} have been ${newStatus.toLowerCase()} successfully!`
                     : `Order ${orderId} has been ${newStatus.toLowerCase()} successfully!`;
                 showToast(message, 'success');
