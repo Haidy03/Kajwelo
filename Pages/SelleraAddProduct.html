@@ -1163,7 +1163,7 @@
         window.gotodashboard = gotodashboard;
 
         // Check if form has unsaved changes
-        function hasUnsavedChanges() {
+        window.hasUnsavedChanges = function hasUnsavedChanges() {
             const form = document.getElementById('productForm');
             if (!form) return false;
 
@@ -1173,7 +1173,7 @@
         }
 
         // Price validation setup
-        function setupPriceValidation() {
+        window.setupPriceValidation = function setupPriceValidation() {
             const mainPrice = document.getElementById('mainPriceId');
             const salePrice = document.getElementById('salePriceId');
             const errorDiv = document.getElementById('errordiv');
@@ -1207,7 +1207,7 @@
         }
 
         // FIXED: Stock management functionality
-        function initializeStockManagement() {
+        window.initializeStockManagement = function initializeStockManagement() {
             // Only initialize once
             if (stockManagementInitialized) return;
 
@@ -1234,7 +1234,7 @@
             //console.log('Stock management initialized with', stockEntries.length, 'entries');
         }
 
-        function addDefaultStockEntry() {
+        window.addDefaultStockEntry = function addDefaultStockEntry() {
             // Only add if no entries exist
             if (stockEntries.length > 0) {
                 console.log('Default entry skipped - entries exist:', stockEntries.length);
@@ -1252,7 +1252,7 @@
             renderStockGrid();
         }
 
-        function addStockEntry() {
+        window.addStockEntry = function addStockEntry() {
             // Prevent adding multiple entries at once
             const stockId = Date.now() + Math.random();
             stockEntries.push({
@@ -1268,7 +1268,7 @@
             startAutoSave();
         }
 
-        function renderStockGrid() {
+       window.renderStockGrid = function renderStockGrid() {
             const stockGrid = document.getElementById('stockItemsContainer');
             if (!stockGrid) {
                 console.error('Stock grid container not found');
@@ -1316,7 +1316,7 @@
             `).join('');
         }
 
-        function updateStockEntry(entryId, field, value) {
+        window.updateStockEntry = function updateStockEntry(entryId, field, value) {
             // Convert entryId to number for comparison
             const id = parseFloat(entryId);
             const entry = stockEntries.find(e => e.id === id);
@@ -1328,7 +1328,7 @@
             }
         }
         window.updateStockEntry = updateStockEntry;
-        function removeStockEntry(entryId) {
+        window.removeStockEntry = function removeStockEntry(entryId) {
             // Convert entryId to number for comparison
             const id = parseFloat(entryId);
 
@@ -1351,7 +1351,7 @@
         }
 
         // Category-Subcategory dependency
-        function setupCategoryDependency() {
+       window.setupCategoryDependency = function setupCategoryDependency() {
             const categorySelect = document.querySelector('select[name="category"]');
             const subcategorySelect = document.querySelector('select[name="subcategory"]');
 
@@ -1368,7 +1368,7 @@
             }
         }
 
-        function updateSubcategoryOptions(categoryValue) {
+       window.updateSubcategoryOptions = function updateSubcategoryOptions(categoryValue) {
             const subcategorySelect = document.querySelector('select[name="subcategory"]');
             if (!subcategorySelect) return;
 
@@ -1398,7 +1398,7 @@
         }
 
         // Sidebar functionality
-        function toggleSidebar() {
+        window.toggleSidebar = function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
@@ -1419,7 +1419,7 @@
         }
 
         // Image upload functionality
-        function initializeImageUpload() {
+       window.initializeImageUpload = function initializeImageUpload() {
             const uploadContainer = document.getElementById('imageUploadContainer');
             const imageInput = document.getElementById('imageInput');
 
@@ -1455,7 +1455,7 @@
             });
         }
 
-        function handleFiles(files) {
+       window.handleFiles = function handleFiles(files) {
             const uploadContainer = document.getElementById('imageUploadContainer');
             const imageError = document.getElementById('imageError');
 
@@ -1485,7 +1485,7 @@
             });
         }
 
-        function renderImagePreview() {
+        window.renderImagePreview = function renderImagePreview() {
             const preview = document.getElementById('imagePreview');
             if (preview) {
                 preview.innerHTML = productImages.map(image => `
@@ -1499,18 +1499,18 @@
             }
         }
 
-        function removeImage(imageId) {
+       window.removeImage = function removeImage(imageId) {
             productImages = productImages.filter(img => img.id != imageId);
             renderImagePreview();
             startAutoSave();
         }
 
         // Tag input functionality
-        function initializeTagInputs() {
+       window.initializeTagInputs = function initializeTagInputs() {
             setupTagInput('tagInput', 'tagsContainer', productTags);
         }
 
-        function setupTagInput(inputId, containerId, dataArray) {
+       window.setupTagInput = function setupTagInput(inputId, containerId, dataArray) {
             const input = document.getElementById(inputId);
             const container = document.getElementById(containerId);
 
@@ -1533,7 +1533,7 @@
             });
         }
 
-        function renderTags(containerId, dataArray) {
+       window.renderTags = function renderTags(containerId, dataArray) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
@@ -1561,7 +1561,7 @@
             });
         }
 
-        function removeTag(containerId, index) {
+       window.removeTag = function removeTag(containerId, index) {
             let dataArray;
             switch (containerId) {
                 case 'tagsContainer':
@@ -1579,7 +1579,7 @@
         }
 
         // Form submission
-        function setupFormSubmission() {
+       window.setupFormSubmission = function setupFormSubmission() {
             const form = document.getElementById('productForm');
             if (!form) return;
 
@@ -1613,7 +1613,7 @@
             });
         }
 
-        function validateStockEntries() {
+       window.validateStockEntries = function validateStockEntries() {
             // Check if we have at least one stock entry
             if (stockEntries.length === 0) {
                 return false;
@@ -1627,7 +1627,7 @@
             return validEntries.length > 0;
         }
 
-        function submitProduct() {
+       window.submitProduct = function submitProduct() {
             const form = document.getElementById('productForm');
             if (!form) return;
 
@@ -1731,7 +1731,7 @@
             }
         }
 
-        function resetForm() {
+        window.resetForm = function resetForm() {
             const form = document.getElementById('productForm');
             if (form) {
                 form.reset();
@@ -1757,7 +1757,7 @@
         }
 
         // FIXED: Load auto-saved data function
-        function loadAutoSavedData() {
+       window.loadAutoSavedData = function loadAutoSavedData() {
             const autoSaveData = localStorage.getItem('kajwelo_product_autosave');
             if (autoSaveData) {
                 try {
@@ -1818,7 +1818,7 @@
 
         // Auto-save functionality
         let autoSaveTimer;
-        function startAutoSave() {
+       window.startAutoSave = function startAutoSave() {
             const form = document.getElementById('productForm');
             if (!form) return;
 
@@ -1842,13 +1842,13 @@
         }
 
         // Clear auto-save data when form is successfully submitted
-        function clearAutoSaveData() {
+       window.clearAutoSaveData = function clearAutoSaveData() {
             localStorage.removeItem('kajwelo_product_autosave');
             console.log('Auto-save data cleared');
         }
 
         // Mobile behavior setup
-        function setupMobileBehavior() {
+       window.setupMobileBehavior = function setupMobileBehavior() {
             // Close sidebar when clicking on a link (for mobile)
             const sidebarLinks = document.querySelectorAll('.sidebar-link');
             if (sidebarLinks) {
