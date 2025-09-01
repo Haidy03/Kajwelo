@@ -134,15 +134,18 @@
     }));
 
     // Admins table light projection
-    const adminsTable = admins.map(a => ({
-      id: a.id,
-      name: a.name || "Admin",
-      email: a.email,
-      role: adminLevelToLabel(Number(a.adminLevel) || 1),
-      password: "********", // hide actual stored value (may be encoded)
-      status: a.isConfirmed === false ? "inactive" : "active",
-      lastLogin: a.lastLogin || new Date().toISOString().slice(0, 10),
-    }));
+    const currentUserId = currentUser?.id;
+    const adminsTable = admins
+      .filter(a => String(a.id) !== String(currentUserId)) // Exclude current logged-in admin
+      .map(a => ({
+        id: a.id,
+        name: a.name || "Admin",
+        email: a.email,
+        role: adminLevelToLabel(Number(a.adminLevel) || 1),
+        password: "********", // hide actual stored value (may be encoded)
+        status: a.isConfirmed === false ? "inactive" : "active",
+        lastLogin: a.lastLogin || new Date().toISOString().slice(0, 10),
+      }));
 
     // Verification requests derived from unverified sellers/products
     let vrId = 1;

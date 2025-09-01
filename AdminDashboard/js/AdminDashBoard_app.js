@@ -463,9 +463,34 @@ function bulkDeleteItems() {
 
     const itemCount = appState.selectedItems.size;
     if (confirm(`Are you sure you want to delete ${itemCount} selected item(s)?`)) {
-        // Convert Set to Array and sort in descending order to avoid index issues
-        const idsToDelete = Array.from(appState.selectedItems).sort((a, b) => b - a);
+        // Convert Set to Array
+        const idsToDelete = Array.from(appState.selectedItems);
 
+        // Use AdminOps to properly delete items from localStorage
+        if (window.AdminOps && typeof window.AdminOps.bulkDelete === 'function') {
+            const res = window.AdminOps.bulkDelete(appState.currentSection, idsToDelete);
+            if (res.success) {
+                // Clear selection
+                appState.selectedItems.clear();
+                appState.selectAll = false;
+
+                // Refresh UI
+                renderTable();
+                updatePagination();
+                updateBadges();
+                updateBulkActionsVisibility();
+
+                showToast(`${res.count} item(s) deleted successfully`, 'success');
+                
+                // Reload the page to ensure data is refreshed
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+                return;
+            }
+        }
+
+        // Fallback to old method if AdminOps is not available
         idsToDelete.forEach(id => {
             const index = dataStore[appState.currentSection].findIndex(item => item.id === id);
             if (index !== -1) {
@@ -484,6 +509,11 @@ function bulkDeleteItems() {
         updateBulkActionsVisibility();
 
         showToast(`${itemCount} item(s) deleted successfully`, 'success');
+        
+        // Reload the page to ensure data is refreshed
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
     }
 }
 
