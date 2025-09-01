@@ -62,7 +62,8 @@
             letter-spacing: 1px;
             line-height: 1;
         }
- @keyframes gradientShift {
+
+        @keyframes gradientShift {
 
             0%,
             100% {
@@ -73,6 +74,7 @@
                 background-position: 100% 50%;
             }
         }
+
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -619,9 +621,14 @@
 
         @media (max-width: 600px) {
 
-            .customers-table th:nth-child(n+4),
-            .customers-table td:nth-child(n+4) {
+            .customers-table th:nth-child(n+3),
+            .customers-table td:nth-child(n+3) {
                 display: none;
+            }
+
+            .customers-table th:nth-child(n+7),
+            .customers-table td:nth-child(n+7) {
+                display: block;
             }
 
             .customer-info {
@@ -690,7 +697,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar" style="overflow-y: hidden;">
         <div class="sidebar-header">
-           <div class="logo">
+            <div class="logo">
                 <h1>Kajwelo</h1>
                 <p>Seller Portal</p>
             </div>
@@ -825,13 +832,7 @@
                             <option>Active</option>
                             <option>Inactive</option>
                             <option>Pending</option>
-                        </select>
-                        <select class="form-select" style="width: auto;">
-                            <option>All Time</option>
-                            <option>This Month</option>
-                            <option>Last Month</option>
-                            <option>Last 3 Months</option>
-                        </select>
+                        </select>   
                     </div>
                 </div>
 
@@ -922,7 +923,7 @@
                         customersId.push(order.customerId);
                     }
                 });
-                console.log(customersId);
+                //console.log(customersId);
                 customersId.forEach(id => {
                     users.forEach(user => {
                         if (user.id === id) {
@@ -931,7 +932,7 @@
                     });
                 });
 
-                console.log(`Found ${customers.length} customers in localStorage`);
+                // console.log(`Found ${customers.length} customers in localStorage`);
 
                 // Calculate customer statistics
                 customers.forEach(customer => {
@@ -968,9 +969,10 @@
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            if (customer.lastOrderDate && customer.lastOrderDate > thirtyDaysAgo) {
+
+            if (customer.orderHistory.length > 0 && new Date(customer.orderHistory[customer.orderHistory.length - 1].orderedAt) > thirtyDaysAgo) {
                 return 'active';
-            } else if (customer.totalOrders > 0) {
+            } else if (new Date(customer.orderHistory[customer.orderHistory.length - 1].orderedAt) < thirtyDaysAgo) {
                 return 'inactive';
             } else {
                 return 'pending';
@@ -1305,6 +1307,7 @@
 
         // Touch device improvements
         if ('ontouchstart' in window) {
+            console.log('Touch device detected');
             document.body.classList.add('touch-device');
             document.addEventListener('touchstart', function () { }, { passive: true });
         }
@@ -1316,6 +1319,7 @@
         }
 
         if (isiPad()) {
+            console.log('iPad detected');
             document.body.classList.add('ipad-device');
         }
     </script>

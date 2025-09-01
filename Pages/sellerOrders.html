@@ -448,6 +448,7 @@
         }
 
         .status-processing {
+            font-size: 0.6rem ;
             background: rgba(59, 130, 246, 0.1);
             color: #2563eb;
         }
@@ -1506,7 +1507,12 @@
                 let matches = true;
 
                 // Status filter
-                if (statusFilter && orderGroup.status !== statusFilter) {
+                console.log( orderGroup.status);
+                if (orderGroup.status==="Checked Out - Waiting to be Shipped") {
+                    orderGroup.status="processing";
+                }
+                if (statusFilter && orderGroup.status.toLowerCase() !== statusFilter.toLowerCase()) {
+                     console.log( orderGroup.status);
                     matches = false;
                 }
 
