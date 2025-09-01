@@ -224,7 +224,7 @@
     import { renderProducts as displayall } from "../cardGeneratot/card.js";
 
     Auth.apply_Autherization();
-    function toggleMenu() {
+    window.toggleMenu=function toggleMenu() {
       const navMenu = document.getElementById("navMenu");
       navMenu.classList.toggle("active");
     }
