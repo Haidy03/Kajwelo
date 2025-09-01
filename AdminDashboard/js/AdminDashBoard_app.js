@@ -11,57 +11,40 @@ document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.sidebar');
         const toggleButton = document.getElementById('centeredSidebarToggle');
         
-        // Check if sidebar is active/collapsed and not collapsed
+        // Check if sidebar is not collapsed and click is outside sidebar and toggle button
         if (sidebar && 
-            (sidebar.classList.contains('active') || !sidebar.classList.contains('collapsed')) && 
+            !sidebar.classList.contains('collapsed') && 
             !sidebar.contains(event.target) && 
             !toggleButton.contains(event.target)) {
             
-            // Close sidebar based on screen size
-            if (window.innerWidth < 992) {
-                // Mobile - hide sidebar completely
-                sidebar.classList.remove('active');
-            } else {
-                // Desktop - collapse sidebar
-                sidebar.classList.add('collapsed');
-                document.querySelector('.main-content').classList.add('sidebar-collapsed');
-            }
+            // Always collapse sidebar when clicking outside
+            sidebar.classList.add('collapsed');
+            document.querySelector('.main-content').classList.add('sidebar-collapsed');
         }
     });
 });
 
 function initializeLayout() {
-    // Initialize layout based on window size
+    // Initialize layout - always start with sidebar collapsed
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     
-    // Set initial state for desktop/tablet
-    if (window.innerWidth >= 992) {
-        // On desktop, start with sidebar visible (not collapsed)
-        sidebar.classList.remove('collapsed');
-        mainContent.classList.remove('sidebar-collapsed');
-    } else {
-        // On mobile, start with sidebar hidden
-        sidebar.classList.remove('active');
+    // Always start with sidebar collapsed on page load
+    if (sidebar && mainContent) {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('sidebar-collapsed');
     }
     
     // Add resize listener for responsive behavior
     window.addEventListener('resize', () => {
-        const newWidth = window.innerWidth;
         const sidebar = document.querySelector('.sidebar');
         const mainContent = document.querySelector('.main-content');
         
-        if (newWidth >= 992) {
-            // Desktop - keep current state but ensure classes are correct
+        // Maintain consistent behavior regardless of screen size
+        if (sidebar && mainContent) {
             if (sidebar.classList.contains('collapsed')) {
                 mainContent.classList.add('sidebar-collapsed');
             } else {
-                mainContent.classList.remove('sidebar-collapsed');
-            }
-        } else {
-            // Mobile - ensure sidebar is hidden when not active
-            if (!sidebar.classList.contains('active')) {
-                sidebar.classList.remove('collapsed');
                 mainContent.classList.remove('sidebar-collapsed');
             }
         }
@@ -84,9 +67,12 @@ function setupEventListeners() {
             // Load section content
             loadSection(section);
             
-            // Close sidebar on mobile
-            if (window.innerWidth < 992) {
-                document.querySelector('.sidebar').classList.remove('active');
+            // Always collapse sidebar after navigation
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar && mainContent) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
             }
             
             // Special handling for inbox section
@@ -117,13 +103,14 @@ function setupEventListeners() {
             const sidebar = document.querySelector('.sidebar');
             const mainContent = document.querySelector('.main-content');
             
-            if (window.innerWidth < 992) {
-                // Mobile - toggle sidebar visibility
-                sidebar.classList.toggle('active');
-            } else {
-                // Desktop - toggle collapsed state
+            // Toggle collapsed state regardless of screen size
+            if (sidebar && mainContent) {
                 sidebar.classList.toggle('collapsed');
-                mainContent.classList.toggle('sidebar-collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.classList.add('sidebar-collapsed');
+                } else {
+                    mainContent.classList.remove('sidebar-collapsed');
+                }
             }
         });
     }
@@ -144,6 +131,13 @@ function setupEventListeners() {
     const addItemBtn = document.getElementById('addItemBtn');
     if (addItemBtn) {
         addItemBtn.addEventListener('click', () => {
+            // Collapse sidebar when opening modal
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar && mainContent) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
+            }
             openAddModal();
         });
     }
@@ -182,30 +176,24 @@ function updateInboxBadgeOnNavigation() {
                     if (chat.messages && Array.isArray(chat.messages)) {
                         chat.messages.forEach(message => {
                             // Count messages with status false (unread) that are not sent by the current user
-                            if (message.status === false && message.sender !== loggedInUser.id) {
+                            if (message.status === false && message.senderId !== loggedInUser.id) {
                                 unreadMessages++;
                             }
                         });
                     }
                 });
             }
-        } catch (e) {
-            console.error('Error counting unread messages:', e);
-            // Fallback to dataStore method
-            unreadMessages = dataStore.inbox ? 
-                dataStore.inbox.filter(m => m.status === 'unread').length : 0;
+        } catch (error) {
+            console.error('Error counting unread messages:', error);
         }
-        
+
+        // Update the inbox badge
         const inboxBadge = document.getElementById('inboxBadge');
         if (inboxBadge) {
-            if (unreadMessages > 0) {
-                inboxBadge.textContent = unreadMessages;
-                inboxBadge.style.display = 'inline-block';
-            } else {
-                inboxBadge.style.display = 'none';
-            }
+            inboxBadge.textContent = unreadMessages;
+            inboxBadge.style.display = unreadMessages > 0 ? 'inline-block' : 'none';
         }
-    }, 300);
+    }, 100);
 }
 
 function loadSection(section, sellerId = null) {
@@ -384,45 +372,35 @@ function updateBadges() {
 
 // Update inbox badge immediately on load and keep it visible
 function updateInboxBadgeImmediate() {
-    // Longer delay to ensure dataStore is populated
-    setTimeout(() => {
-        try {
-            // Count messages with status false in chats of logged in user
-            let unreadMessages = 0;
-            try {
-                const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-                if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
-                    loggedInUser.chats.forEach(chat => {
-                        if (chat.messages && Array.isArray(chat.messages)) {
-                            chat.messages.forEach(message => {
-                                // Count messages with status false (unread) that are not sent by the current user
-                                if (message.status === false && message.sender !== loggedInUser.id) {
-                                    unreadMessages++;
-                                }
-                            });
+    // Count messages with status false in chats of logged in user
+    let unreadMessages = 0;
+    try {
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+        if (loggedInUser && loggedInUser.chats && Array.isArray(loggedInUser.chats)) {
+            loggedInUser.chats.forEach(chat => {
+                if (chat.messages && Array.isArray(chat.messages)) {
+                    chat.messages.forEach(message => {
+                        // Count messages with status false (unread) that are not sent by the current user
+                        if (message.status === false && message.senderId !== loggedInUser.id) {
+                            unreadMessages++;
                         }
                     });
                 }
-            } catch (e) {
-                console.error('Error counting unread messages:', e);
-                // Fallback to dataStore method
-                unreadMessages = dataStore.inbox ? 
-                    dataStore.inbox.filter(m => m.status === 'unread').length : 0;
-            }
-            
-            const inboxBadge = document.getElementById('inboxBadge');
-            if (inboxBadge) {
-                if (unreadMessages > 0) {
-                    inboxBadge.textContent = unreadMessages;
-                    inboxBadge.style.display = 'inline-block';
-                } else {
-                    inboxBadge.style.display = 'none';
-                }
-            }
-        } catch (e) {
-            console.error('Error updating inbox badge on load:', e);
+            });
         }
-    }, 1000); // Longer delay to ensure dataStore is ready
+    } catch (error) {
+        console.error('Error counting unread messages:', error);
+    }
+
+    // Update the inbox badge
+    const inboxBadge = document.getElementById('inboxBadge');
+    if (inboxBadge) {
+        inboxBadge.textContent = unreadMessages;
+        inboxBadge.style.display = unreadMessages > 0 ? 'inline-block' : 'none';
+    }
+
+    // Update every 30 seconds
+    setTimeout(updateInboxBadgeImmediate, 30000);
 }
 
 // Set up periodic updates to ensure badge stays visible

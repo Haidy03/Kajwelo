@@ -60,9 +60,15 @@ body {
     position: fixed;
     top: 70px; /* Start below fixed header */
     left: 0;
-    transition: all 0.3s;
+    transition: transform 0.3s ease-in-out;
     z-index: 1000;
     width: 280px; /* Made sidebar bigger */
+    transform: translateX(0);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    -webkit-font-smoothing: subpixel-antialiased;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar.collapsed {
@@ -556,18 +562,21 @@ body {
 @media (max-width: 992px) {
     .sidebar {
         position: fixed;
-        left: -100%;
-        width: 300px;
+        left: 0;
+        width: 280px;
         z-index: 1050;
         height: calc(100vh - 70px);
+        transform: translateX(-100%); /* Start hidden */
+        display: flex;
+        flex-direction: column;
     }
 
-    .sidebar.active {
-        left: 0;
+    .sidebar:not(.collapsed) {
+        transform: translateX(0); /* Visible when not collapsed */
     }
 
     /* Ensure nav labels appear when sidebar is toggled open */
-    .sidebar.active .d-lg-inline {
+    .sidebar:not(.collapsed) .d-lg-inline {
         display: inline !important;
     }
 
