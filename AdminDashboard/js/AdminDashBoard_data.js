@@ -46,13 +46,13 @@
     const customers = users.filter(u => (u.role || "").toLowerCase() === "customer");
     const admins = users.filter(u => (u.role || "").toLowerCase() === "admin" || (u.role || "") === "Admin");
 
-    // Flatten products from sellers, filtering only verified products (isVerified = true)
+    // Flatten products from sellers, filtering only verified products (isVerified = true) from verified sellers
     const products = [];
 
     sellers.forEach(s => {
       (s.products || []).forEach(p => {
-        // Include products from verified sellers, regardless of product verification status
-        if (s.isVerified) {
+        // Include only verified products from verified sellers
+        if (s.isVerified && p.isVerified) {
           const stock = computeStockCount(p);
           let status = "active";
           if (stock === 0) status = "inactive";
