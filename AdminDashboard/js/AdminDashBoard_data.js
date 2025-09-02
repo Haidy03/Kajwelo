@@ -106,8 +106,13 @@
     }));
 
     // Sellers table light projection
-    // Include all sellers, not just verified ones
-    const sellersTable = sellers.map(s => ({
+    let VerifiedSellers = [];
+    for(let i = 0; i < sellers.length; i++){
+      if(sellers[i].isVerified)
+        VerifiedSellers.push(sellers[i]);
+    }
+      
+    const sellersTable = VerifiedSellers.map(s => ({
         id: s.id,
         name: s.name || s.brandName || "Seller",
         email: s.email,
