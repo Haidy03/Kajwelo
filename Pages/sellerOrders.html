@@ -826,6 +826,10 @@
             margin-bottom: 1rem;
             opacity: 0.3;
         }
+        .currency {
+            font-size: 0.6rem;
+            /* color: #6b7280; */
+        }
     </style>
 </head>
 
@@ -1314,7 +1318,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="order-total">$${orderGroup.totalPrice.toFixed(2)}</div>
+                        <div class="order-total">${orderGroup.totalPrice.toFixed(2)} <span class="currency">EGP</span></div>
                     </td>
                     <td>
                         <span class="status-badge status-${orderGroup.statusClass}">
@@ -1376,7 +1380,7 @@
                             ${orderGroup.orders.length > 1 ? `<small class="text-muted">(${orderGroup.orders.length} orders)</small>` : ''}
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="order-total">$${orderGroup.totalPrice.toFixed(2)}</div>
+                            <div class="order-total">${orderGroup.totalPrice.toFixed(2)} <span class="currency">EGP</span></div>
                             <div>
                                 <div>${orderGroup.formattedDate}</div>
                                 <small class="text-muted">${orderGroup.formattedTime}</small>
