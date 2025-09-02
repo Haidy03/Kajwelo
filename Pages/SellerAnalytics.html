@@ -1076,9 +1076,9 @@
             }
 
             // Update DOM elements
-            document.getElementById('total-sales-value').innerText = `$${totalSales.toFixed(2)}`;
+            document.getElementById('total-sales-value').innerText = `${totalSales.toFixed(2)} EGP`;
             document.getElementById('total-orders-value').innerText = totalOrders;
-            document.getElementById('avg-order-value').innerText = `$${avgOrderValue}`;
+            document.getElementById('avg-order-value').innerText = `${avgOrderValue} EGP`;
             document.getElementById('top-product-name').innerText = topProductName;
 
             // Calculate percentage changes (simplified - you can implement more sophisticated logic)
@@ -1115,7 +1115,7 @@
             // Update DOM elements
             document.getElementById('total-customers').innerText = uniqueCustomers;
             document.getElementById('repeat-customers').innerText = repeatCustomers;
-            document.getElementById('avg-customer-value').innerText = `$${avgCustomerValue}`;
+            document.getElementById('avg-customer-value').innerText = `${avgCustomerValue} EGP`;
             document.getElementById('total-products').innerText = totalProducts;
             document.getElementById('active-products').innerText = activeProducts;
             document.getElementById('low-stock-items').innerText = lowStockItems;
@@ -1195,7 +1195,7 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function (value) {
-                                    return '$' + value.toFixed(0);
+                                    return 'EGP' + value.toFixed(0);
                                 }
                             }
                         }
@@ -1384,7 +1384,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Monthly Revenue ($)',
+                        label: 'Monthly Revenue (EGP)',
                         data: data,
                         backgroundColor: 'rgba(102, 126, 234, 0.8)',
                         borderColor: '#667eea',
@@ -1407,7 +1407,7 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function (value) {
-                                    return '$' + value.toFixed(0);
+                                    return 'EGP' + value.toFixed(0);
                                 }
                             }
                         }

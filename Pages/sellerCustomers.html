@@ -1074,7 +1074,7 @@
                     </td>
                     <td>${customer.email}</td>
                 <td>${customer.totalOrders}</td>
-                <td>$${customer.totalSpent.toFixed(2)}</td>
+                <td>${customer.totalSpent.toFixed(2)} EGP</td>
                     <td>
                         <span class="status-badge status-${customer.status}">
                             ${customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
@@ -1274,7 +1274,7 @@
                                         <tr>
                                             <td>${order.orderId.substring(0, 8)}...</td>
                                             <td>${new Date(order.orderedAt).toLocaleDateString()}</td>
-                                            <td>$${order.totalPrice.toFixed(2)}</td>
+                                            <td>${order.totalPrice.toFixed(2)} EGP</td>
                                             <td>${order.status}</td>
                                         </tr>
                                     `).join('')}

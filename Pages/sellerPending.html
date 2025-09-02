@@ -1616,11 +1616,16 @@
         function addVariantRow(color = '', size = '', quantity = '') {
             const tableBody = document.getElementById('variantsTableBody');
             const newRow = document.createElement('tr');
+            try {
+               color = color.toLowerCase();
+            } catch (error) {
+                // console.error("Error processing color:", error);
+            }
             newRow.innerHTML = `
             <td>
                 <select class="form-input-variant" onchange="updateVariantData(this)" data-variant-type="color" required>
                     <option value="">Select Color</option>
-                    ${validColors.map(c => `<option value="${c}" ${c.toLocaleLowerCase() === color.toLocaleLowerCase() ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
+                    ${validColors.map(c => `<option value="${c}" ${c.toLowerCase() === color ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('')}
                 </select>
             </td>
             <td>

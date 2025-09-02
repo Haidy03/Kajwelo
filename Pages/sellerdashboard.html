@@ -1045,7 +1045,7 @@
             // Set initial active section
             document.getElementById('dashboard-section').classList.add('active');
 
-            document.querySelector("#earnings").textContent = "$" + currentUser.earnings;
+            document.querySelector("#earnings").textContent = "EGP" + currentUser.earnings;
             document.querySelector("#ordersCount").textContent = currentUser.orders.length
             document.querySelector("#verifiedProducts").textContent = currentUser.products.filter(product => product.isVerified === true).length;
             document.querySelector("#customersCount").textContent = brandCustomersIds.length;
@@ -1088,7 +1088,7 @@
                                     <td><strong>#${(order.orderId || '').split("-")[0]}</strong></td>
                                     <td>${currentCustomer ? currentCustomer.name : 'Unknown'}</td>
                                     <td class="hide-mobile">${order.products ? order.products.length : 0}</td>
-                                    <td><strong>$${order.totalPrice || 0}</strong></td>
+                                    <td><strong>${order.totalPrice || 0} EGP</strong></td>
                                     <td><span class="status-badge ${statusClass}">${order.status || ''}</span></td>
                                     <td class="hide-mobile">${customFormat}</td>
                                     <td>
@@ -1132,7 +1132,7 @@
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Sales ($)',
+                        label: 'Sales (EGP)',
                         data,
                         borderColor: '#667eea',
                         backgroundColor: 'rgba(102,126,234,0.2)',
